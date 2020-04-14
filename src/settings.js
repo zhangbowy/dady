@@ -4,13 +4,13 @@ module.exports = {
 
   /**
    * @type {boolean} true | false
-   * @description Whether fix the header
+   * @description 是否固定头部
    */
   fixedHeader: false,
 
   /**
    * @type {boolean} true | false
-   * @description Whether show the logo in sidebar
+   * @description 是否显示侧边栏logo
    */
   sidebarLogo: false
 }

@@ -24,6 +24,7 @@ export default {
   width: 100%;
   position: relative;
   overflow: hidden;
+  background: #f5f5f5;
 }
 .fixed-header+.app-main {
   padding-top: 50px;
@@ -37,4 +38,24 @@ export default {
     padding-right: 15px;
   }
 }
+.main-content{
+  padding: 10px;
+  .screen-box{
+    text-align: right;
+    background: #fff;
+    padding: 10px;
+    position: relative;
+    .operation{
+      position: absolute;
+      right: 10px;
+      top: 10px;
+    }
+  }
+  .content{
+    border: 1px solid #f5f5f5;
+    margin-top: 10px;
+    border-bottom: none
+  }
+}
+
 </style>

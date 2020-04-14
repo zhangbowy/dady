@@ -3,45 +3,44 @@ import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
 
-// create an axios instance
+// 创建axios相应拦截器
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
-  // withCredentials: true, // send cookies when cross-domain requests
-  timeout: 5000 // request timeout
+  // withCredentials: true, // 跨域请求发送cookie
+  timeout: 5000 // 请求超时
 })
 
-// request interceptor
+// 响应拦截器
 service.interceptors.request.use(
   config => {
     // do something before request is sent
 
     if (store.getters.token) {
-      // let each request carry token
-      // ['X-Token'] is a custom headers key
-      // please modify it according to the actual situation
+      // 使每个请求头携带token
+      // ['X-Token'] 是header请求头中的key
+      // 请根据实际情况修改
       config.headers['X-Token'] = getToken()
     }
     return config
   },
   error => {
-    // do something with request error
+    // 请求出错
     console.log(error) // for debug
     return Promise.reject(error)
   }
 )
 
-// response interceptor
+// 响应拦截器
 service.interceptors.response.use(
   /**
-   * If you want to get http information such as headers or status
-   * Please return  response => response
+    *如果您想要获取诸如头或状态之类的http信息
+    *请返回response=>response
   */
-
   /**
-   * Determine the request status by custom code
-   * Here is just an example
-   * You can also judge the status by HTTP Status Code
-   */
+    *通过自定义代码确定请求状态
+    *这里只是一个例子
+    *您还可以通过HTTP状态代码判断状态
+  */
   response => {
     const res = response.data
 
@@ -56,9 +55,9 @@ service.interceptors.response.use(
       // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
       if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
         // to re-login
-        MessageBox.confirm('You have been logged out, you can cancel to stay on this page, or log in again', 'Confirm logout', {
-          confirmButtonText: 'Re-Login',
-          cancelButtonText: 'Cancel',
+        MessageBox.confirm('登录失效，请重新登录！', '确认退出', {
+          confirmButtonText: '重新登录',
+          cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
           store.dispatch('user/resetToken').then(() => {
@@ -72,7 +71,7 @@ service.interceptors.response.use(
     }
   },
   error => {
-    console.log('err' + error) // for debug
+    console.log('err' + error) // debug
     Message({
       message: error.message,
       type: 'error',

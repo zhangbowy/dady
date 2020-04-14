@@ -13,8 +13,8 @@
           <a style="color:#20a0ff" href="https://wallstreetcn.com" target="_blank">wallstreetcn</a>
         </div>
         <div class="bullshit__headline">{{ message }}</div>
-        <div class="bullshit__info">Please check that the URL you entered is correct, or click the button below to return to the homepage.</div>
-        <a href="" class="bullshit__return-home">Back to home</a>
+        <div class="bullshit__info">请检查您输入的网址是否正确，或单击下面的按钮返回主页。</div>
+        <a href="" class="bullshit__return-home">回到首页</a>
       </div>
     </div>
   </div>
@@ -26,7 +26,7 @@ export default {
   name: 'Page404',
   computed: {
     message() {
-      return 'The webmaster said that you can not enter this page...'
+      return '站长说你不能进入这个页面。。。'
     }
   }
 }
