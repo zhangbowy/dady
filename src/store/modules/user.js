@@ -1,10 +1,10 @@
-import { login, logout, getInfo } from '@/api/user'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { login, logout, getInfo, checkLogin } from '@/api/user'
+// import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
 const getDefaultState = () => {
   return {
-    token: getToken(),
+    // token: getToken(),
     name: '',
     avatar: ''
   }
@@ -32,10 +32,10 @@ const actions = {
   login({ commit }, userInfo) {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password }).then(response => {
-        const { data } = response
-        commit('SET_TOKEN', data.token)
-        setToken(data.token)
+      login({ phone: username.trim(), passWord: password }).then(response => {
+        // const { data } = response
+        // commit('SET_TOKEN', data.token)
+        // setToken(data.token)
         resolve()
       }).catch(error => {
         reject(error)
@@ -67,8 +67,21 @@ const actions = {
   // user logout
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {
-      logout(state.token).then(() => {
-        removeToken() // must remove  token  first
+      logout().then(() => {
+        // removeToken() // must remove  token  first
+        resetRouter()
+        commit('RESET_STATE')
+        resolve()
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+  // user logout
+  checkLogin({ commit, state }) {
+    return new Promise((resolve, reject) => {
+      checkLogin().then(() => {
+        // removeToken() // must remove  token  first
         resetRouter()
         commit('RESET_STATE')
         resolve()
@@ -81,7 +94,7 @@ const actions = {
   // remove token
   resetToken({ commit }) {
     return new Promise(resolve => {
-      removeToken() // must remove  token  first
+      // removeToken() // must remove  token  first
       commit('RESET_STATE')
       resolve()
     })

@@ -1,7 +1,7 @@
 <template>
   <div class="goods-category main-content">
     <div class="screen-box">
-      <el-button icon="el-icon-plus" type="primary" @click="showDialog('add')">新增</el-button>
+      <el-button size="small" icon="el-icon-plus" type="primary" @click="showDialog('add')">新增</el-button>
     </div>
     <div class="content">
       <el-table
@@ -60,16 +60,24 @@
           <el-input v-model="form.name" autocomplete="off" />
         </el-form-item>
         <el-form-item label="上级分类" :label-width="formLabelWidth">
-          <el-select v-model="form.pid" placeholder="请选择上级分类">
-            <el-option label="大分类1" value="1" />
-            <el-option label="大分类2" value="2" />
+          <el-select v-model="form.pid" placeholder="请选择上级分类" style="width: 100%">
+            <el-option label="等级分类" value="0" />
+            <el-option label="手机" value="1" />
+            <el-option label="服装" value="2" />
           </el-select>
         </el-form-item>
+        <el-form-item label="设备码" :label-width="formLabelWidth">
+          <el-select v-model="form.pid" placeholder="请选择绑定设备" style="width: 100%">
+            <el-option label="设备1" value="1" />
+            <el-option label="设备2" value="2" />
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-button v-if="dialogType!=='detail'" type="primary" @click="onSubmit('shopForm')">保存</el-button>
+          <el-button v-else type="primary" @click="dialogType='edit'">编辑</el-button>
+          <el-button @click="dialogFormVisible = false">取消</el-button>
+        </el-form-item>
       </el-form>
-      <div v-if="dialogType==='add' || dialogType==='edit'" slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
-      </div>
     </el-dialog>
   </div>
 </template>

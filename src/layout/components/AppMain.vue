@@ -45,6 +45,8 @@ export default {
     background: #fff;
     padding: 10px;
     position: relative;
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+    border-radius: 5px;
     .operation{
       position: absolute;
       right: 10px;
@@ -54,7 +56,16 @@ export default {
   .content{
     border: 1px solid #f5f5f5;
     margin-top: 10px;
-    border-bottom: none
+    border-bottom: none;
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+    border-radius: 5px;
+  }
+
+  // 分页样式
+  .pagination-box{
+    text-align: right;
+    background: #fff;
+    padding: 10px;
   }
 }
 

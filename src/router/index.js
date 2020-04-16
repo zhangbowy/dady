@@ -30,11 +30,25 @@ export const constantRoutes = [
     }]
   },
   {
+    path: '/shopManage',
+    component: Layout,
+    alwaysShow: true,
+    redirect: '/shopManage/shopList',
+    meta: { title: '店铺管理', icon: 'shop' },
+    children: [{
+      path: 'shopList',
+      name: 'ShopList',
+      component: () => import('@/views/shopManage/shop/list'),
+      alwaysShow: false,
+      meta: { title: '店铺列表', noCache: false }
+    }]
+  },
+  {
     path: '/commodity',
     component: Layout,
     alwaysShow: true,
     redirect: '/commodity/goodsCategory',
-    meta: { title: '商品', icon: 'goods' },
+    meta: { title: '商品管理', icon: 'goods' },
     children: [{
       path: 'goodsCategory',
       name: 'GoodsCategory',
@@ -42,31 +56,78 @@ export const constantRoutes = [
       meta: { title: '商品分类' }
     },
     {
-      path: 'goods',
-      name: 'Goods',
-      component: () => import('@/views/commodity/goods/index'),
-      alwaysShow: false,
-      redirect: '/commodity/goods/list',
-      meta: { title: '商品管理', noCache: false },
-      children: [{
-        path: 'list',
-        name: 'GoodsList',
-        hidden: true,
-        component: () => import('@/views/commodity/goods/list/index'),
-        meta: { title: '商品列表', activeMenu: '/commodity/goods' }
-      }, {
-        path: 'detail/:id(\\d+)?',
-        name: 'GoodsDetail',
-        hidden: true,
-        component: () => import('@/views/commodity/goods/detail/index'),
-        meta: { title: '商品详情', activeMenu: '/commodity/goods' }
-      }, {
-        path: 'edit/:id(\\d+)?',
-        name: 'EditGoods',
-        hidden: true,
-        component: () => import('@/views/commodity/goods/edit/index'),
-        meta: { title: '编辑/新增商品', activeMenu: '/commodity/goods' }
-      }]
+      path: 'goodsList',
+      name: 'GoodsList',
+      component: () => import('@/views/commodity/goods/list'),
+      meta: { title: '商品列表', activeMenu: '/commodity/goodsList' }
+    }, {
+      path: 'goodsEdit:id(\\d+)?',
+      name: 'GoodsEdit',
+      hidden: true,
+      component: () => import('@/views/commodity/goods/edit'),
+      meta: { title: '商品编辑', activeMenu: '/commodity/goodsList' }
+    }, {
+      path: 'goodsDetail:id(\\d+)?',
+      name: 'GoodsDetail',
+      hidden: true,
+      component: () => import('@/views/commodity/goods/detail'),
+      meta: { title: '商品详情', activeMenu: '/commodity/goodsList' }
+    }]
+  },
+  {
+    path: '/orderManage',
+    component: Layout,
+    alwaysShow: true,
+    redirect: '/orderManage/orderList',
+    meta: { title: '订单管理', icon: 'order' },
+    children: [{
+      path: 'orderList',
+      name: 'OrderList',
+      component: () => import('@/views/orderManage/order/list'),
+      meta: { title: '订单列表' }
+    }]
+  },
+  {
+    path: '/designerManage',
+    component: Layout,
+    alwaysShow: true,
+    redirect: '/designerManage/designerTeam',
+    meta: { title: '设计师管理', icon: 'designer' },
+    children: [{
+      path: 'designerTeam',
+      name: 'DesignerTeam',
+      component: () => import('@/views/designer/designerTeam/list'),
+      meta: { title: '团队列表' }
+    }, {
+      path: 'designerList',
+      name: 'DesignerList',
+      component: () => import('@/views/designer/designerList/list'),
+      meta: { title: '设计师列表' }
+    }]
+  }, {
+    path: '/logisticsManage',
+    component: Layout,
+    alwaysShow: true,
+    redirect: '/logisticsManage/template',
+    meta: { title: '物流模板管理', icon: 'logistics' },
+    children: [{
+      path: 'template',
+      name: 'Template',
+      component: () => import('@/views/logistics/template/list'),
+      meta: { title: '物流模板列表' }
+    }]
+  },
+  {
+    path: '/machineManage',
+    component: Layout,
+    alwaysShow: true,
+    redirect: '/machineManage/machineList',
+    meta: { title: '设备管理', icon: 'machine' },
+    children: [{
+      path: 'machineList',
+      name: 'MachineList',
+      component: () => import('@/views/machineManage/machine/list'),
+      meta: { title: '设备列表' }
     }]
   },
   {
@@ -79,19 +140,19 @@ export const constantRoutes = [
       {
         path: 'admin',
         name: 'Admin',
-        component: () => import('@/views/manage/admin/index'),
+        component: () => import('@/views/manage/admin/list'),
         meta: { title: '管理员列表' }
       },
       {
         path: 'roles',
         name: 'Roles',
-        component: () => import('@/views/manage/roles/index'),
+        component: () => import('@/views/manage/roles/list'),
         meta: { title: '角色列表' }
       },
       {
         path: 'rules',
         name: 'Rules',
-        component: () => import('@/views/manage/rules/index'),
+        component: () => import('@/views/manage/rules/list'),
         meta: { title: '权限规则' }
       }
     ]

@@ -1,7 +1,7 @@
 <template>
   <div class="card-tag">
-    <div class="tag-content" :style="`background:${backColor}`">
-      <svg-icon :icon-class="iconName" />
+    <div class="tag-content" :style="`background:${backColor};color:${color};border-radius:${raidus};display: ${block?'block':'inline-block'}`">
+      <svg-icon v-if="iconName" :icon-class="iconName" />
       <span>{{ tagName }}</span>
     </div>
   </div>
@@ -25,7 +25,19 @@ export default {
     },
     backColor: {
       type: String,
-      default: '#666666'
+      default: '#F5F7FA'
+    },
+    color: {
+      type: String,
+      default: '#31708f'
+    },
+    raidus: {
+      type: String,
+      default: ''
+    },
+    block: {
+      type: Boolean,
+      default: true
     }
   }
 }
@@ -35,6 +47,7 @@ export default {
 .tag-content{
   color: #fff;
   padding: 10px;
+  display: inline-block;
 }
 </style>
 

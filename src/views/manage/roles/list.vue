@@ -1,25 +1,34 @@
 <template>
-  <div class="goods-list main-content">
+  <div class="roles-list main-content">
     <div class="screen-box">
       <div class="screen-item">
         <el-input
           v-model="keywords"
-          placeholder="请输入关键词"
+          size="small"
+          placeholder="请输入角色名称"
           clearable
           style="width:220px"
         />
-        <el-button icon="el-icon-search" type="primary">搜索</el-button>
+        <el-select v-model="status" size="small" multiple placeholder="请选择">
+          <el-option
+            v-for="item in statusOption"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+        <el-button size="small" icon="el-icon-search" type="primary">搜索</el-button>
       </div>
       <div class="operation">
-        <router-link :to="'/commodity/goods/edit'">
-          <el-button icon="el-icon-plus" type="primary">新增</el-button>
+        <router-link :to="'/commodity/rolesEdit'">
+          <el-button size="small" icon="el-icon-plus" type="primary">新增</el-button>
         </router-link>
       </div>
     </div>
     <div class="content">
       <el-table
         ref="multipleTable"
-        :data="goodsList"
+        :data="rolesList"
         style="width: 100%"
         fit
         highlight-current-row
@@ -31,24 +40,9 @@
           width="55"
         />
         <el-table-column
-          label="商品图片"
+          prop="name"
+          label="角色名称"
           align="center"
-          width="100"
-        >
-          <template slot-scope="scope">
-            <img :src="scope.row.img" alt="" width="60" height="60">
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="title"
-          label="商品标题"
-          align="center"
-        />
-        <el-table-column
-          prop="salesVolume"
-          label="销量"
-          align="center"
-          sortable
         />
         <el-table-column
           label="状态"
@@ -56,7 +50,7 @@
           width="250"
         >
           <template slot-scope="scope">
-            <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status==0?'未发布':'已上架' }}</el-tag>
+            <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status==0?'禁用':'正常' }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column
@@ -75,12 +69,12 @@
           align="center"
         >
           <template slot-scope="scope">
-            <router-link :to="`/commodity/goods/detail?id=${scope.row.id}`">
+            <router-link :to="`/commodity/rolesDetail?id=${scope.row.id}`">
               <el-button
                 size="mini"
               >查看</el-button>
             </router-link>
-            <router-link :to="`/commodity/goods/edit?id=${scope.row.id}`">
+            <router-link :to="`/commodity/rolesEdit?id=${scope.row.id}`">
               <el-button
                 size="mini"
               >编辑</el-button>
@@ -98,7 +92,7 @@
         :hide-on-single-page="true"
         background
         layout="prev, pager, next"
-        :total="goodsList.length"
+        :total="rolesList.length"
       />
     </div>
   </div>
@@ -119,17 +113,27 @@ export default {
   data() {
     return {
       keywords: '',
-      goodsList: [{
+      rolesList: [{
         id: 1,
-        img: 'http://img.tecqm.cn/upload_375541a0001c9e4b09d48086a71965ac.jpg',
-        title: '苹果xs',
-        desc: '苹果xs手机',
+        name: '超级管理员',
+        status: 1,
         create_time: '2020-4-14 15:40:28',
-        price: '10',
-        salesVolume: 100,
+        update_time: '2020-4-14 15:47:28'
+      }, {
+        id: 2,
+        name: '产品管理员',
         status: 0,
+        create_time: '2020-4-14 15:40:28',
         update_time: '2020-4-14 15:47:28'
       }],
+      statusOption: [{
+        value: '0',
+        label: '正常'
+      }, {
+        value: '1',
+        label: '禁用'
+      }],
+      status: '',
       multipleSelection: []
     }
   },
@@ -138,7 +142,7 @@ export default {
       this.multipleSelection = val
     },
     handleDelete(id) {
-      this.$confirm('是否删除该商品?', '提示', {
+      this.$confirm('是否删除该角色?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
@@ -161,12 +165,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.goods-list{
+.roles-list{
   .screen-box{
     .screen-item{
       text-align: left;
     }
   }
 }
-
 </style>

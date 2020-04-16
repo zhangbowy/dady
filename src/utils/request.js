@@ -1,12 +1,14 @@
 import axios from 'axios'
+import qs from 'qs'
 import { MessageBox, Message } from 'element-ui'
-import store from '@/store'
-import { getToken } from '@/utils/auth'
+// import store from '@/store'
+// import { getToken } from '@/utils/auth'
+import router from './../router/index'
 
 // 创建axios相应拦截器
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
-  // withCredentials: true, // 跨域请求发送cookie
+  withCredentials: true, // 跨域请求发送cookie
   timeout: 5000 // 请求超时
 })
 
@@ -15,11 +17,24 @@ service.interceptors.request.use(
   config => {
     // do something before request is sent
 
-    if (store.getters.token) {
-      // 使每个请求头携带token
-      // ['X-Token'] 是header请求头中的key
-      // 请根据实际情况修改
-      config.headers['X-Token'] = getToken()
+    // if (store.getters.token) {
+    //   // 使每个请求头携带token
+    //   // ['X-Token'] 是header请求头中的key
+    //   // 请根据实际情况修改
+    //   config.headers['X-Token'] = getToken()
+    // }
+    if (config.method === 'post') { // 支持2种方法，默认使用Form Data
+      // 如果useRequestBody=false, 默认支持Form Data
+      // SpringMVC Controller 中不需要使用@RequestBody，默认使用@RequestParam
+      config.data = qs.stringify(config.data)
+      config.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
+    } else if (config.method === 'get') {
+      const newParams = {}
+      for (const key in config.params) {
+        newParams[key] = encodeURIComponent(config.params[key])
+      }
+      config.params = newParams
+      config.headers['Content-Type'] = 'application/json;charset=UTF-8'
     }
     return config
   },
@@ -44,28 +59,28 @@ service.interceptors.response.use(
   response => {
     const res = response.data
 
-    // if the custom code is not 20000, it is judged as an error.
-    if (res.code !== 20000) {
+    // code为1即请求成功.
+    if (res.code !== 0) {
       Message({
-        message: res.message || 'Error',
+        message: res.msg || `请求异常：${res.code}`,
         type: 'error',
         duration: 5 * 1000
       })
-
-      // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
-      if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
-        // to re-login
-        MessageBox.confirm('登录失效，请重新登录！', '确认退出', {
+      // 402: 登录失效或未登录;
+      if (res.code === 402) {
+        // 去重新登录
+        MessageBox.confirm('您未登录或登录失效，请重新登录！', '确认退出', {
           confirmButtonText: '重新登录',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          store.dispatch('user/resetToken').then(() => {
-            location.reload()
-          })
+          // store.dispatch('user/resetToken').then(() => {
+          //   location.reload()
+          // })
+          router.push({ path: '/login' })
         })
       }
-      return Promise.reject(new Error(res.message || 'Error'))
+      return Promise.reject(new Error(res.msg || 'Error'))
     } else {
       return res
     }
@@ -73,7 +88,7 @@ service.interceptors.response.use(
   error => {
     console.log('err' + error) // debug
     Message({
-      message: error.message,
+      message: error.msg || '请求异常',
       type: 'error',
       duration: 5 * 1000
     })

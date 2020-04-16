@@ -353,3 +353,14 @@ export function removeClass(ele, cls) {
     ele.className = ele.className.replace(reg, ' ')
   }
 }
+
+/**
+ * @param {Array} arr1
+ * @param {Array} arr2
+ * @returns {Array}
+ */
+export function diffArary(arr1, arr2) {
+  arr1 = uniqueArr(arr1)
+  arr2 = uniqueArr(arr2)
+  return arr1.concat(arr2).filter(arg => !(arr1.includes(arg) && arr2.includes(arg)))
+}
