@@ -20,7 +20,7 @@
         <el-button size="small" icon="el-icon-search" type="primary">搜索</el-button>
       </div>
       <div class="operation">
-        <router-link :to="'/commodity/rolesEdit'">
+        <router-link :to="'/manage/rolesEdit'">
           <el-button size="small" icon="el-icon-plus" type="primary">新增</el-button>
         </router-link>
       </div>
@@ -69,12 +69,12 @@
           align="center"
         >
           <template slot-scope="scope">
-            <router-link :to="`/commodity/rolesDetail?id=${scope.row.id}`">
+            <router-link :to="`/manage/rolesDetail?id=${scope.row.id}`">
               <el-button
                 size="mini"
               >查看</el-button>
             </router-link>
-            <router-link :to="`/commodity/rolesEdit?id=${scope.row.id}`">
+            <router-link :to="`/manage/rolesEdit?id=${scope.row.id}`">
               <el-button
                 size="mini"
               >编辑</el-button>

@@ -116,7 +116,7 @@
         <el-form-item label="店铺logo" prop="logo">
           <el-upload
             class="logo-uploader"
-            :action="uploadImgUrl"
+            :action="uploadUrl"
             :data="{type: 'shop_logo'}"
             name="image"
             :file-list="fileList"

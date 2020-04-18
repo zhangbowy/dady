@@ -364,3 +364,31 @@ export function diffArary(arr1, arr2) {
   arr2 = uniqueArr(arr2)
   return arr1.concat(arr2).filter(arg => !(arr1.includes(arg) && arr2.includes(arg)))
 }
+
+export function limetedStr(str, limeitNum) {
+  if (typeof (str) === 'string') {
+    if (str.length > limeitNum) {
+      str = str.substring(0, limeitNum) + '...'
+    }
+  }
+  return str
+}
+
+export function getUrl(file) {
+  if (!file) {
+    return
+  }
+  let url = null
+  if (typeof (file) === 'string') { // 返回图片路径
+    url = file
+  } else { // 根据文件数据创建图片
+    if (window.createObjectURL !== undefined) {
+      url = window.createObjectURL(file)
+    } else if (window.URL !== undefined) {
+      url = window.URL.createObjectURL(file)
+    } else if (window.webkitURL !== undefined) {
+      url = window.webkitURL.createObjectURL(file)
+    }
+  }
+  return url
+}

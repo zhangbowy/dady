@@ -25,9 +25,6 @@
                   </el-input>
                 </el-form-item>
                 <el-form-item label="商品图片">
-                  <!-- <el-input v-model="form.stock">
-                <template slot="append">件</template>
-              </el-input> -->
                   <img-upload
                     :img-data="form.images"
                     :pic-max="picMax"
@@ -84,8 +81,9 @@
             </div> -->
             <div class="form-content-item">
               <div class="block-title"><card-tag tag-name="商品详情" /></div>
-              <el-form-item>
-                <mavon-editor ref="editor" v-model="form.detail" @save="saveDetail" @change="updateDetail" />
+              <el-form-item style="padding:10px 10px">
+                <Tinymce ref="editor" v-model="form.detail" :height="400" />
+                <!-- <mavon-editor ref="editor" v-model="form.detail" @save="saveDetail" @change="updateDetail" /> -->
               </el-form-item>
             </div>
           </el-tab-pane>
@@ -136,7 +134,7 @@
           </el-tab-pane>
         </el-tabs>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit('form')">立即创建</el-button>
+          <el-button type="primary" @click="onSubmit('form')">保存</el-button>
           <el-button @click="()=>this.$router.go(-1)">取消</el-button>
         </el-form-item>
       </el-form>
@@ -146,7 +144,8 @@
 
 <script>
 import CardTag from '@/components/CardTag'
-import { mavonEditor } from 'mavon-editor' // 富文本编辑器
+// import { mavonEditor } from 'mavon-editor' // 富文本编辑器
+import Tinymce from '@/components/Tinymce'
 import ImgUpload from '@/components/ImgUpload' // 图片上传
 import SkuSelect from '@/components/VueSku/sku-select' // sku规格
 import SkuTable from '@/components/VueSku/sku-table' // skulist
@@ -155,7 +154,7 @@ import { addGood, editGood, goodDetail } from '@/api/goods'
 export default {
   components: {
     CardTag,
-    mavonEditor,
+    Tinymce,
     ImgUpload,
     SkuSelect,
     SkuTable
@@ -163,7 +162,7 @@ export default {
   data() {
     return {
       id: '',
-      picMax: 15, // 图片上传
+      picMax: 5, // 图片上传
       activeName: '1',
       form: {
         name: '', // 标题

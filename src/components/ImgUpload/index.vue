@@ -5,8 +5,8 @@
         <transition-group>
           <div v-for="(item, index) in imgList" :key="index+item" class="img-item">
             <i class="el-icon-close close-btn" @click="deleteImg(index)" />
-            <img v-if="widths" :src="item" style="width:315px;height:88px;">
-            <img v-else :src="item">
+            <img v-if="widths" :src="'http://'+item" style="width:315px;height:88px;">
+            <img v-else :src="'http://'+item">
           </div>
         </transition-group>
       </draggable>
@@ -66,7 +66,7 @@ export default {
     imageChoose(ArrList) {
       ArrList.forEach((item, index) => {
         if (this.imgList.length < this.picMax) {
-          this.imgList.push(item.image_path)
+          this.imgList.push(item.oss_path)
         }
       })
       this.$emit('chooseImg', this.imgList)

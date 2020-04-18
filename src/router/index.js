@@ -72,6 +72,11 @@ export const constantRoutes = [
       hidden: true,
       component: () => import('@/views/commodity/goods/detail'),
       meta: { title: '商品详情', activeMenu: '/commodity/goodsList' }
+    }, {
+      path: 'resources',
+      name: 'Resources',
+      component: () => import('@/views/commodity/resources'),
+      meta: { title: '我的资源', activeMenu: '/commodity/resources' }
     }]
   },
   {
@@ -148,6 +153,13 @@ export const constantRoutes = [
         name: 'Roles',
         component: () => import('@/views/manage/roles/list'),
         meta: { title: '角色列表' }
+      },
+      {
+        path: 'rolesEdit:id(\\d+)?',
+        name: 'RolesEdit',
+        hidden: true,
+        component: () => import('@/views/manage/roles/edit'),
+        meta: { title: '角色编辑', activeMenu: '/manage/roles' }
       },
       {
         path: 'rules',

@@ -61,18 +61,18 @@
         </el-form-item>
         <el-form-item label="上级分类" :label-width="formLabelWidth">
           <el-select v-model="form.pid" placeholder="请选择上级分类" style="width: 100%">
-            <el-option label="等级分类" value="0" />
+            <el-option label="顶级分类" value="0" />
             <el-option label="手机" value="1" />
             <el-option label="服装" value="2" />
           </el-select>
         </el-form-item>
         <el-form-item label="设备码" :label-width="formLabelWidth">
-          <el-select v-model="form.pid" placeholder="请选择绑定设备" style="width: 100%">
-            <el-option label="设备1" value="1" />
-            <el-option label="设备2" value="2" />
+          <el-select v-model="form.code" placeholder="请选择绑定设备" style="width: 100%">
+            <el-option label="帽子刺绣机" value="121312" />
+            <el-option label="衣服刺绣机" value="221312" />
           </el-select>
         </el-form-item>
-        <el-form-item>
+        <el-form-item :label-width="formLabelWidth">
           <el-button v-if="dialogType!=='detail'" type="primary" @click="onSubmit('shopForm')">保存</el-button>
           <el-button v-else type="primary" @click="dialogType='edit'">编辑</el-button>
           <el-button @click="dialogFormVisible = false">取消</el-button>
@@ -105,6 +105,7 @@ export default {
       form: {
         name: '',
         pid: '',
+        code: '',
         desc: ''
       },
       formLabelWidth: '120px',
@@ -127,12 +128,6 @@ export default {
       if (id) {
         // 请求分类详情
       }
-    },
-    handleClick(id) {
-      console.log(id)
-    },
-    handleEdit(id) {
-      console.log(id)
     },
     handleDelete(id) {
       this.$confirm('是否删除该分类?', '提示', {

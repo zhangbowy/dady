@@ -1,54 +1,88 @@
 <template>
   <div>
-    <!-- <div class="order-list">
+    <div class="order-list">
       <div class="order-item">
-        <div class="order-header">
-          <div class="header-item">
-            <div>商品</div>
-            <div>单价/数量</div>
-          </div>
-          <div class="header-item">
-            <div>订单状态</div>
-          </div>
-          <div class="header-item">
-            <div>收货人</div>
-          </div>
-          <div class="header-item">
-            <div>买家信息</div>
-          </div>
-          <div class="header-item">
-            <div>买家留言</div>
-          </div>
-          <div class="header-item">
-            <div>实付金额</div>
-          </div>
-          <div class="header-item">
-            <div>订单操作</div>
-          </div>
-        </div>
+        <el-row class="order-header">
+          <el-col :span="6" class="header-item">
+            <el-row>
+              <el-col :span="12">商品</el-col>
+              <el-col :span="12" class="alignR">单价/数量</el-col>
+            </el-row>
+          </el-col>
+          <el-col :span="3" class="header-item">
+            订单状态
+          </el-col>
+          <el-col :span="3" class="header-item">
+            收货人
+          </el-col>
+          <el-col :span="3" class="header-item">
+            买家信息
+          </el-col>
+          <el-col :span="3" class="header-item">
+            买家留言
+          </el-col>
+          <el-col :span="3" class="header-item">
+            实付金额
+          </el-col>
+          <el-col :span="3" class="header-item">
+            订单操作
+          </el-col>
+        </el-row>
+
         <div class="order-item-content">
           <el-checkbox-group v-model="checkList">
             <div v-for="(item, index) in data" :key="item.id+index" class="item-box">
               <div class="item-header">
-                <el-checkbox />
-                <span>订单号：{{ item.orderNo }}</span>
+                <el-checkbox :label="item.id" />
+                <span>订单号：{{ item.order_no }}</span>
                 <span>{{ item.payType==1?'线下支付': '在线支付' }}</span>
                 <span>{{ item.ordrType==1?'普通订单': '手动订单' }}</span>
                 <span>{{ item.payTime }}</span>
               </div>
-              <div class="item-content">
-                <div class="content-cell">
-                  <img :src="item.goodsImg" alt="" width="80" height="80">
-                  <span>{{ item.goodName }}</span>
-                </div>
-              </div>
+              <el-row class="item-content" type="flex" align="middle">
+                <el-col :span="6" class="td-item">
+                  <el-row>
+                    <el-col :span="12">
+                      <img :src="item.goodsImg" alt="" width="80" height="80">
+                      <span>{{ item.goodName }}</span></el-col>
+                    <el-col :span="12" class="alignR">{{ item.price }}元/{{ item.number }}件</el-col>
+                  </el-row>
+                </el-col>
+                <el-col :span="3" class="td-item">
+                  {{ item.status==0?'待支付':'已完成' }}
+                </el-col>
+                <el-col :span="3" class="td-item">{{ item.consignee }}/{{ item.consigneePhone }}</el-col>
+                <el-col :span="3" class="td-item">张三</el-col>
+                <el-col :span="3" class="td-item">请尽快发货</el-col>
+                <el-col :span="3" class="td-item">100元</el-col>
+                <el-col :span="3" class="td-item">
+                  <el-button
+                    size="mini"
+                    type="primary"
+                  >订单详情</el-button>
+                  <!-- <el-button
+                    size="mini"
+                    @click.native="showDialog('edit', scope.row)"
+                  >编辑</el-button> -->
+                  <el-button
+                    size="mini"
+                    type="primary"
+                    style="margin: 10px 0 0"
+                  >确认发货</el-button>
+                  <el-button
+                    size="mini"
+                    type="primary"
+                    style="margin: 10px 0 0"
+                  >取消订单</el-button>
+                </el-col>
+              </el-row>
             </div>
           </el-checkbox-group>
         </div>
       </div>
-    </div> -->
+    </div>
 
-    <el-table
+    <!-- <el-table
       ref="multipleTable"
       :data="data"
       style="width: 100%"
@@ -134,7 +168,7 @@
           >发货</el-button>
         </template>
       </el-table-column>
-    </el-table>
+    </el-table> -->
   </div>
 </template>
 
@@ -158,18 +192,78 @@ export default {
   },
   data() {
     return {
-      checkList: [],
-      multipleSelection: []
+      checkList: []
     }
   },
   methods: {
-    handleSelectionChange(val) {
-      this.multipleSelection = val
-    }
   }
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+.order-header{
+  align-items: center;
+  font-size: 16px;
+  padding: 0 10px;
+  box-shadow: 0px 10px 20px #fcfcfc;
+  margin-bottom: 20px;
+  background: #fafafa;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  .header-item{
+    text-align: center;
+    border-right: 1px solid #eee;
+    padding: 10px 5px;
+    &:last-child{
+      border-right: none;
+    }
+  }
+}
+.order-item-content{
+  .item-box{
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 1px solid #fafafa;
+    box-shadow: 0px 10px 20px #fcfcfc;
+    vertical-align: middle;
+    .item-header{
+      padding: 10px;
+      background: #f5f5f5;
+      span{
+        margin-left: 10px;
+      }
+    }
+    .item-content{
+      padding: 0 10px;
+      &:hover{
+        background: #fafafa;
+      }
+      .td-item{
+        padding: 10px 5px;
+        text-align: center;
+        border-right: 1px solid #eee;
+        &:last-child{
+          border: none
+        }
+      }
+    }
+  }
+}
+.el-checkbox-group{
+  font-size: 14px;
+  .el-checkbox{
+    span{
+      font-size: 0;
+    }
+  }
+}
+</style>
 
+<style lang="scss">
+.order-list{
+  .el-checkbox__label{
+    display: none
+    ;
+  }
+}
 </style>

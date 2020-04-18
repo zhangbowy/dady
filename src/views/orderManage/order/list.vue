@@ -19,11 +19,6 @@
         </el-select>
         <el-button size="small" icon="el-icon-search" type="primary">搜索</el-button>
       </div>
-      <div class="operation">
-        <router-link :to="'/commodity/orderEdit'">
-          <el-button size="small" icon="el-icon-plus" type="primary">新增</el-button>
-        </router-link>
-      </div>
     </div>
     <div class="content">
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
@@ -33,16 +28,19 @@
         <el-tab-pane label="待付款" name="2">
           <order-table :data="orderList" />
         </el-tab-pane>
-        <el-tab-pane label="待发货" name="3">
+        <el-tab-pane label="议价中" name="3">
           <order-table :data="orderList" />
         </el-tab-pane>
-        <el-tab-pane label="已发货" name="4">
+        <el-tab-pane label="待发货" name="4">
           <order-table :data="orderList" />
         </el-tab-pane>
-        <el-tab-pane label="已完成" name="5">
+        <el-tab-pane label="已发货" name="5">
           <order-table :data="orderList" />
         </el-tab-pane>
-        <el-tab-pane label="已关闭" name="6">
+        <el-tab-pane label="已完成" name="6">
+          <order-table :data="orderList" />
+        </el-tab-pane>
+        <el-tab-pane label="已关闭" name="7">
           <order-table :data="orderList" />
         </el-tab-pane>
       </el-tabs>
@@ -78,42 +76,48 @@ export default {
       total: 2,
       orderList: [{
         id: 1,
-        orderNo: '202004160001',
+        order_no: '202004160001',
         goodsImg: 'http://img.tecqm.cn/upload_375541a0001c9e4b09d48086a71965ac.jpg',
         goodName: '苹果xs',
         desc: '苹果xs手机',
         create_time: '2020-4-14 15:40:28',
         price: '10',
+        number: 1,
         salesVolume: 100,
         status: 0,
+        consignee: '张三',
+        consigneePhone: '18895464664',
         update_time: '2020-4-14 15:47:28'
       }, {
-        id: 1,
-        orderNo: '202004160002',
+        id: 2,
+        order_no: '202004160002',
         goodsImg: 'http://img.tecqm.cn/upload_375541a0001c9e4b09d48086a71965ac.jpg',
         goodName: '苹果x',
         desc: '苹果x手机',
         create_time: '2020-4-15 15:40:28',
         price: '100',
+        number: 2,
+        consignee: '张三',
+        consigneePhone: '18895464664',
         salesVolume: 1,
         status: 1,
         update_time: '2020-4-15 15:47:28'
       }],
       statusOption: [{
         value: '0',
-        label: '待审核'
+        label: '待付款'
       }, {
         value: '1',
-        label: '出售中'
+        label: '议价中'
       }, {
         value: '2',
-        label: '待上架'
+        label: '代发货'
       }, {
         value: '3',
-        label: '仓库中'
+        label: '已发货'
       }, {
         value: '4',
-        label: '已售罄'
+        label: '已完成'
       }],
       status: '',
       multipleSelection: [],
@@ -126,7 +130,7 @@ export default {
       console.log(tab, event)
     },
     handleDelete(id) {
-      this.$confirm('是否删除该商品?', '提示', {
+      this.$confirm('是否删除该订单?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',

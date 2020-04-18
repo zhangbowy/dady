@@ -67,7 +67,7 @@ export default {
   },
 
   data: () => ({
-    picMax: 15, // 图片上传
+    picMax: 1, // 图片上传
     baseUrl: process.env.VUE_APP_BASE_API,
     data: [],
     coefficient: {
@@ -114,7 +114,7 @@ export default {
               },
               picMax: {
                 type: Number,
-                default: 15
+                default: 1
               }
             },
             methods: {
@@ -167,6 +167,7 @@ export default {
                   min={0}
                   controls={false}
                   precision={0}
+                  style={'width:100%'}
                   oninput={e => (this.row.weight = e)}
                 ></ElInputNumber>
               )
@@ -187,6 +188,7 @@ export default {
                   min={0}
                   controls={false}
                   precision={0}
+                  style={'width:100%'}
                   oninput={e => (this.row.num = e)}
                 ></ElInputNumber>
               )
@@ -207,6 +209,7 @@ export default {
                   min={0}
                   controls={false}
                   precision={0}
+                  style={'width:100%'}
                   oninput={e => (this.row.current_price = e)}
                 ></ElInputNumber>
               )
@@ -275,7 +278,7 @@ export default {
           // 初始化属性
           images: '',
           weight: '', // 为了方便展示数据，这里默认设置为 100
-          num: '1000',
+          num: '',
           current_price: ''
         }))
       }

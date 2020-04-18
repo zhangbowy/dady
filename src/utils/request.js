@@ -26,8 +26,10 @@ service.interceptors.request.use(
     if (config.method === 'post') { // 支持2种方法，默认使用Form Data
       // 如果useRequestBody=false, 默认支持Form Data
       // SpringMVC Controller 中不需要使用@RequestBody，默认使用@RequestParam
-      config.data = qs.stringify(config.data)
-      config.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
+      if (!config.headers['Content-Type']) {
+        config.data = qs.stringify(config.data)
+        config.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
+      }
     } else if (config.method === 'get') {
       const newParams = {}
       for (const key in config.params) {
