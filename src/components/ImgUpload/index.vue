@@ -28,7 +28,7 @@ export default {
   },
   props: {
     imgData: {
-      type: Array,
+      type: [Array, String],
       default: () => []
     },
     picMax: {
@@ -57,7 +57,11 @@ export default {
     }
   },
   created() {
-    this.imgList = this.imgData
+    if (typeof this.imgData === 'string') {
+      this.imgList[0] = this.imgData
+    } else {
+      this.imgList = this.imgData
+    }
   },
   methods: {
     showGoodsModal() {

@@ -51,7 +51,7 @@
 import Vue from 'vue'
 import { flatten } from '@/utils/sku'
 import { diffArary } from '@/utils'
-import ImgUpload from '@/components/ImgUpload' // 图片上传
+import ImgUpload from '@/components/ImgUpload'
 
 export default {
   components: {
@@ -143,7 +143,7 @@ export default {
             render() {
               return (
                 <ImgUpload
-                  img-data={[]}
+                  img-data={this.row.images}
                   picMax={this.picMax}
                   on-chooseImg={this.imageChoose}
                   on-changePsit={this.changeImg}
@@ -247,7 +247,7 @@ export default {
             } else {
               data.push({
                 ...item,
-                images: '', // 图片
+                images: '1', // 图片
                 weight: undefined, // 重量
                 num: undefined, // 库存
                 current_price: undefined // 价格

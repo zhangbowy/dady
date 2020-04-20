@@ -40,7 +40,7 @@ const dynamicLoadScript = (src, callback) => {
     }
     script.onerror = function() {
       this.onerror = this.onload = null
-      cb(new Error('Failed to load ' + src), script)
+      cb(new Error('加载失败 ' + src), script)
     }
   }
 

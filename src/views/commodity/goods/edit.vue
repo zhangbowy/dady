@@ -27,7 +27,7 @@
                 <el-form-item label="商品图片">
                   <img-upload
                     :img-data="form.images"
-                    :pic-max="picMax"
+                    :pic-max="1"
                     @chooseImg="imageChoose"
                     @changePsit="changeImg"
                   />
@@ -237,11 +237,13 @@ export default {
         id: id
       }).then(res => {
         this.form = res.data
+        this.form.images = []
+        this.$refs.skutable.data = JSON.parse(res.data.sku_list)
+        this.specification = JSON.parse(res.data.sku_show)
+        console.log(JSON.parse(res.data.sku_list))
         this.form.sku_show = JSON.parse(res.data.sku_show)
         this.form.sku_list = JSON.parse(res.data.sku_list)
-        this.specification = this.form.sku_show
-        this.$refs.skutable.data = this.form.sku_list
-        this.form.images = []
+        // console.log(this.form.sku_list)
       })
     },
     // 提交按钮
@@ -249,8 +251,9 @@ export default {
       const _this = this
       _this.$refs[formName].validate((valid) => {
         if (valid) {
-          _this.form.sku_list = JSON.stringify(this.$refs.skutable.data)
-          _this.form.sku_show = JSON.stringify(this.specificationFilter)
+          _this.form.sku_list = JSON.stringify(_this.$refs.skutable.data)
+          _this.form.sku_show = JSON.stringify(_this.specificationFilter)
+          _this.form.images = JSON.stringify(_this.form.images)
           if (_this.form.id) {
             editGood(_this.form).then(res => {
               if (res.code === 0) {
@@ -288,33 +291,21 @@ export default {
     // tab选项卡切换
     handleClick(tab, event) {
     },
-    // 更新详情数据
-    updateDetail(markdown, html) {
-      // 此时会自动将 markdown 和 html 传递到这个方法中
-      console.log('markdown内容: ' + markdown)
-      console.log('html内容:' + html)
-    },
-    // 保存详情数据
-    saveDetail(markdown, html) {
-      // 此时会自动将 markdown 和 html 传递到这个方法中
-      console.log('markdown内容:' + markdown)
-      console.log('html内容:' + html)
-    },
     // 图片上传模块
     imageChoose(imgArray) {
-      this.form.image_path = []
+      this.form.images = []
       if (imgArray.length > 0) {
         const that = this
         imgArray.forEach(item => {
           // 这里的this指向前面对象的this
-          that.form.image_path.push(item)
+          that.form.images.push(item)
         })
         // imgArray.forEach(item => {
         //   // 这里的this指向前面对象的this
         //   that.form.image_path.push(item.image_path);
         // });
       }
-      this.$refs.form.validateField('image_path')
+      this.$refs.form.validateField('images')
       // this.imageModalConfig.visible = false;
     },
     // 拖拽后触发

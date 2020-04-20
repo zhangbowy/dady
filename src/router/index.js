@@ -44,6 +44,20 @@ export const constantRoutes = [
     }]
   },
   {
+    path: '/member',
+    component: Layout,
+    alwaysShow: true,
+    redirect: '/member/memberList',
+    meta: { title: '会员管理', icon: 'member' },
+    children: [{
+      path: 'memberList',
+      name: 'MemberList',
+      component: () => import('@/views/memberCenter/member/list'),
+      alwaysShow: false,
+      meta: { title: '会员列表', noCache: false }
+    }]
+  },
+  {
     path: '/commodity',
     component: Layout,
     alwaysShow: true,
@@ -109,18 +123,6 @@ export const constantRoutes = [
       component: () => import('@/views/designer/designerList/list'),
       meta: { title: '设计师列表' }
     }]
-  }, {
-    path: '/logisticsManage',
-    component: Layout,
-    alwaysShow: true,
-    redirect: '/logisticsManage/template',
-    meta: { title: '物流模板管理', icon: 'logistics' },
-    children: [{
-      path: 'template',
-      name: 'Template',
-      component: () => import('@/views/logistics/template/list'),
-      meta: { title: '物流模板列表' }
-    }]
   },
   {
     path: '/machineManage',
@@ -133,6 +135,38 @@ export const constantRoutes = [
       name: 'MachineList',
       component: () => import('@/views/machineManage/machine/list'),
       meta: { title: '设备列表' }
+    }]
+  },
+  {
+    path: '/fontLibrary',
+    component: Layout,
+    alwaysShow: true,
+    redirect: '/fontLibrary/list',
+    meta: { title: '字体库', icon: 'fontLib' },
+    children: [{
+      path: 'list',
+      name: 'FontList',
+      component: () => import('@/views/fontLibrary/list/index'),
+      meta: { title: '字体列表' }
+    }]
+  },
+  {
+    path: '/system',
+    component: Layout,
+    alwaysShow: true,
+    redirect: '/system/logisticTemplate',
+    meta: { title: '系统设置', icon: 'system' },
+    children: [{
+      path: 'logisticTemplate',
+      name: 'LogisticTemplate',
+      component: () => import('@/views/systemSetup/logisticTemplate/list'),
+      meta: { title: '物流模板设置' }
+    },
+    {
+      path: 'embroidTemplate',
+      name: 'EmbroidTemplate',
+      component: () => import('@/views/systemSetup/embroidTemplate/index'),
+      meta: { title: '刺绣模板设置' }
     }]
   },
   {
