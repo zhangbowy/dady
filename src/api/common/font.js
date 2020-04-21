@@ -10,5 +10,22 @@ export default {
       },
       data
     })
+  },
+  // 获取字体列表
+  fontList(data) {
+    return request({
+      url: '/font/fontList',
+      method: 'post',
+      data
+    })
+  },
+  // 删除字体
+  deleteFont(data) {
+    return request({
+      url: '/font/deleteFont',
+      method: 'post',
+      data
+    })
   }
+
 }

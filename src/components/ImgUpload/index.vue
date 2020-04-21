@@ -1,18 +1,28 @@
 <template>
   <div class="clearBoth">
-    <div v-if="imgList && imgList.length>0" class="img-list">
+    <div v-if="imgList && imgList.length>0 && picMax>1" class="img-list">
       <draggable v-model="imgList" class="wrapper">
         <transition-group>
           <div v-for="(item, index) in imgList" :key="index+item" class="img-item">
-            <i class="el-icon-close close-btn" @click="deleteImg(index)" />
+            <i v-if="!disable" class="el-icon-close close-btn" @click="deleteImg(index)" />
             <img v-if="widths" :src="'http://'+item" style="width:315px;height:88px;">
             <img v-else :src="'http://'+item">
           </div>
         </transition-group>
       </draggable>
     </div>
+    <div v-if="picMax==1 && imgList !=''" class="img-list">
+      <div class="img-item">
+        <i v-if="!disable" class="el-icon-close close-btn" @click="deleteImg()" />
+        <img v-if="widths" :src="'http://'+imgList" :style="`width:{widths}}px;height:88px;`">
+        <img v-else :src="'http://'+imgList" width="100" height="100">
+      </div>
+    </div>
     <div v-if="imgList && imgList.length<picMax" class="img-box" @click="showGoodsModal">
-      <i class="el-icon-plus" />
+      <i v-if="!disable" class="el-icon-plus" />
+    </div>
+    <div v-if="picMax==1 && imgList==''" class="img-box" @click="showGoodsModal">
+      <i v-if="!disable" class="el-icon-plus" />
     </div>
     <image-modal :visible.sync="imageModalConfig.visible" :pic-max="picMax" @confirm="imageChoose" />
   </div>
@@ -30,6 +40,10 @@ export default {
     imgData: {
       type: [Array, String],
       default: () => []
+    },
+    disable: {
+      type: Boolean,
+      default: false
     },
     picMax: {
       type: Number,
@@ -57,7 +71,7 @@ export default {
     }
   },
   created() {
-    if (typeof this.imgData === 'string') {
+    if (this.picMax > 1) {
       this.imgList[0] = this.imgData
     } else {
       this.imgList = this.imgData
@@ -70,9 +84,14 @@ export default {
     imageChoose(ArrList) {
       ArrList.forEach((item, index) => {
         if (this.imgList.length < this.picMax) {
-          this.imgList.push(item.oss_path)
+          if (this.picMax === 1) {
+            this.imgList = item.oss_path
+          } else {
+            this.imgList.push(item.oss_path)
+          }
         }
       })
+
       this.$emit('chooseImg', this.imgList)
       this.imageModalConfig.visible = false
     },
@@ -81,7 +100,11 @@ export default {
       this.$emit('changePsit', this.imgList)
     },
     deleteImg(index) {
-      this.imgList.splice(index, 1)
+      if (this.picMax === 1) {
+        this.imgList = ''
+      } else {
+        this.imgList.splice(index, 1)
+      }
       this.$emit('chooseImg', this.imgList)
     }
   }

@@ -39,3 +39,39 @@ export function deleteGoods(params) {
     params
   })
 }
+
+// 商品分类模块
+export const Category = {
+  // 获取分类列表
+  getList(data) {
+    return request({
+      url: '/goods/getCategory',
+      method: 'post',
+      data
+    })
+  },
+  // 添加分类
+  addCategory(data) {
+    return request({
+      url: '/goods/addCategory',
+      method: 'post',
+      data
+    })
+  },
+  // 编辑分类
+  editCategory(data) {
+    return request({
+      url: '/goods/editCategory',
+      method: 'post',
+      data
+    })
+  },
+  // 删除分类
+  deleteCategory(data) {
+    return request({
+      url: '/goods/delCategory',
+      method: 'post',
+      data
+    })
+  }
+}

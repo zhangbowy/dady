@@ -167,6 +167,11 @@ export const constantRoutes = [
       name: 'EmbroidTemplate',
       component: () => import('@/views/systemSetup/embroidTemplate/index'),
       meta: { title: '刺绣模板设置' }
+    }, {
+      path: 'adsense',
+      name: 'Adsense',
+      component: () => import('@/views/systemSetup/adsense/index'),
+      meta: { title: '广告位设置' }
     }]
   },
   {

@@ -18,6 +18,7 @@
     </div>
     <div class="content">
       <el-table
+        v-loading="loading"
         :data="fontsList"
         style="width: 100%"
         fit
@@ -36,6 +37,15 @@
           align="center"
         />
         <el-table-column
+          label="样板展示"
+          align="center"
+          width="100"
+        >
+          <template slot-scope="scope">
+            <img :src="scope.row.font_content[0]" alt="" width="40" height="40">
+          </template>
+        </el-table-column>
+        <el-table-column
           fixed="right"
           label="操作"
           align="center"
@@ -43,14 +53,18 @@
           <template slot-scope="scope">
             <el-button
               size="mini"
+              @click.native="showDetail(scope.row)"
+            >查看</el-button>
+            <el-button
+              size="mini"
               type="danger"
-              @click="handleDelete(scope.row.shop_id)"
+              @click="handleDelete(scope.row.font_id)"
             >删除</el-button>
           </template>
         </el-table-column>
       </el-table>
       <!-- 分页 -->
-      <div class="pagination-box">
+      <!-- <div class="pagination-box">
         <el-pagination
           :total="total"
           :current-page="currentPage"
@@ -60,7 +74,7 @@
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
         />
-      </div>
+      </div> -->
     </div>
     <!-- 店铺新增，详情，编辑弹框 -->
     <el-dialog center :title="'新增字体'" :visible.sync="dialogFormVisible">
@@ -93,6 +107,15 @@
         </el-form-item>
       </el-form>
     </el-dialog>
+
+    <el-dialog center :title="fontDetail.font_name" :visible.sync="fontDetailDialog">
+      <div style="text-align: center" class="font-box">
+        <div v-for="(item,key) in fontDetail.font_content" :key="key" class="font-item">
+          <span>{{ key }}：</span>
+          <img :src="item" alt="" width="40">
+        </div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -101,11 +124,12 @@ import fontApi from '@/api/common/font'
 export default {
   data() {
     return {
-      load: true,
+      loading: true,
       keywords: '',
       baseUrl: process.env.VUE_APP_BASE_API,
       fontsList: [],
       dialogFormVisible: false,
+      fontDetailDialog: false,
       fontForm: {
         font_name: ''
       },
@@ -113,6 +137,7 @@ export default {
       currentPage: 1,
       total: 0,
       fileList: [],
+      fontDetail: {},
       rules: {
         font_name: [
           { required: true, message: '请填写字体名称', trigger: 'blur' }
@@ -124,30 +149,29 @@ export default {
   watch: {
     dialogFormVisible(val) {
       if (val === false) {
-        console.log(1)
         this.$refs['fontForm'].resetFields()
         this.fileList = []
       }
     }
   },
   mounted() {
-    // this.fetchData()
+    this.fetchData()
   },
   methods: {
     fetchData() {
-      // 获取店铺列表
-      // getList({
-      //   shop_name: this.keywords,
-      //   pageSize: this.pageSize,
-      //   currentPage: this.currentPage
-      // }).then(res => {
-      //   this.fontsList = res.data.data
-      //   this.total = res.data.count
-      // })
+      // 获取字体列表
+      fontApi.fontList().then(res => {
+        this.loading = false
+        this.fontsList = res.data
+      })
     },
     showDialog(type, form) {
       this.dialogType = type
       this.dialogFormVisible = true
+    },
+    showDetail(row) {
+      this.fontDetail = row
+      this.fontDetailDialog = true
     },
     onSubmit() {
       const upload = this.$refs.upload
@@ -168,13 +192,13 @@ export default {
         type: 'warning',
         confirmButtonClass: 'danger'
       }).then(() => {
-        // delShop({ shop_id: id }).then(res => {
-        //   this.$message({
-        //     type: 'success',
-        //     message: '删除成功!'
-        //   })
-        //   this.fetchData()
-        // })
+        fontApi.deleteFont({ font_id: id }).then(res => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+          this.fetchData()
+        })
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -186,6 +210,12 @@ export default {
       const formData = new FormData()
       formData.append('font', e.file)
       formData.append('font_name', this.fontForm.font_name)
+      const loading = this.$loading({
+        lock: true,
+        text: '文件上传中',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.2)'
+      })
       fontApi.uploadFont(formData).then(res => {
         if (res.code !== 0) {
           this.$message({
@@ -197,7 +227,9 @@ export default {
             message: '上传成功',
             type: 'success'
           })
-          // this.getImgList()
+          loading.close()
+          this.fetchData()
+          this.dialogFormVisible = false
         }
       })
     },
@@ -231,6 +263,15 @@ export default {
       position: relative;
       top: 0;
       right: 0;
+    }
+  }
+  .font-box{
+    display: flex;
+    flex-flow: wrap;
+    align-items: center;
+    .font-item{
+      width: 20%;
+      margin-bottom: 20px;
     }
   }
 }

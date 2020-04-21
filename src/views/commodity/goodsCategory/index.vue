@@ -8,19 +8,43 @@
         :data="categories"
         style="width: 100%"
         fit
+        row-key="id"
         highlight-current-row
+        :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
       >
         <el-table-column
-          fixed
-          type="index"
-          label="序号"
-          width="100"
-          align="center"
-        />
-        <el-table-column
-          prop="name"
+          prop="category_name"
           label="分类名称"
           align="center"
+          width="200"
+        />
+        <el-table-column
+          label="分类logo"
+          align="center"
+        >
+          <template slot-scope="scope">
+            <img :src="'http://' + scope.row.logo" alt="" width="60" height="60">
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="广告图"
+          align="center"
+        >
+          <template slot-scope="scope">
+            <img :src="'http://' +scope.row.image_path" alt="" width="120" height="60">
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="created_at"
+          label="创建时间"
+          align="center"
+          width="200"
+        />
+        <el-table-column
+          prop="updated_at"
+          label="最后更新时间"
+          align="center"
+          width="200"
         />
         <el-table-column
           fixed="right"
@@ -31,12 +55,8 @@
           <template slot-scope="scope">
             <el-button
               size="mini"
-              @click="showDialog()"
+              @click="showDialog('detail', scope.row)"
             >查看</el-button>
-            <el-button
-              size="mini"
-              @click="showDialog('edit', scope.row.id)"
-            >编辑</el-button>
             <el-button
               size="mini"
               type="danger"
@@ -55,79 +75,172 @@
     </div>
     <!-- 新增，详情，编辑弹框 -->
     <el-dialog center :title="dialogType=='add'? '新增分类': dialogType=='edit'? '编辑分类': '分类详情'" :visible.sync="dialogFormVisible">
-      <el-form :model="form">
-        <el-form-item label="分类名称" :label-width="formLabelWidth">
-          <el-input v-model="form.name" autocomplete="off" />
+      <el-form ref="form" :model="form" :rules="rules">
+        <el-form-item label="分类名称" :label-width="formLabelWidth" prop="category_name">
+          <el-input v-model="form.category_name" autocomplete="off" :disabled="dialogType=='detail'" />
         </el-form-item>
         <el-form-item label="上级分类" :label-width="formLabelWidth">
-          <el-select v-model="form.pid" placeholder="请选择上级分类" style="width: 100%">
-            <el-option label="顶级分类" value="0" />
-            <el-option label="手机" value="1" />
-            <el-option label="服装" value="2" />
-          </el-select>
+          <el-cascader
+            v-model="form.parent_id"
+            :options="categories"
+            :props="optionProps"
+            clearable
+            :disabled="dialogType=='detail'"
+          />
         </el-form-item>
-        <el-form-item label="设备码" :label-width="formLabelWidth">
+        <el-form-item label="分类logo" :label-width="formLabelWidth" prop="logo">
+          <img-upload
+            :img-data="form.logo"
+            :pic-max="1"
+            :disabled="dialogType=='detail'"
+            @chooseImg="logoChoose"
+          />
+        </el-form-item>
+        <el-form-item label="分类广告位" :label-width="formLabelWidth" prop="image_path">
+          <img-upload
+            :img-data="form.image_path"
+            :pic-max="1"
+            :disabled="dialogType=='detail'"
+            @chooseImg="imageChoose"
+          />
+        </el-form-item>
+        <el-form-item label="跳转链接" :label-width="formLabelWidth">
+          <el-input v-model="form.link" :disabled="dialogType=='detail'" />
+        </el-form-item>
+        <!-- <el-form-item label="设备码" :label-width="formLabelWidth">
           <el-select v-model="form.code" placeholder="请选择绑定设备" style="width: 100%">
             <el-option label="帽子刺绣机" value="121312" />
             <el-option label="衣服刺绣机" value="221312" />
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item :label-width="formLabelWidth">
-          <el-button v-if="dialogType!=='detail'" type="primary" @click="onSubmit('shopForm')">保存</el-button>
+          <el-button v-if="dialogType!=='detail'" type="primary" @click="onSubmit('form')">保存</el-button>
           <el-button v-else type="primary" @click="dialogType='edit'">编辑</el-button>
-          <el-button @click="dialogFormVisible = false">取消</el-button>
-        </el-form-item>
+          <el-button @click="dialogFormVisible = false">取消</el-button></el-form-item>
       </el-form>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { categories } from '@/api/category'
+import { Category } from '@/api/goods'
+import ImgUpload from '@/components/ImgUpload'
 export default {
+  components: {
+    ImgUpload
+  },
   data() {
     return {
-      categories: [{
-        id: 1,
-        date: '2016-05-02',
-        name: '手机'
-      }, {
-        id: 2,
-        date: '2016-05-02',
-        name: '帽子'
-      }, {
-        id: 3,
-        date: '2016-05-02',
-        name: '裙子'
-      }],
-      dialogTableVisible: false,
+      // 分组选择配置项
+      optionProps: {
+        checkStrictly: true,
+        expandTrigger: 'hover',
+        value: 'id',
+        label: 'category_name'
+      },
+      categories: [],
       dialogFormVisible: false,
       form: {
-        name: '',
-        pid: '',
-        code: '',
-        desc: ''
+        category_name: '',
+        parent_id: '',
+        link: '',
+        logo: '',
+        image_path: ''
+      },
+      rules: {
+        category_name: [
+          { required: true, message: '请填写分类名称', trigger: 'blur' },
+          { min: 1, max: 5, message: '长度在 1 到 5 个字符', trigger: 'blur' }
+        ],
+        logo: [
+          { required: true, message: '请上传分类logo', trigger: 'blur' }
+        ],
+        image_path: [
+          { required: true, message: '请上传广告图', trigger: 'blur' }
+        ]
       },
       formLabelWidth: '120px',
       dialogType: 'add'
     }
   },
+  watch: {
+    dialogFormVisible(val) {
+      if (val === false) {
+        this.$refs['form'].resetFields()
+        this.form = {
+          category_name: '',
+          parent_id: '',
+          link: '',
+          logo: '',
+          image_path: ''
+        }
+      }
+    }
+  },
   mounted() {
-    // this.getCategores()
+    this.fetchData()
   },
   methods: {
     // 获取所有分类
-    getCategores() {
-      categories().then(res => {
-
+    fetchData() {
+      Category.getList().then(res => {
+        console.log(res)
+        this.categories = res.data
       })
     },
-    showDialog(type, id) {
+    showDialog(type, form) {
       this.dialogType = type
       this.dialogFormVisible = true
-      if (id) {
+      if (form && form.id) {
         // 请求分类详情
+        this.form.id = form.id
+        this.form.category_name = form.category_name
+        this.form.logo = form.logo
+        this.form.link = form.link
+        this.form.parent_id = form.parent_id
+        this.form.image_path = form.image_path
       }
+    },
+    onSubmit(formName) {
+      const _this = this
+      _this.$refs[formName].validate((valid) => {
+        if (valid) {
+          _this.form.parent_id = _this.form.parent_id ? _this.form.parent_id[0] : 0
+          if (_this.form.id) {
+            Category.editCategory(_this.form).then(res => {
+              if (res.code === 0) {
+                this.$message({
+                  type: 'success',
+                  message: res.msg || '修改成功!'
+                })
+                // 重置表单
+                _this.$refs[formName].resetFields()
+                this.dialogFormVisible = false
+                this.fetchData()
+              } else {
+                this.$message.success(res.msg || '修改失败!')
+              }
+            })
+          } else {
+            Category.addCategory(_this.form).then(res => {
+              if (res.code === 0) {
+                this.$message({
+                  type: 'success',
+                  message: res.msg || '添加成功!'
+                })
+                // 重置表单
+                _this.$refs[formName].resetFields()
+                this.dialogFormVisible = false
+                this.fetchData()
+              } else {
+                this.$message.success(res.msg || '添加失败!')
+              }
+            })
+          }
+        } else {
+          return false
+        }
+      })
     },
     handleDelete(id) {
       this.$confirm('是否删除该分类?', '提示', {
@@ -137,9 +250,12 @@ export default {
         confirmButtonClass: 'danger',
         center: true
       }).then(() => {
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
+        Category.deleteCategory({ id: id }).then(res => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+          this.fetchData()
         })
       }).catch(() => {
         this.$message({
@@ -147,6 +263,16 @@ export default {
           message: '已取消删除'
         })
       })
+    },
+    // 图片上传模块
+    logoChoose(path) {
+      this.form.logo = path
+      this.$refs.form.validateField('logo')
+    },
+    imageChoose(path) {
+      this.form.image_path = path
+      this.$refs.form.validateField('image_path')
+      // this.imageModalConfig.visible = false;
     }
   }
 }

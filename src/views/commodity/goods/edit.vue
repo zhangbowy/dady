@@ -27,7 +27,7 @@
                 <el-form-item label="商品图片">
                   <img-upload
                     :img-data="form.images"
-                    :pic-max="1"
+                    :pic-max="5"
                     @chooseImg="imageChoose"
                     @changePsit="changeImg"
                   />

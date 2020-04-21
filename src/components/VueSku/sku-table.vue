@@ -120,12 +120,12 @@ export default {
             methods: {
               // 图片上传模块
               imageChoose(imgArray) {
-                this.row.images = []
+                this.row.images = ''
                 if (imgArray.length > 0) {
                   const that = this
                   imgArray.forEach(item => {
                     // 这里的this指向前面对象的this
-                    that.row.images.push(item)
+                    that.row.images.item
                   })
                   // imgArray.forEach(item => {
                   //   // 这里的this指向前面对象的this

@@ -46,3 +46,49 @@ export const embTemplate = {
     })
   }
 }
+export const adsense = {
+  /**
+   * 获取首页广告位列表
+   * @param {* }
+   */
+  getAdsenseList(params) {
+    return request({
+      url: '/system/getSlider',
+      method: 'get',
+      params
+    })
+  },
+  /**
+   * 添加首页广告位
+   * @param {*image_path sort link }
+   */
+  addAdsense(data) {
+    return request({
+      url: '/system/addSlider',
+      method: 'post',
+      data
+    })
+  },
+  /**
+   * 编辑首页广告位
+   * @param {* id image_path sort link }
+   */
+  editAdsense(data) {
+    return request({
+      url: '/system/editSlider',
+      method: 'post',
+      data
+    })
+  },
+  /**
+   * 删除首页广告位
+   * @param {*id }
+   */
+  deleteAdsense(data) {
+    return request({
+      url: '/system/delSlider',
+      method: 'post',
+      data
+    })
+  }
+}

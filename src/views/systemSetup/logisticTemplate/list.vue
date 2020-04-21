@@ -140,7 +140,6 @@
 </template>
 
 <script>
-import { categories } from '@/api/category'
 export default {
   data() {
     return {
@@ -199,9 +198,9 @@ export default {
     },
     // 获取所有物流模板
     getCategores() {
-      categories().then(res => {
+      // Category().then(res => {
 
-      })
+      // })
     },
     showDialog(type, id) {
       this.dialogType = type

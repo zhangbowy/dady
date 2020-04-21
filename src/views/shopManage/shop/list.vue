@@ -114,21 +114,11 @@
           <el-input v-model="shopForm.password " :disabled="dialogType=='detail'" />
         </el-form-item>
         <el-form-item label="店铺logo" prop="logo">
-          <el-upload
-            class="logo-uploader"
-            :action="uploadUrl"
-            :data="{type: 'shop_logo'}"
-            name="image"
-            :file-list="fileList"
-            :with-credentials="true"
-            :show-file-list="false"
-            :on-success="handleAvatarSuccess"
-            :before-upload="beforeAvatarUpload"
-            :disabled="dialogType=='detail'"
-          >
-            <img v-if="imageUrl" :src="imageUrl" class="logo">
-            <i v-else class="el-icon-plus logo-uploader-icon" />
-          </el-upload>
+          <img-upload
+            :img-data="shopForm.logo"
+            :pic-max="1"
+            @chooseImg="imageChoose"
+          />
         </el-form-item>
         <el-form-item label="到期时间" prop="system_end_time">
           <el-date-picker
@@ -152,7 +142,11 @@
 <script>
 import { getList, delShop, addShop, editShop } from '@/api/shop'
 import { validPhone } from '@/utils/validate'
+import ImgUpload from '@/components/ImgUpload'
 export default {
+  components: {
+    ImgUpload
+  },
   filters: {
     statusFilter(status) {
       const statusMap = {
@@ -263,6 +257,12 @@ export default {
           url: this.baseUrl + '/' + form.logo
         })
       }
+    },
+    // 图片上传模块
+    imageChoose(imgArray) {
+      this.shopForm.logo = imgArray
+      this.$refs.shopForm.validateField('logo')
+      // this.imageModalConfig.visible = false;
     },
     onSubmit(formName) {
       const _this = this
