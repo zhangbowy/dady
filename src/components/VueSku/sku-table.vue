@@ -120,18 +120,18 @@ export default {
             methods: {
               // 图片上传模块
               imageChoose(imgArray) {
-                this.row.images = ''
-                if (imgArray.length > 0) {
-                  const that = this
-                  imgArray.forEach(item => {
-                    // 这里的this指向前面对象的this
-                    that.row.images.item
-                  })
-                  // imgArray.forEach(item => {
-                  //   // 这里的this指向前面对象的this
-                  //   that.form.image_path.push(item.image_path);
-                  // });
-                }
+                this.row.images = imgArray
+                // if (imgArray.length > 0) {
+                //   const that = this
+                //   imgArray.forEach(item => {
+                //     // 这里的this指向前面对象的this
+                //     that.row.images.item
+                //   })
+                //   // imgArray.forEach(item => {
+                //   //   // 这里的this指向前面对象的this
+                //   //   that.form.image_path.push(item.image_path);
+                //   // });
+                // }
                 // this.$refs.row.validateField('images')
                 // this.imageModalConfig.visible = false;
               },
@@ -149,6 +149,27 @@ export default {
                   on-changePsit={this.changeImg}
                 >
                 </ImgUpload>
+              )
+            }
+          })
+        },
+        {
+          label: '价格',
+          width: 150,
+          component: Vue.extend({
+            props: ['row'],
+            render() {
+              return (
+                <ElInputNumber
+                  placeholder='请输入价格'
+                  value={this.row.current_price}
+                  step={1}
+                  min={0}
+                  controls={false}
+                  precision={0}
+                  style={'width:100%'}
+                  oninput={e => (this.row.current_price = e)}
+                ></ElInputNumber>
               )
             }
           })
@@ -194,27 +215,6 @@ export default {
               )
             }
           })
-        },
-        {
-          label: '价格',
-          width: 150,
-          component: Vue.extend({
-            props: ['row'],
-            render() {
-              return (
-                <ElInputNumber
-                  placeholder='请输入价格'
-                  value={this.row.current_price}
-                  step={1}
-                  min={0}
-                  controls={false}
-                  precision={0}
-                  style={'width:100%'}
-                  oninput={e => (this.row.current_price = e)}
-                ></ElInputNumber>
-              )
-            }
-          })
         }
       ]
     }
@@ -247,10 +247,10 @@ export default {
             } else {
               data.push({
                 ...item,
-                images: '1', // 图片
-                weight: undefined, // 重量
-                num: undefined, // 库存
-                current_price: undefined // 价格
+                images: '', // 图片
+                weight: 0, // 重量
+                num: 0, // 库存
+                current_price: 0 // 价格
               })
             }
           })
@@ -259,6 +259,20 @@ export default {
           // 当删除了规格值
           this.data = this.data.filter(_item => !diffIds.includes(_item.sku_id))
         }
+      }
+    },
+    data: {
+      deep: true,
+      immediate: true,
+      handler(newData, oldData) {
+        this.$store.dispatch('sku/setSkuList', newData)
+        const priceInfo = {}
+        priceInfo.minPrice = Math.min.apply(null, newData.map((o) => { return o.current_price }))
+        priceInfo.minWeight = Math.min.apply(null, newData.map((o) => { return o.weight }))
+        priceInfo.totalNum = newData.map((o) => { return o.num }).reduce((first, second) => {
+          return first + second
+        }, 0)
+        this.$store.dispatch('sku/setPriceInfo', priceInfo)
       }
     }
   },
@@ -277,9 +291,9 @@ export default {
           ...item,
           // 初始化属性
           images: '',
-          weight: '', // 为了方便展示数据，这里默认设置为 100
-          num: '',
-          current_price: ''
+          weight: 0, // 为了方便展示数据，这里默认设置为 100
+          num: 0,
+          current_price: 0
         }))
       }
     }

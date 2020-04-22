@@ -75,7 +75,7 @@
       <el-col :span="18" style="padding: 0 20px">
         <div class="img-list">
           <div v-for="(item,index) in imgList" :key="index" class="img-item">
-            <img :src="'http://'+item.oss_path" alt="">
+            <img :src="item.oss_path" alt="">
             <el-checkbox v-model="item.checked" :label="limetedStr(item.img_name,16)" :title="item.img_name" />
             <el-col>
               <el-button type="text" @click.stop="showdialog('modifyName',item)">改名</el-button>

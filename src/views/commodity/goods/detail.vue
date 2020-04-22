@@ -1,13 +1,323 @@
 <template>
-  <div>商品详情</div>
+  <div class="goods-edit">
+    <div class="title-info">
+      <card-tag tag-name="商品详情" />
+    </div>
+    <!-- 表单部分 -->
+    <div class="form-info">
+      <el-form ref="form" :model="form" label-width="80px" label-position="top" size="small">
+        <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+          <el-tab-pane label="基本信息" name="1">
+            <div class="form-content-item">
+              <div class="block-title"><card-tag tag-name="基本信息" /></div>
+              <div class="block-content">
+                <el-form-item label="商品标题" prop="name">
+                  <el-input v-model="form.name" disabled />
+                </el-form-item>
+                <el-form-item label="分享描述" prop="name">
+                  <el-input v-model="form.desc" disabled />
+                </el-form-item>
+                <el-form-item label="商品图片">
+                  <img-upload
+                    :img-data="form.images"
+                    :pic-max="5"
+                    disabled
+                  />
+                </el-form-item>
+                <el-form-item label="起购数量" prop="min_buy">
+                  <el-input-number v-model="form.min_buy" disabled>
+                    <template slot="append">件</template>
+                  </el-input-number>
+                </el-form-item>
+                <el-form-item label="限购数量" prop="max_buy">
+                  <el-input-number v-model="form.max_buy" disabled>
+                    <template slot="append">件</template>
+                  </el-input-number>
+                </el-form-item>
+                <el-form-item label="商品分类" prop="category_id">
+                  <el-cascader
+                    v-model="form.category_id"
+                    :options="categories"
+                    :props="optionProps"
+                    placeholder="选择商品分类"
+                    clearable
+                    disabled
+                  />
+                </el-form-item>
+              </div>
+            </div>
+            <!-- <div class="form-content-item">
+              <div class="block-title"><card-tag tag-name="物流信息" /></div>
+              <div class="block-content">
+                <el-form-item label="物流设置">
+                  <el-radio-group v-model="form.logisticsType">
+                    <el-radio :label="0" style="margin-right: 0">统一运费： </el-radio>
+                    <el-input v-model="form.freight" style="width: 25%; margin-right: 30px">
+                      <template slot="append">元</template>
+                    </el-input>
+                    <el-radio :label="1">包邮</el-radio>
+                    <el-radio :label="2" style="margin-right: 0">物流模板：  </el-radio>
+                    <el-select v-model="form.logistics" placeholder="请选择物流模板" :disabled="form.logisticsType!=2">
+                      <el-option label="顺丰速运" value="1" />
+                      <el-option label="圆通快递" value="2" />
+                    </el-select>
+                  </el-radio-group>
+                </el-form-item>
+              </div>
+            </div> -->
+            <div class="form-content-item">
+              <div class="block-title"><card-tag tag-name="商品详情" /></div>
+              <el-form-item style="padding:10px 10px">
+                <Tinymce ref="editor" v-model="form.detail" :height="400" disabled />
+                <!-- <mavon-editor ref="editor" v-model="form.detail" @save="saveDetail" @change="updateDetail" /> -->
+              </el-form-item>
+            </div>
+          </el-tab-pane>
+          <el-tab-pane label="商品规格" name="2">
+            <div class="sku_container">
+              <div v-for="(spec, index) in specification" :key="spec.id" class="sku_group mb10">
+                <div class="spec_title">
+                  <span class="label">规格名：</span>
+                  <el-input v-model.trim="spec.value" class="input" placeholder="请输入规格名" disabled />
+                </div>
+                <div class="group_container">
+                  <span class="label">规格值：</span>
+                  <el-popover
+                    v-for="(option, option_index) in spec.leaf"
+                    :key="option_index"
+                    placement="bottom"
+                    width="120"
+                    trigger="click"
+                  >
+                    <el-input v-model.trim="option.value" style="width: 110px;" disabled />
+                    <div slot="reference" class="sku_item">
+                      <div class="text">{{ option.value }}</div>
+                    </div>
+                  </el-popover>
+                  <el-input
+                    v-model="addValues[index]"
+                    class="input"
+                    uffix-icon="el-icon-plus"
+                    placeholder="多个产品属性以空格隔开"
+                    disabled
+                    @keyup.native.enter="addOption(index)"
+                    @blur="addOption(index)"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="sku_container">
+              <sku-table ref="skutable" :skus-data="specificationFilter" />
+              <!-- <vue-json-pretty :data="specificationFilter" /> -->
+            </div>
+          </el-tab-pane>
+        </el-tabs>
+        <div class="form-content-item">
+          <div class="block-title"><card-tag tag-name="价格库存" /></div>
+          <div class="block-content">
+            <el-form-item label="商品原价" prop="old_price">
+              <el-input v-model="form.old_price" disabled>
+                <template slot="append">元</template>
+              </el-input>
+            </el-form-item>
+            <el-form-item label="商品现价" prop="current_price">
+              <el-input v-model="form.current_price" disabled>
+                <template slot="append">元</template>
+              </el-input>
+            </el-form-item>
+            <el-form-item label="商品库存" prop="sum_stock">
+              <el-input v-model="form.sum_stock" disabled>
+                <template slot="append">件</template>
+              </el-input>
+            </el-form-item>
+            <el-form-item label="商品重量" prop="weight">
+              <el-input v-model="form.weight" disabled>
+                <template slot="append">千克</template>
+              </el-input>
+            </el-form-item>
+          </div>
+        </div>
+        <el-form-item>
+          <el-button type="primary" @click="()=>this.$router.push({path: `/commodity/goodsEdit?id=${form.id}`})">编辑</el-button>
+          <el-button @click="()=>this.$router.go(-1)">返回</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
+  </div>
 </template>
 
 <script>
+import CardTag from '@/components/CardTag'
+// import { mavonEditor } from 'mavon-editor' // 富文本编辑器
+import Tinymce from '@/components/Tinymce'
+import ImgUpload from '@/components/ImgUpload' // 图片上传
+import SkuTable from '@/components/VueSku/sku-table' // skulist
+import { goodDetail, Category } from '@/api/goods'
 export default {
-
+  components: {
+    CardTag,
+    Tinymce,
+    ImgUpload,
+    SkuTable
+  },
+  data() {
+    return {
+      id: '',
+      picMax: 5, // 图片上传
+      activeName: '1',
+      form: {
+      },
+      categories: [],
+      // 分组选择配置项
+      optionProps: {
+        checkStrictly: true,
+        expandTrigger: 'hover',
+        value: 'id',
+        label: 'category_name'
+      },
+      addValues: [],
+      specification: [] // 规格数组
+    }
+  },
+  computed: {
+    disabled() {
+      return this.specification.length > 3 || this.specification.some(item => !item.value)
+    },
+    // 过滤掉属性名和属性值为空的数据规格项目
+    specificationFilter() {
+      return this.specification.filter(item => item.value && item.leaf.length)
+    }
+  },
+  created() {
+    this.getCategory()
+    this.id = this.$route.query.id ? this.$route.query.id : ''
+    if (this.$route.query.id) {
+      this.fetchData(this.$route.query.id)
+    }
+  },
+  methods: {
+    getCategory() {
+      Category.getList().then(res => {
+        this.categories = res.data
+      })
+    },
+    // 初始化商品详情
+    fetchData(id) {
+      goodDetail({
+        id: id
+      }).then(res => {
+        this.form = res.data
+        this.form.images = res.data.images
+        this.$refs.skutable.data = res.data.sku_list
+        this.specification = res.data.sku_show
+        this.form.sku_show = res.data.sku_show
+        this.form.sku_list = res.data.sku_list
+        // console.log(this.form.sku_list)
+      })
+    },
+    // tab选项卡切换
+    handleClick(tab, event) {
+    }
+  }
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+.goods-edit{
+  padding: 15px;
+  .title-info{
+    background: #fff;
+    border-radius: 10px 10px;
+  }
+  .form-info{
+    padding: 10px;
+    background: #fff;
+    .form-content-item{
+      margin-bottom: 20px;
+      box-shadow: 0px 10px 20px #f3f4f3;
+      .block-content{
+        padding: 10px 30px 20px;
+        background: #fff;
+        .el-input{
+          width: 50%;
+        }
+      }
+    }
+  }
+}
+</style>
+<style lang="sass" scoped>
+.sku_container
+  margin-bottom: 30px
+  font-size: 12px
+  color: #666
+  padding: 10px
+  border: 1px solid #e5e5e5
 
+.remove
+  display: none
+  position: absolute
+  z-index: 2
+  width: 18px
+  height: 18px
+  font-size: 14px
+  line-height: 16px
+  color: #fff
+  text-align: center
+  cursor: pointer
+  background: rgba(0,0,0,.3)
+  border-radius: 50%
+
+.sku_group
+  margin-bottom: 10px
+  &:hover
+    .spec_title .remove
+      display: block
+
+.spec_title
+  position: relative
+  padding: 7px 10px
+  background-color: #f8f8f8
+  line-height: 16px
+  font-weight: 400
+
+  .input
+    width: 200px
+
+  .remove
+    top: 12px
+    right: 10px
+
+.group_container
+  padding: 10px 10px 0
+
+  .input
+    width: 250px
+
+  .sku_item
+    background-color: #f8f8f8
+    padding: 10px
+    display: inline-block
+    margin-right: 10px
+    vertical-align: middle
+    text-align: center
+    position: relative
+    border-radius: 2px
+    cursor: pointer
+
+    &:hover
+      .remove
+        display: block
+
+    .remove
+      top: -8px
+      right: -8px
+
+    .text
+      display: block
+      width: 74px
+      margin: 0 auto
+      overflow: hidden
+      text-overflow: ellipsis
+      white-space: nowrap
 </style>

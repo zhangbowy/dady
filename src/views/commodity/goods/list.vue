@@ -9,7 +9,7 @@
           clearable
           style="width:220px"
         />
-        <el-select v-model="status" size="small" multiple placeholder="请选择">
+        <el-select v-model="status" size="small" clearable placeholder="请选择">
           <el-option
             v-for="item in statusOption"
             :key="item.value"
@@ -17,7 +17,8 @@
             :value="item.value"
           />
         </el-select>
-        <el-button size="small" icon="el-icon-search" type="primary">搜索</el-button>
+        <el-button size="small" icon="el-icon-search" type="primary" @click="fetchData">搜索</el-button>
+        <el-button size="small" icon="el-icon-refresh-right" @click="reset">重置</el-button>
       </div>
       <div class="operation">
         <router-link :to="'/commodity/goodsEdit'">
@@ -45,16 +46,21 @@
           width="100"
         >
           <template slot-scope="scope">
-            <img :src="scope.row.images" alt="" width="60" height="60">
+            <img :src="scope.row.thumb_image_path" alt="" width="60" height="60">
           </template>
         </el-table-column>
         <el-table-column
-          prop="name"
-          label="商品标题"
+          label="商品信息"
           align="center"
-        />
+        >
+          <template slot-scope="scope">
+            <p>{{ scope.row.name }}</p>
+            <span class="current-price">￥{{ scope.row.current_price }}</span>
+            <span class="old-price">￥{{ scope.row.old_price }}</span>
+          </template>
+        </el-table-column>
         <el-table-column
-          prop="volume"
+          prop="sale_num"
           label="销量"
           align="center"
           sortable
@@ -71,7 +77,7 @@
           width="250"
         >
           <template slot-scope="scope">
-            <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status==0?'待审核':'已上架' }}</el-tag>
+            <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status==1?'待审核':scope.row.status==2? '待上架':'已上架' }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column
@@ -88,23 +94,51 @@
           fixed="right"
           label="操作"
           align="center"
+          width="150"
         >
           <template slot-scope="scope">
-            <router-link :to="`/commodity/goodsDetail?id=${scope.row.id}`">
+            <div class="operate-btn">
+              <router-link :to="`/commodity/goodsDetail?id=${scope.row.id}`">
+                <el-button
+                  size="mini"
+                >查看</el-button>
+              </router-link>
+              <el-button
+                v-if="scope.row.status==1"
+                size="mini"
+                type="success"
+                @click.stop="changeStates(scope.row.id, 2)"
+              >审核</el-button>
+              <el-button
+                v-if="scope.row.status==2"
+                size="mini"
+                type="success"
+                @click.stop="changeStates(scope.row.id, 3)"
+              >上架</el-button>
+              <el-button
+                v-if="scope.row.status==3"
+                size="mini"
+                type="danger"
+                @click.stop="changeStates(scope.row.id, 2)"
+              >下架</el-button>
+              <router-link :to="`/commodity/goodsEdit?id=${scope.row.id}`">
+                <el-button
+                  size="mini"
+                  type="primary"
+                >编辑</el-button>
+              </router-link>
               <el-button
                 size="mini"
-              >查看</el-button>
-            </router-link>
-            <router-link :to="`/commodity/goodsEdit?id=${scope.row.id}`">
+                type="danger"
+                @click="handleDelete(scope.row.id)"
+              >删除</el-button>
               <el-button
+                v-if="scope.row.status==2"
                 size="mini"
-              >编辑</el-button>
-            </router-link>
-            <el-button
-              size="mini"
-              type="danger"
-              @click="handleDelete(scope.row.id)"
-            >删除</el-button>
+                type="danger"
+                @click.stop="changeStates(scope.row.id, 1)"
+              >取消审核</el-button>
+            </div>
           </template>
         </el-table-column>
       </el-table>
@@ -125,14 +159,14 @@
 </template>
 
 <script>
-import { getList, deleteGoods } from '@/api/goods'
+import { getList, deleteGoods, changeStatus } from '@/api/goods'
 export default {
   filters: {
     statusFilter(status) {
       const statusMap = {
-        1: 'success',
-        0: 'danger',
-        2: 'danger'
+        1: 'danger',
+        2: 'warning',
+        3: 'success'
       }
       return statusMap[status]
     }
@@ -146,20 +180,17 @@ export default {
       total: 2,
       goodsList: [],
       statusOption: [{
-        value: '0',
+        value: -1,
+        label: '全部'
+      }, {
+        value: 1,
         label: '待审核'
       }, {
-        value: '1',
-        label: '出售中'
-      }, {
-        value: '2',
+        value: 2,
         label: '待上架'
       }, {
-        value: '3',
-        label: '仓库中'
-      }, {
-        value: '4',
-        label: '已售罄'
+        value: 3,
+        label: '已上架'
       }],
       status: '',
       multipleSelection: []
@@ -169,10 +200,17 @@ export default {
     this.fetchData()
   },
   methods: {
+    reset() {
+      this.name = ''
+      this.status = ''
+      this.fetchData(0)
+    },
     fetchData() {
       getList({
+        name: this.keywords,
         pageSize: this.pageSize,
-        currentPage: this.currentPage
+        currentPage: this.currentPage,
+        status: this.status
       }).then(res => {
         this.goodsList = res.data.data
         this.total = res.data.count
@@ -180,6 +218,29 @@ export default {
     },
     handleSelectionChange(val) {
       this.multipleSelection = val
+    },
+    // 修改商品状态
+    changeStates(id, status) {
+      this.$confirm(`${status === 1 ? '审核通过后可以上架' : status === 2 ? '是否立即上架？' : '是否下架改商品？'}`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        confirmButtonClass: 'danger',
+        center: true
+      }).then(() => {
+        changeStatus({
+          id: id,
+          status: status
+        }).then(res => {
+          this.$message({
+            type: 'success',
+            message: '修改成功!'
+          })
+          this.fetchData()
+        })
+      }).catch(() => {
+
+      })
     },
     handleDelete(id) {
       this.$confirm('是否删除该商品?', '提示', {
@@ -222,6 +283,20 @@ export default {
   .screen-box{
     .screen-item{
       text-align: left;
+    }
+  }
+  .current-price{
+    color: #fa3b3b;
+    font-size: 16px;
+  }
+  .old-price{
+    color: #999;
+    text-decoration: line-through;
+    font-size: 12px;
+  }
+  .operate-btn{
+    button{
+      margin-bottom: 5px;
     }
   }
 }

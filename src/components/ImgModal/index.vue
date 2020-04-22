@@ -38,7 +38,7 @@
             <div v-show="activeList.includes(item.id)" class="active">
               <i>{{ activeList.indexOf(item.id) + 1 }}</i>
             </div>
-            <img :src="'http://'+item.oss_path" :alt="item.img_name">
+            <img :src="item.oss_path" :alt="item.img_name">
             <span class="img-meta">{{ item.img_init_name }}</span>
             <p class="img-title" :title="item.img_name">{{ item.img_name }}</p>
           </div>

@@ -14,15 +14,8 @@
                 <el-form-item label="商品标题" prop="name">
                   <el-input v-model="form.name" />
                 </el-form-item>
-                <el-form-item label="商品原价" prop="old_price">
-                  <el-input v-model="form.old_price">
-                    <template slot="append">元</template>
-                  </el-input>
-                </el-form-item>
-                <el-form-item label="商品现价" prop="current_price">
-                  <el-input v-model="form.current_price">
-                    <template slot="append">元</template>
-                  </el-input>
+                <el-form-item label="分享描述" prop="desc">
+                  <el-input v-model="form.desc" />
                 </el-form-item>
                 <el-form-item label="商品图片">
                   <img-upload
@@ -31,16 +24,6 @@
                     @chooseImg="imageChoose"
                     @changePsit="changeImg"
                   />
-                </el-form-item>
-                <el-form-item label="商品库存" prop="sum_stock">
-                  <el-input v-model="form.sum_stock">
-                    <template slot="append">件</template>
-                  </el-input>
-                </el-form-item>
-                <el-form-item label="商品重量" prop="weight">
-                  <el-input v-model="form.weight">
-                    <template slot="append">千克</template>
-                  </el-input>
                 </el-form-item>
                 <el-form-item label="起购数量" prop="min_buy">
                   <el-input-number v-model="form.min_buy">
@@ -52,11 +35,14 @@
                     <template slot="append">件</template>
                   </el-input-number>
                 </el-form-item>
-                <el-form-item label="商品分类" prop="category">
-                  <el-select v-model="form.category" placeholder="请选择商品分类" style="width: 50%">
-                    <el-option label="手机" :value="1" />
-                    <el-option label="箱包" :value="2" />
-                  </el-select>
+                <el-form-item label="商品分类" prop="category_id">
+                  <el-cascader
+                    v-model="form.category_id"
+                    :options="categories"
+                    :props="optionProps"
+                    placeholder="选择商品分类"
+                    clearable
+                  />
                 </el-form-item>
               </div>
             </div>
@@ -88,6 +74,7 @@
             </div>
           </el-tab-pane>
           <el-tab-pane label="商品规格" name="2">
+            <!-- sku规格部分 -->
             <div class="sku_container">
               <div v-for="(spec, index) in specification" :key="spec.id" class="sku_group mb10">
                 <div class="spec_title">
@@ -124,15 +111,64 @@
                 <el-button type="info" :disabled="disabled" @click="addSpec">添加规格项目</el-button>
               </div>
             </div>
-            <div class="sku_container">
+
+            <!-- <div class="sku_container">
               <sku-select :skus-data="specificationFilter" />
-            </div>
+            </div> -->
             <div class="sku_container">
               <sku-table ref="skutable" :skus-data="specificationFilter" />
               <!-- <vue-json-pretty :data="specificationFilter" /> -->
             </div>
           </el-tab-pane>
         </el-tabs>
+        <!-- 价格部分 -->
+        <div class="form-content-item">
+          <div class="block-title"><card-tag tag-name="价格库存" /></div>
+          <div v-if="skuList.length>0" class="block-content">
+            <el-form-item label="商品原价" prop="old_price">
+              <el-input v-model="form.old_price">
+                <template slot="append">元</template>
+              </el-input>
+            </el-form-item>
+            <el-form-item label="商品现价">
+              <el-input v-model="priceInfo.minPrice" :disabled="skuList.length>0">
+                <template slot="append">元</template>
+              </el-input>
+            </el-form-item>
+            <el-form-item label="商品库存">
+              <el-input v-model="priceInfo.totalNum" :disabled="skuList.length>0">
+                <template slot="append">件</template>
+              </el-input>
+            </el-form-item>
+            <el-form-item label="商品重量">
+              <el-input v-model="priceInfo.minWeight" :disabled="skuList.length>0">
+                <template slot="append">千克</template>
+              </el-input>
+            </el-form-item>
+          </div>
+          <div v-else class="block-content">
+            <el-form-item label="商品原价" prop="old_price">
+              <el-input v-model="form.old_price">
+                <template slot="append">元</template>
+              </el-input>
+            </el-form-item>
+            <el-form-item label="商品现价" prop="current_price">
+              <el-input v-model="form.current_price">
+                <template slot="append">元</template>
+              </el-input>
+            </el-form-item>
+            <el-form-item label="商品库存" prop="sum_stock">
+              <el-input v-model="form.sum_stock">
+                <template slot="append">件</template>
+              </el-input>
+            </el-form-item>
+            <el-form-item label="商品重量" prop="weight">
+              <el-input v-model="form.weight">
+                <template slot="append">千克</template>
+              </el-input>
+            </el-form-item>
+          </div>
+        </div>
         <el-form-item>
           <el-button type="primary" @click="onSubmit('form')">保存</el-button>
           <el-button @click="()=>this.$router.go(-1)">取消</el-button>
@@ -147,16 +183,15 @@ import CardTag from '@/components/CardTag'
 // import { mavonEditor } from 'mavon-editor' // 富文本编辑器
 import Tinymce from '@/components/Tinymce'
 import ImgUpload from '@/components/ImgUpload' // 图片上传
-import SkuSelect from '@/components/VueSku/sku-select' // sku规格
 import SkuTable from '@/components/VueSku/sku-table' // skulist
 import { createUniqueString, uniqueArr } from '@/utils'
-import { addGood, editGood, goodDetail } from '@/api/goods'
+import { addGood, editGood, goodDetail, Category } from '@/api/goods'
+import { mapGetters } from 'vuex'
 export default {
   components: {
     CardTag,
     Tinymce,
     ImgUpload,
-    SkuSelect,
     SkuTable
   },
   data() {
@@ -167,6 +202,7 @@ export default {
       form: {
         name: '', // 标题
         old_price: '', // 原价
+        desc: '', // 分享描述
         current_price: '', // 当前价格
         sum_stock: '', // 库存
         weight: '', // 重量
@@ -175,7 +211,7 @@ export default {
         images: [], // 主图
         sku_show: '', // 规则
         sku_list: '', // 规则列表
-        category: '', // 分类
+        category_id: '', // 分类
         logisticsType: 0, // 物流类型
         freight: '', // 运费
         logisticsTemplate: '', // 物流模板id
@@ -207,15 +243,27 @@ export default {
         images: [
           { required: true, message: '请上传商品主图', trigger: 'blur' }
         ],
-        category: [
-          { required: true, message: '请选择商品分类', trigger: 'change' }
+        category_id: [
+          { required: true, message: '请选择分类', trigger: 'change' }
         ]
+      },
+      categories: [],
+      // 分组选择配置项
+      optionProps: {
+        checkStrictly: true,
+        expandTrigger: 'hover',
+        value: 'id',
+        label: 'category_name'
       },
       addValues: [],
       specification: [] // 规格数组
     }
   },
   computed: {
+    ...mapGetters([
+      'skuList',
+      'priceInfo'
+    ]),
     disabled() {
       return this.specification.length > 3 || this.specification.some(item => !item.value)
     },
@@ -225,24 +273,29 @@ export default {
     }
   },
   created() {
+    this.getCategory()
     this.id = this.$route.query.id ? this.$route.query.id : ''
     if (this.$route.query.id) {
       this.fetchData(this.$route.query.id)
     }
   },
   methods: {
+    getCategory() {
+      Category.getList().then(res => {
+        this.categories = res.data
+      })
+    },
     // 初始化商品详情
     fetchData(id) {
       goodDetail({
         id: id
       }).then(res => {
         this.form = res.data
-        this.form.images = []
-        this.$refs.skutable.data = JSON.parse(res.data.sku_list)
-        this.specification = JSON.parse(res.data.sku_show)
-        console.log(JSON.parse(res.data.sku_list))
-        this.form.sku_show = JSON.parse(res.data.sku_show)
-        this.form.sku_list = JSON.parse(res.data.sku_list)
+        this.form.images = res.data.images
+        this.$refs.skutable.data = res.data.sku_list
+        this.specification = res.data.sku_show
+        this.form.sku_show = res.data.sku_show
+        this.form.sku_list = res.data.sku_list
         // console.log(this.form.sku_list)
       })
     },
@@ -251,9 +304,14 @@ export default {
       const _this = this
       _this.$refs[formName].validate((valid) => {
         if (valid) {
-          _this.form.sku_list = JSON.stringify(_this.$refs.skutable.data)
-          _this.form.sku_show = JSON.stringify(_this.specificationFilter)
-          _this.form.images = JSON.stringify(_this.form.images)
+          _this.form.sku_list = this.skuList // 取store里面的skuList
+          _this.form.sku_show = _this.specificationFilter
+          _this.form.category_id = _this.form.category_id[_this.form.category_id.length - 1]
+          if (this.skuList.length > 0) {
+            _this.form.current_price = this.priceInfo.minPrice
+            _this.form.weight = this.priceInfo.minWeight
+            _this.form.sum_stock = this.priceInfo.totalNum
+          }
           if (_this.form.id) {
             editGood(_this.form).then(res => {
               if (res.code === 0) {
@@ -300,17 +358,13 @@ export default {
           // 这里的this指向前面对象的this
           that.form.images.push(item)
         })
-        // imgArray.forEach(item => {
-        //   // 这里的this指向前面对象的this
-        //   that.form.image_path.push(item.image_path);
-        // });
       }
       this.$refs.form.validateField('images')
       // this.imageModalConfig.visible = false;
     },
     // 拖拽后触发
     changeImg(val) {
-      this.form.image_path = val
+      this.form.images = val
     },
     // 添加规格
     addSpec() {
@@ -359,7 +413,7 @@ export default {
       margin-bottom: 20px;
       box-shadow: 0px 10px 20px #f3f4f3;
       .block-content{
-        padding: 20px 50px;
+        padding: 10px 30px 20px;
         background: #fff;
         .el-input{
           width: 50%;

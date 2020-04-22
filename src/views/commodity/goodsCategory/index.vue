@@ -10,6 +10,7 @@
         fit
         row-key="id"
         highlight-current-row
+        default-expand-all
         :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
       >
         <el-table-column
@@ -23,7 +24,7 @@
           align="center"
         >
           <template slot-scope="scope">
-            <img :src="'http://' + scope.row.logo" alt="" width="60" height="60">
+            <img :src="scope.row.logo" alt="" width="60" height="60">
           </template>
         </el-table-column>
         <el-table-column
@@ -31,7 +32,7 @@
           align="center"
         >
           <template slot-scope="scope">
-            <img :src="'http://' +scope.row.image_path" alt="" width="120" height="60">
+            <img :src="scope.row.image_path" alt="" width="120" height="60">
           </template>
         </el-table-column>
         <el-table-column
@@ -79,7 +80,7 @@
         <el-form-item label="分类名称" :label-width="formLabelWidth" prop="category_name">
           <el-input v-model="form.category_name" autocomplete="off" :disabled="dialogType=='detail'" />
         </el-form-item>
-        <el-form-item label="上级分类" :label-width="formLabelWidth">
+        <el-form-item v-if="dialogType=='add'" label="上级分类" :label-width="formLabelWidth">
           <el-cascader
             v-model="form.parent_id"
             :options="categories"
@@ -87,6 +88,7 @@
             clearable
             :disabled="dialogType=='detail'"
           />
+          <span style="color: #F56C6C">tip：顶级分类无需选择</span>
         </el-form-item>
         <el-form-item label="分类logo" :label-width="formLabelWidth" prop="logo">
           <img-upload
@@ -205,8 +207,9 @@ export default {
       const _this = this
       _this.$refs[formName].validate((valid) => {
         if (valid) {
-          _this.form.parent_id = _this.form.parent_id ? _this.form.parent_id[0] : 0
           if (_this.form.id) {
+            // 编辑的话不传parent_id
+            delete _this.form.parent_id
             Category.editCategory(_this.form).then(res => {
               if (res.code === 0) {
                 this.$message({
@@ -222,6 +225,7 @@ export default {
               }
             })
           } else {
+            _this.form.parent_id = _this.form.parent_id.length > 0 ? _this.form.parent_id[_this.form.parent_id.length - 1] : 0
             Category.addCategory(_this.form).then(res => {
               if (res.code === 0) {
                 this.$message({

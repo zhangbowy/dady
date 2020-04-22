@@ -7,7 +7,7 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            今日访客
+            访客
           </div>
           <count-to :start-val="0" :end-val="102400" :duration="2600" class="card-panel-num" />
         </div>
@@ -33,7 +33,7 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            日销售额
+            销售额
           </div>
           <count-to :start-val="0" :end-val="9280" :duration="3200" class="card-panel-num" />
         </div>

@@ -12,6 +12,9 @@ export function addGood(data) {
   return request({
     url: '/goods/addGoods',
     method: 'post',
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    },
     data
   })
 }
@@ -20,6 +23,9 @@ export function editGood(data) {
   return request({
     url: '/goods/editGoods',
     method: 'post',
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    },
     data
   })
 }
@@ -32,11 +38,22 @@ export function goodDetail(data) {
   })
 }
 
-export function deleteGoods(params) {
+export function deleteGoods(data) {
   return request({
     url: '/goods/deleteGoods',
-    method: 'get',
-    params
+    method: 'post',
+    data
+  })
+}
+/**
+ * 修改商品状态
+ * @param {*id status}
+ */
+export function changeStatus(data) {
+  return request({
+    url: '/goods/setStatus',
+    method: 'post',
+    data
   })
 }
 

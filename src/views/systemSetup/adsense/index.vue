@@ -36,7 +36,7 @@
           width="100"
         >
           <template slot-scope="scope">
-            <img :src="'http://' +scope.row.image_path" alt="" width="60" height="60">
+            <img :src="scope.row.image_path" alt="" width="60" height="60">
           </template>
         </el-table-column>
         <el-table-column
