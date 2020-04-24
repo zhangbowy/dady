@@ -7,6 +7,7 @@
       <el-tabs v-model="type" type="border-card" @tab-click="handleClick">
         <el-tab-pane label="一般定制" name="1">
           <el-table
+            v-loading="loading"
             :data="templates"
             style="width: 100%"
             fit
@@ -123,6 +124,7 @@ export default {
   },
   data() {
     return {
+      loading: true,
       templates: [],
       listIndex: '',
       dialogTableVisible: false,
@@ -152,11 +154,12 @@ export default {
     this.getEmbTemplate()
   },
   methods: {
-    // 获取所有物流模板
+    // 获取所有模板
     getEmbTemplate() {
       embTemplate.getEmbTemplate({
         template_type: this.type
       }).then(res => {
+        this.loading = false
         this.templates = res.data
       })
     },

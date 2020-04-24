@@ -351,7 +351,6 @@ export default {
     },
     // 选择图片
     chooseImg(obj) {
-      console.log(obj)
       // 单选模式
       if (this.picMax === 1) {
         // 删除原有选中项
@@ -392,7 +391,6 @@ export default {
     },
     // 确认选择图片
     confirm() {
-      console.log(this.chooseList)
       this.$emit('confirm', this.chooseList)
     }
   }

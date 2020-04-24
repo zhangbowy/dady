@@ -6,6 +6,7 @@
     <div class="content">
       <el-table
         ref="multipleTable"
+        v-loading="loading"
         :data="templates"
         style="width: 100%"
         fit
@@ -143,6 +144,7 @@
 export default {
   data() {
     return {
+      loading: false,
       total: 10,
       templates: [{
         id: 1,

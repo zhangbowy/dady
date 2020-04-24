@@ -68,7 +68,11 @@
             <div class="form-content-item">
               <div class="block-title"><card-tag tag-name="商品详情" /></div>
               <el-form-item style="padding:10px 10px">
-                <Tinymce ref="editor" v-model="form.detail" :height="400" disabled />
+                <tinymce-editor
+                  ref="editor"
+                  v-model="form.detail"
+                  :disabled="true"
+                />
                 <!-- <mavon-editor ref="editor" v-model="form.detail" @save="saveDetail" @change="updateDetail" /> -->
               </el-form-item>
             </div>
@@ -110,33 +114,34 @@
               <sku-table ref="skutable" :skus-data="specificationFilter" />
               <!-- <vue-json-pretty :data="specificationFilter" /> -->
             </div>
+            <div class="form-content-item">
+              <div class="block-title"><card-tag tag-name="价格库存" /></div>
+              <div class="block-content">
+                <el-form-item label="商品原价" prop="old_price">
+                  <el-input v-model="form.old_price" disabled>
+                    <template slot="append">元</template>
+                  </el-input>
+                </el-form-item>
+                <el-form-item label="商品现价" prop="current_price">
+                  <el-input v-model="form.current_price" disabled>
+                    <template slot="append">元</template>
+                  </el-input>
+                </el-form-item>
+                <el-form-item label="商品库存" prop="sum_stock">
+                  <el-input v-model="form.sum_stock" disabled>
+                    <template slot="append">件</template>
+                  </el-input>
+                </el-form-item>
+                <el-form-item label="商品重量" prop="weight">
+                  <el-input v-model="form.weight" disabled>
+                    <template slot="append">千克</template>
+                  </el-input>
+                </el-form-item>
+              </div>
+            </div>
           </el-tab-pane>
         </el-tabs>
-        <div class="form-content-item">
-          <div class="block-title"><card-tag tag-name="价格库存" /></div>
-          <div class="block-content">
-            <el-form-item label="商品原价" prop="old_price">
-              <el-input v-model="form.old_price" disabled>
-                <template slot="append">元</template>
-              </el-input>
-            </el-form-item>
-            <el-form-item label="商品现价" prop="current_price">
-              <el-input v-model="form.current_price" disabled>
-                <template slot="append">元</template>
-              </el-input>
-            </el-form-item>
-            <el-form-item label="商品库存" prop="sum_stock">
-              <el-input v-model="form.sum_stock" disabled>
-                <template slot="append">件</template>
-              </el-input>
-            </el-form-item>
-            <el-form-item label="商品重量" prop="weight">
-              <el-input v-model="form.weight" disabled>
-                <template slot="append">千克</template>
-              </el-input>
-            </el-form-item>
-          </div>
-        </div>
+
         <el-form-item>
           <el-button type="primary" @click="()=>this.$router.push({path: `/commodity/goodsEdit?id=${form.id}`})">编辑</el-button>
           <el-button @click="()=>this.$router.go(-1)">返回</el-button>
@@ -149,14 +154,14 @@
 <script>
 import CardTag from '@/components/CardTag'
 // import { mavonEditor } from 'mavon-editor' // 富文本编辑器
-import Tinymce from '@/components/Tinymce'
+import TinymceEditor from '@/components/TinymceEditor'
 import ImgUpload from '@/components/ImgUpload' // 图片上传
 import SkuTable from '@/components/VueSku/sku-table' // skulist
 import { goodDetail, Category } from '@/api/goods'
 export default {
   components: {
     CardTag,
-    Tinymce,
+    TinymceEditor,
     ImgUpload,
     SkuTable
   },

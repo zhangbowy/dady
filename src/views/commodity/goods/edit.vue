@@ -68,7 +68,13 @@
             <div class="form-content-item">
               <div class="block-title"><card-tag tag-name="商品详情" /></div>
               <el-form-item style="padding:10px 10px">
-                <Tinymce ref="editor" v-model="form.detail" :height="400" />
+                <tinymce-editor
+                  ref="editor"
+                  v-model="form.detail"
+                  :value="form.detail"
+                  @onClick="onClick"
+                />
+                <!-- <Tinymce ref="editor" v-model="form.detail" :height="400" /> -->
                 <!-- <mavon-editor ref="editor" v-model="form.detail" @save="saveDetail" @change="updateDetail" /> -->
               </el-form-item>
             </div>
@@ -119,56 +125,57 @@
               <sku-table ref="skutable" :skus-data="specificationFilter" />
               <!-- <vue-json-pretty :data="specificationFilter" /> -->
             </div>
+            <!-- 价格部分 -->
+            <div class="form-content-item">
+              <div class="block-title"><card-tag tag-name="价格库存" /></div>
+              <div v-if="skuList.length>0" class="block-content">
+                <el-form-item label="商品原价" prop="old_price">
+                  <el-input v-model="form.old_price">
+                    <template slot="append">元</template>
+                  </el-input>
+                </el-form-item>
+                <el-form-item label="商品现价">
+                  <el-input v-model="priceInfo.minPrice" :disabled="skuList.length>0">
+                    <template slot="append">元</template>
+                  </el-input>
+                </el-form-item>
+                <el-form-item label="商品库存">
+                  <el-input v-model="priceInfo.totalNum" :disabled="skuList.length>0">
+                    <template slot="append">件</template>
+                  </el-input>
+                </el-form-item>
+                <el-form-item label="商品重量">
+                  <el-input v-model="priceInfo.minWeight" :disabled="skuList.length>0">
+                    <template slot="append">千克</template>
+                  </el-input>
+                </el-form-item>
+              </div>
+              <div v-else class="block-content">
+                <el-form-item label="商品原价" prop="old_price">
+                  <el-input v-model="form.old_price">
+                    <template slot="append">元</template>
+                  </el-input>
+                </el-form-item>
+                <el-form-item label="商品现价" prop="current_price">
+                  <el-input v-model="form.current_price">
+                    <template slot="append">元</template>
+                  </el-input>
+                </el-form-item>
+                <el-form-item label="商品库存" prop="sum_stock">
+                  <el-input v-model="form.sum_stock">
+                    <template slot="append">件</template>
+                  </el-input>
+                </el-form-item>
+                <el-form-item label="商品重量" prop="weight">
+                  <el-input v-model="form.weight">
+                    <template slot="append">千克</template>
+                  </el-input>
+                </el-form-item>
+              </div>
+            </div>
           </el-tab-pane>
         </el-tabs>
-        <!-- 价格部分 -->
-        <div class="form-content-item">
-          <div class="block-title"><card-tag tag-name="价格库存" /></div>
-          <div v-if="skuList.length>0" class="block-content">
-            <el-form-item label="商品原价" prop="old_price">
-              <el-input v-model="form.old_price">
-                <template slot="append">元</template>
-              </el-input>
-            </el-form-item>
-            <el-form-item label="商品现价">
-              <el-input v-model="priceInfo.minPrice" :disabled="skuList.length>0">
-                <template slot="append">元</template>
-              </el-input>
-            </el-form-item>
-            <el-form-item label="商品库存">
-              <el-input v-model="priceInfo.totalNum" :disabled="skuList.length>0">
-                <template slot="append">件</template>
-              </el-input>
-            </el-form-item>
-            <el-form-item label="商品重量">
-              <el-input v-model="priceInfo.minWeight" :disabled="skuList.length>0">
-                <template slot="append">千克</template>
-              </el-input>
-            </el-form-item>
-          </div>
-          <div v-else class="block-content">
-            <el-form-item label="商品原价" prop="old_price">
-              <el-input v-model="form.old_price">
-                <template slot="append">元</template>
-              </el-input>
-            </el-form-item>
-            <el-form-item label="商品现价" prop="current_price">
-              <el-input v-model="form.current_price">
-                <template slot="append">元</template>
-              </el-input>
-            </el-form-item>
-            <el-form-item label="商品库存" prop="sum_stock">
-              <el-input v-model="form.sum_stock">
-                <template slot="append">件</template>
-              </el-input>
-            </el-form-item>
-            <el-form-item label="商品重量" prop="weight">
-              <el-input v-model="form.weight">
-                <template slot="append">千克</template>
-              </el-input>
-            </el-form-item>
-          </div>
-        </div>
+
         <el-form-item>
           <el-button type="primary" @click="onSubmit('form')">保存</el-button>
           <el-button @click="()=>this.$router.go(-1)">取消</el-button>
@@ -181,7 +188,7 @@
 <script>
 import CardTag from '@/components/CardTag'
 // import { mavonEditor } from 'mavon-editor' // 富文本编辑器
-import Tinymce from '@/components/Tinymce'
+import TinymceEditor from '@/components/TinymceEditor'
 import ImgUpload from '@/components/ImgUpload' // 图片上传
 import SkuTable from '@/components/VueSku/sku-table' // skulist
 import { createUniqueString, uniqueArr } from '@/utils'
@@ -190,9 +197,9 @@ import { mapGetters } from 'vuex'
 export default {
   components: {
     CardTag,
-    Tinymce,
     ImgUpload,
-    SkuTable
+    SkuTable,
+    TinymceEditor
   },
   data() {
     return {
@@ -394,6 +401,16 @@ export default {
     // 删除规格值
     delOption(spec_index, option_index) {
       this.specification[spec_index].leaf.splice(option_index, 1)
+    },
+    // 鼠标单击的事件
+    onClick(e, editor) {
+      console.log('Element clicked')
+      console.log(e)
+      console.log(editor)
+    },
+    // 清空内容
+    clear() {
+      this.$refs.editor.clear()
     }
   }
 }

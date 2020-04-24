@@ -18,6 +18,7 @@
     </div>
     <div class="content">
       <el-table
+        v-loading="loading"
         :data="adList"
         style="width: 100%"
         fit
@@ -128,6 +129,7 @@ export default {
   },
   data() {
     return {
+      loading: true,
       baseUrl: process.env.VUE_APP_BASE_API,
       adList: [],
       dialogFormVisible: false,
@@ -171,6 +173,7 @@ export default {
         pageSize: this.pageSize,
         currentPage: this.currentPage
       }).then(res => {
+        this.loading = false
         this.adList = res.data
       })
     },

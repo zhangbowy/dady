@@ -18,6 +18,7 @@
     </div>
     <div class="content">
       <el-table
+        v-loading="loading"
         :data="shopsList"
         style="width: 100%"
         fit
@@ -173,7 +174,7 @@ export default {
       }
     }
     return {
-      load: true,
+      loading: true,
       keywords: '',
       baseUrl: process.env.VUE_APP_BASE_API,
       shopsList: [],
@@ -237,6 +238,7 @@ export default {
         pageSize: this.pageSize,
         currentPage: this.currentPage
       }).then(res => {
+        this.loading = false
         this.shopsList = res.data.data
         this.total = res.data.count
       })

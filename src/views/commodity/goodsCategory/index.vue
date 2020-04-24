@@ -5,6 +5,7 @@
     </div>
     <div class="content">
       <el-table
+        v-loading="loading"
         :data="categories"
         style="width: 100%"
         fit
@@ -133,6 +134,7 @@ export default {
   },
   data() {
     return {
+      loading: true,
       // 分组选择配置项
       optionProps: {
         checkStrictly: true,
@@ -187,6 +189,7 @@ export default {
     fetchData() {
       Category.getList().then(res => {
         console.log(res)
+        this.loading = false
         this.categories = res.data
       })
     },
