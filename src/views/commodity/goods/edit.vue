@@ -46,25 +46,29 @@
                 </el-form-item>
               </div>
             </div>
-            <!-- <div class="form-content-item">
+            <div class="form-content-item">
               <div class="block-title"><card-tag tag-name="物流信息" /></div>
               <div class="block-content">
                 <el-form-item label="物流设置">
                   <el-radio-group v-model="form.logisticsType">
                     <el-radio :label="0" style="margin-right: 0">统一运费： </el-radio>
-                    <el-input v-model="form.freight" style="width: 25%; margin-right: 30px">
+                    <el-input v-model="form.freight" type="number" style="width: 25%; margin-right: 30px" :disabled="form.logisticsType!=0">
                       <template slot="append">元</template>
                     </el-input>
                     <el-radio :label="1">包邮</el-radio>
                     <el-radio :label="2" style="margin-right: 0">物流模板：  </el-radio>
                     <el-select v-model="form.logistics" placeholder="请选择物流模板" :disabled="form.logisticsType!=2">
-                      <el-option label="顺丰速运" value="1" />
-                      <el-option label="圆通快递" value="2" />
+                      <el-option
+                        v-for="item in expressList"
+                        :key="item.express_template_id"
+                        :label="item.express_template_name"
+                        :value="item.express_template_id"
+                      />
                     </el-select>
                   </el-radio-group>
                 </el-form-item>
               </div>
-            </div> -->
+            </div>
             <div class="form-content-item">
               <div class="block-title"><card-tag tag-name="商品详情" /></div>
               <el-form-item style="padding:10px 10px">
@@ -194,6 +198,7 @@ import SkuTable from '@/components/VueSku/sku-table' // skulist
 import { createUniqueString, uniqueArr } from '@/utils'
 import { addGood, editGood, goodDetail, Category } from '@/api/goods'
 import { mapGetters } from 'vuex'
+import { expressApi } from '@/api/system'
 export default {
   components: {
     CardTag,
@@ -254,7 +259,8 @@ export default {
           { required: true, message: '请选择分类', trigger: 'change' }
         ]
       },
-      categories: [],
+      categories: [], // 商品分类
+      expressList: [], // 运费模板
       // 分组选择配置项
       optionProps: {
         checkStrictly: true,
@@ -281,6 +287,7 @@ export default {
   },
   created() {
     this.getCategory()
+    this.getExpressList()
     this.id = this.$route.query.id ? this.$route.query.id : ''
     if (this.$route.query.id) {
       this.fetchData(this.$route.query.id)
@@ -290,6 +297,11 @@ export default {
     getCategory() {
       Category.getList().then(res => {
         this.categories = res.data
+      })
+    },
+    getExpressList() {
+      expressApi.getExpressList().then(res => {
+        this.expressList = res.data.data
       })
     },
     // 初始化商品详情

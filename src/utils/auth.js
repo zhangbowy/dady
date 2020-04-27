@@ -1,15 +1,15 @@
 import Cookies from 'js-cookie'
 
-const TokenKey = 'yuncx_access_token'
+const StatusKey = 'yuncx_is_login'
 
-export function getToken() {
-  return Cookies.get(TokenKey)
+export function getStatus() {
+  return Cookies.get(StatusKey)
 }
 
-export function setToken(token) {
-  return Cookies.set(TokenKey, token)
+export function setStatus(status) {
+  return Cookies.set(StatusKey, status)
 }
 
-export function removeToken() {
-  return Cookies.remove(TokenKey)
+export function removeStatus() {
+  return Cookies.remove(StatusKey)
 }

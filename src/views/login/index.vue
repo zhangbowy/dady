@@ -41,7 +41,7 @@
         </span>
       </el-form-item>
 
-      <!-- <el-form-item prop="code">
+      <el-form-item prop="code">
         <span class="svg-container">
           <svg-icon icon-class="vercode" />
         </span>
@@ -57,7 +57,7 @@
         <span class="show-pwd">
           <img :src="codeImg" alt="" width="120" height="60">
         </span>
-      </el-form-item> -->
+      </el-form-item>
 
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">立即登录</el-button>
     </el-form>
@@ -66,7 +66,7 @@
 
 <script>
 // import { validUsername } from '@/utils/validate'
-
+import { getCaptcha } from '@/api/common'
 export default {
   name: 'Login',
   data() {
@@ -109,7 +109,16 @@ export default {
       immediate: true
     }
   },
+  created() {
+    // this.getCaptchas()
+  },
+
   methods: {
+    getCaptchas() {
+      getCaptcha().then(res => {
+        console.log(res)
+      })
+    },
     showPwd() {
       if (this.passwordType === 'password') {
         this.passwordType = ''

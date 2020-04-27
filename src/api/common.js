@@ -2,7 +2,9 @@
 import request from '@/utils/request'
 
 export const GroupApi = {
-  // 获取分类下拉
+  /**
+  * 获取分组列表
+  */
   getGroupList(data) {
     return request({
       url: '/gallery/groupList',
@@ -11,6 +13,7 @@ export const GroupApi = {
     })
   },
   /**
+   * 添加分组
    * @param {group_name parent_id level}
    */
   addGroup(data) {
@@ -21,6 +24,7 @@ export const GroupApi = {
     })
   },
   /**
+   * 编辑分组
   * @param {gallery_group_id group_name}
   */
   editGroup(data) {
@@ -31,6 +35,7 @@ export const GroupApi = {
     })
   },
   /**
+   * 删除分组
   * @param {group_id}
   */
   deleteGroup(data) {
@@ -40,5 +45,20 @@ export const GroupApi = {
       data
     })
   }
-
+}
+// 获取所有城市 只到市
+export default function getCityData(params) {
+  return request({
+    url: '/system/getCity',
+    method: 'get',
+    params
+  })
+}
+// 获取验证码
+export function getCaptcha(params) {
+  return request({
+    url: '/user/getCaptcha',
+    method: 'get',
+    params
+  })
 }

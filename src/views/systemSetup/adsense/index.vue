@@ -169,10 +169,7 @@ export default {
   methods: {
     fetchData() {
       // 获取广告位列表
-      adsense.getAdsenseList({
-        pageSize: this.pageSize,
-        currentPage: this.currentPage
-      }).then(res => {
+      adsense.getAdsenseList().then(res => {
         this.loading = false
         this.adList = res.data
       })

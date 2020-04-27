@@ -2,7 +2,7 @@
 
 // 计算每个sku后面有多少项
 export function getLevels(tree) {
-  let level = []
+  const level = []
   for (let i = tree.length - 1; i >= 0; i--) {
     if (tree[i + 1] && tree[i + 1].leaf) {
       level[i] = tree[i + 1].leaf.length * level[i + 1] || 1
@@ -20,10 +20,10 @@ export function getLevels(tree) {
  * @return {[type]}        [description]
  */
 export function flatten(tree, stocks = [], options) {
-  let { optionValue = 'id', optionText = 'value' } = options || {}
-  let result = []
+  const { optionValue = 'id', optionText = 'value' } = options || {}
+  const result = []
   let skuLen = 0
-  let stockMap = {} // 记录已存在的stock的数据
+  const stockMap = {} // 记录已存在的stock的数据
   const level = getLevels(tree)
   if (tree.length === 0) return result
   tree.forEach(sku => {
@@ -33,18 +33,18 @@ export function flatten(tree, stocks = [], options) {
   })
   // 根据已有的stocks生成一个map
   stocks.forEach(stock => {
-    let { skus, ...attr } = stock
+    const { skus, ...attr } = stock
     stockMap[skus.map(item => `${item.k_id}_${item.v_id}`).join('|')] = attr
   })
   for (let i = 0; i < skuLen; i++) {
-    let skus = []
-    let mapKey = []
+    const skus = []
+    const mapKey = []
     tree.forEach((sku, column) => {
       const { leaf } = sku
       let item = {}
       if (!leaf || leaf.length === 0) return true
       if (leaf.length > 1) {
-        let row = parseInt(i / level[column], 10) % leaf.length
+        const row = parseInt(i / level[column], 10) % leaf.length
         item = tree[column].leaf[row]
       } else {
         item = tree[column].leaf[0]
@@ -55,10 +55,10 @@ export function flatten(tree, stocks = [], options) {
         k_id: sku[optionValue],
         k: sku[optionText],
         v_id: item[optionValue],
-        v: item[optionText],
+        v: item[optionText]
       })
     })
-    let { ...data } = stockMap[mapKey.join('|')] || {}
+    const { ...data } = stockMap[mapKey.join('|')] || {}
     // 从map中找出存在的sku并保留其值
     result.push({ ...data, skus })
   }
@@ -72,11 +72,11 @@ export function flatten(tree, stocks = [], options) {
  * @return {Boolean}         [description]
  */
 export function isEqual(prevSKU, nextSKU, options) {
-  let { optionValue = 'id' } = options || {}
+  const { optionValue = 'id' } = options || {}
   return (
     nextSKU.length === prevSKU.length &&
     nextSKU.every(({ leaf = [] }, index) => {
-      let prevLeaf = prevSKU[index].leaf || []
+      const prevLeaf = prevSKU[index].leaf || []
       return (
         prevSKU[index][optionValue] === nextSKU[index][optionValue] &&
         leaf.length === prevLeaf.length &&

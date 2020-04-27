@@ -29,3 +29,4 @@ export function checkLogin() {
     method: 'get'
   })
 }
+

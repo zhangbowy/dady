@@ -163,6 +163,13 @@ export const constantRoutes = [
       meta: { title: '物流模板设置' }
     },
     {
+      path: 'logisticTempEdit:id(\\d+)?',
+      name: 'LogisticTempEdit',
+      hidden: true,
+      component: () => import('@/views/systemSetup/logisticTemplate/edit'),
+      meta: { title: '物流模板编辑' }
+    },
+    {
       path: 'embroidTemplate',
       name: 'EmbroidTemplate',
       component: () => import('@/views/systemSetup/embroidTemplate/index'),

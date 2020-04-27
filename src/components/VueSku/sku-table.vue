@@ -175,7 +175,7 @@ export default {
           })
         },
         {
-          label: '重量',
+          label: '重量（公斤）',
           width: 150,
           component: Vue.extend({
             props: ['row'],
@@ -196,7 +196,7 @@ export default {
           })
         },
         {
-          label: '库存',
+          label: '库存（件）',
           width: 150,
           component: Vue.extend({
             props: ['row'],

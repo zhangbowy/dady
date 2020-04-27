@@ -1,7 +1,7 @@
 import axios from 'axios'
 import qs from 'qs'
 import { MessageBox, Message } from 'element-ui'
-// import store from '@/store'
+import store from '@/store'
 // import { getToken } from '@/utils/auth'
 import router from './../router/index'
 
@@ -76,9 +76,9 @@ service.interceptors.response.use(
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          // store.dispatch('user/resetToken').then(() => {
-          //   location.reload()
-          // })
+          store.dispatch('user/resetToken').then(() => {
+            location.reload()
+          })
           router.push({ path: '/login' })
         })
       }

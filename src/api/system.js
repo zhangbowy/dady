@@ -46,6 +46,7 @@ export const embTemplate = {
     })
   }
 }
+
 export const adsense = {
   /**
    * 获取首页广告位列表
@@ -87,6 +88,70 @@ export const adsense = {
   deleteAdsense(data) {
     return request({
       url: '/system/delSlider',
+      method: 'post',
+      data
+    })
+  }
+}
+
+export const expressApi = {
+  /**
+   * 获取物流模板列表
+   * @param {* }
+   */
+  getExpressList(params) {
+    return request({
+      url: '/system/expTemplate',
+      method: 'get',
+      params
+    })
+  },
+  /**
+  * 物流模板详情
+  * @param {* }
+  */
+  expressDetail(params) {
+    return request({
+      url: '/system/expTemplateDetail',
+      method: 'get',
+      params
+    })
+  },
+  /**
+   * 添加物流模板
+   * @param {* }
+   */
+  addExpress(data) {
+    return request({
+      url: '/system/addExpTemplate',
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8'
+      },
+      data
+    })
+  },
+  /**
+  * 编辑物流模板
+  * @param {* }
+  */
+  editExpress(data) {
+    return request({
+      url: '/system/editExpTemplate',
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8'
+      },
+      data
+    })
+  },
+  /**
+  * 删除物流模板
+  * @param {* }
+  */
+  deleteExpress(data) {
+    return request({
+      url: '/system/delExpTemplate',
       method: 'post',
       data
     })

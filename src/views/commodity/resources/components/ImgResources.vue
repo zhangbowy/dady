@@ -10,7 +10,7 @@
         </el-input>
       </el-col>
     </el-row>
-    <el-row class="content">
+    <el-row v-loading="loading" class="content">
       <el-col :span="6" style="background: #f5f5f5;padding: 20px 10px">
         <el-button
           size="small"
@@ -274,6 +274,7 @@ export default {
         pageSize: 10,
         count: 0
       },
+      loading: true,
       deleteArr: [] // 待删除图片的数组
     }
   },
@@ -315,6 +316,7 @@ export default {
         gallery_group_id: this.selectGroupId,
         img_name: this.keyword
       }).then(res => {
+        this.loading = false
         this.imgList = res.data.data
         this.pageInfo.count = res.data.count
       })
