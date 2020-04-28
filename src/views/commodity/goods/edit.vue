@@ -340,7 +340,7 @@ export default {
                 })
                 // 重置表单
                 _this.$refs[formName].resetFields()
-                _this.$router.go(-1)
+                _this.$router.replace({ path: '/commodity/goodsList' })
               } else {
                 this.$message.success(res.msg || '修改失败!')
               }
@@ -354,7 +354,7 @@ export default {
                 })
                 // 重置表单
                 _this.$refs[formName].resetFields()
-                _this.$router.go(-1)
+                _this.$router.replace({ path: '/commodity/goodsList' })
               } else {
                 this.$message.success(res.msg || '添加失败!')
               }

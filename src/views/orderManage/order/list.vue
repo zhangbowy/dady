@@ -5,7 +5,7 @@
         <el-input
           v-model="keywords"
           size="small"
-          placeholder="请输入关键词"
+          placeholder="请输入订单号"
           clearable
           style="width:220px"
         />
@@ -22,25 +22,28 @@
     </div>
     <div class="content">
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-        <el-tab-pane label="全部" name="1">
+        <el-tab-pane label="全部" name="0">
           <order-table :data="orderList" />
         </el-tab-pane>
-        <el-tab-pane label="待付款" name="2">
+        <el-tab-pane label="待付款" name="1">
           <order-table :data="orderList" />
         </el-tab-pane>
-        <el-tab-pane label="议价中" name="3">
+        <el-tab-pane label="待发货" name="3">
           <order-table :data="orderList" />
         </el-tab-pane>
-        <el-tab-pane label="待发货" name="4">
+        <el-tab-pane label="已发货" name="4">
           <order-table :data="orderList" />
         </el-tab-pane>
-        <el-tab-pane label="已发货" name="5">
+        <el-tab-pane label="已完成" name="4">
           <order-table :data="orderList" />
         </el-tab-pane>
-        <el-tab-pane label="已完成" name="6">
+        <el-tab-pane label="询价中" name="5">
           <order-table :data="orderList" />
         </el-tab-pane>
-        <el-tab-pane label="已关闭" name="7">
+        <el-tab-pane label="已回复" name="6">
+          <order-table :data="orderList" />
+        </el-tab-pane>
+        <el-tab-pane label="已关闭" name="-2">
           <order-table :data="orderList" />
         </el-tab-pane>
       </el-tabs>
@@ -62,6 +65,7 @@
 
 <script>
 import OrderTable from './components/OrderTable'
+import { orderApi } from '@/api/order'
 export default {
   components: {
     OrderTable
@@ -70,7 +74,7 @@ export default {
   data() {
     return {
       keywords: '',
-      baseUrl: process.env.VUE_APP_BASE_API,
+      order_type: 1,
       pageSize: 5,
       currentPage: 1,
       total: 2,
@@ -105,29 +109,53 @@ export default {
       }],
       statusOption: [{
         value: '0',
-        label: '待付款'
+        label: '全部'
       }, {
         value: '1',
-        label: '议价中'
+        label: '待付款'
       }, {
         value: '2',
-        label: '代发货'
+        label: '待发货'
       }, {
         value: '3',
         label: '已发货'
       }, {
         value: '4',
         label: '已完成'
+      }, {
+        value: '5',
+        label: '询价中'
+      }, {
+        value: '6',
+        label: '询价回复'
+      }, {
+        value: '-2',
+        label: '已关闭/取消订单'
       }],
       status: '',
       multipleSelection: [],
-      activeName: '1'
+      activeName: '0'
     }
   },
+  created() {
+    this.fetchData()
+  },
   methods: {
-
+    fetchData() {
+      orderApi.getList({
+        currentPage: this.currentPage,
+        pageSize: this.pageSize,
+        status: this.status,
+        order_no: this.keywords,
+        order_type: this.order_type
+      }).then(res => {
+        this.orderList = res.data.data
+        this.total = res.data.count
+      })
+    },
     handleClick(tab, event) {
-      console.log(tab, event)
+      this.status = tab.name
+      this.fetchData()
     },
     handleDelete(id) {
       this.$confirm('是否删除该订单?', '提示', {

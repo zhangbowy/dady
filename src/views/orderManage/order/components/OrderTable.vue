@@ -5,8 +5,8 @@
         <el-row class="order-header">
           <el-col :span="6" class="header-item">
             <el-row>
-              <el-col :span="12">商品</el-col>
-              <el-col :span="12" class="alignR">单价/数量</el-col>
+              <el-col :span="16">商品</el-col>
+              <el-col :span="8" class="alignR">单价/数量</el-col>
             </el-row>
           </el-col>
           <el-col :span="3" class="header-item">
@@ -31,7 +31,7 @@
 
         <div class="order-item-content">
           <el-checkbox-group v-model="checkList">
-            <div v-for="(item, index) in data" :key="item.id+index" class="item-box">
+            <div v-for="(item, index) in data" :key="`${item.id}-${index}`" class="item-box">
               <div class="item-header">
                 <el-checkbox :label="item.id" />
                 <span>订单号：{{ item.order_no }}</span>
@@ -41,20 +41,24 @@
               </div>
               <el-row class="item-content" type="flex" align="middle">
                 <el-col :span="6" class="td-item">
-                  <el-row>
-                    <el-col :span="12">
-                      <img :src="item.goodsImg" alt="" width="80" height="80">
-                      <span>{{ item.goodName }}</span></el-col>
-                    <el-col :span="12" class="alignR">{{ item.price }}元/{{ item.number }}件</el-col>
+                  <el-row v-for="good in item.order_item" :key="good.sku_id">
+                    <el-col :span="16" style="text-align:left">
+                      <img :src="good.image" alt="" width="80" height="80">
+                      <div>
+                        <span>{{ good.name }}</span>
+                        <span>{{ good.sku_name }}</span>
+                      </div>
+                    </el-col>
+                    <el-col :span="8" class="alignR">{{ good.current_price }}元/{{ good.buy_num }}件</el-col>
                   </el-row>
                 </el-col>
                 <el-col :span="3" class="td-item">
-                  {{ item.status==0?'待支付':'已完成' }}
+                  {{ item._status }}
                 </el-col>
-                <el-col :span="3" class="td-item">{{ item.consignee }}/{{ item.consigneePhone }}</el-col>
-                <el-col :span="3" class="td-item">张三</el-col>
-                <el-col :span="3" class="td-item">请尽快发货</el-col>
-                <el-col :span="3" class="td-item">100元</el-col>
+                <el-col :span="3" class="td-item">{{ item.receiver_name }}/{{ item.receiver_phone }}</el-col>
+                <el-col :span="3" class="td-item">{{ item.receiver_name }}</el-col>
+                <el-col :span="3" class="td-item">{{ item.buyer_message }}</el-col>
+                <el-col :span="3" class="td-item">{{ item.pay_amount }}元</el-col>
                 <el-col :span="3" class="td-item">
                   <el-button
                     size="mini"
@@ -224,7 +228,7 @@ export default {
     margin-bottom: 20px;
     border-radius: 5px;
     border: 1px solid #fafafa;
-    box-shadow: 0px 10px 20px #fcfcfc;
+    box-shadow: 0px 10px 20px #cccccc;
     vertical-align: middle;
     .item-header{
       padding: 10px;

@@ -3,7 +3,7 @@
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
       <div class="title-container">
-        <h3 class="title">用户登录</h3>
+        <h3 class="title">账号登录</h3>
       </div>
 
       <el-form-item prop="username">
@@ -59,7 +59,7 @@
         </span>
       </el-form-item> -->
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">立即登录</el-button>
+      <el-button class="login-btn" :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">立即登录</el-button>
     </el-form>
   </div>
 </template>
@@ -200,27 +200,32 @@ $cursor: #fff;
 $bg:#2d3a4b;
 $dark_gray:#889aa4;
 $light_gray:#eee;
+$light_white:#fff;
 
 .login-container {
   min-height: 100%;
   width: 100%;
   background-image: url('../../assets/login/loginbg.jpg');
-  background-size: 100%;
+  background-size: 100% 100%;
   background-color: $bg;
   overflow: hidden;
 
   .login-form {
     position: fixed;
-    width: 520px;
+    width: 400px;
     max-width: 100%;
     padding: 50px 35px 50px;
     margin: 0 auto;
     overflow: hidden;
-    left: 50%;
+    left: 70%;
     top: 50%;
+    background: rgba(255, 255, 255, 0.1);
     transform: translate(-50%, -50%);
-    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.4);
     border-radius: 10px;
+    .login-btn{
+      background: linear-gradient(to right,#5893F5,#625CFF);
+      border: none;
+    }
   }
 
   .svg-container {
@@ -236,7 +241,7 @@ $light_gray:#eee;
 
     .title {
       font-size: 26px;
-      color: $light_gray;
+      color: $light_white;
       margin: 0px auto 40px auto;
       text-align: center;
       font-weight: bold;
