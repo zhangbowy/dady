@@ -62,3 +62,11 @@ export function getCaptcha(params) {
     params
   })
 }
+// 获取快递公司列表
+export function getExpressList(params) {
+  return request({
+    url: '/order/expressList',
+    method: 'get',
+    params
+  })
+}

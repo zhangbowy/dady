@@ -25,7 +25,7 @@ export default {
     },
     backColor: {
       type: String,
-      default: '#F5F7FA'
+      default: '#ebebeb'
     },
     color: {
       type: String,

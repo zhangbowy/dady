@@ -104,6 +104,13 @@ export const constantRoutes = [
       name: 'OrderList',
       component: () => import('@/views/orderManage/order/list'),
       meta: { title: '订单列表' }
+    },
+    {
+      path: 'orderDetail:order_no(\\d+)?',
+      name: 'OrderDetail',
+      hidden: true,
+      component: () => import('@/views/orderManage/order/detail'),
+      meta: { title: '订单详情' }
     }]
   },
   {

@@ -205,7 +205,7 @@ $light_white:#fff;
 .login-container {
   min-height: 100%;
   width: 100%;
-  background-image: url('../../assets/login/loginbg.jpg');
+  // background-image: url('../../assets/login/loginbg.jpg');
   background-size: 100% 100%;
   background-color: $bg;
   overflow: hidden;
