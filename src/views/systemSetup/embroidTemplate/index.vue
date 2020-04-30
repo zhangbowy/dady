@@ -251,7 +251,7 @@ export default {
         embTemplate.changeCoverImg({
           id: id,
           template_type: this.type,
-          cover_image: imgArray[0]
+          cover_image: imgArray
         }).then(res => {
           console.log(res)
           if (res.code === 0) {

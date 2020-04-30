@@ -92,9 +92,6 @@ export default {
       }, {
         value: '4',
         label: '手绘'
-      }, {
-        value: '5',
-        label: '询价'
       }],
       statusOption: [{
         value: '',
