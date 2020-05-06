@@ -1,17 +1,6 @@
 <template>
   <div class="fonts-list main-content">
     <div class="screen-box">
-      <!-- <div class="screen-item">
-        <el-input
-          v-model="keywords"
-          size="small"
-          placeholder="请输入店铺名称"
-          clearable
-          style="width:220px"
-          @keyup.enter.native="fetchData"
-        />
-        <el-button size="small" icon="el-icon-search" type="primary" @click.native="fetchData">搜索</el-button>
-      </div> -->
       <div class="operation">
         <el-button size="small" icon="el-icon-upload" type="primary" @click="showDialog('add')">上传</el-button>
       </div>
@@ -76,7 +65,7 @@
         />
       </div> -->
     </div>
-    <!-- 店铺新增，详情，编辑弹框 -->
+    <!-- 新增字体 -->
     <el-dialog center :title="'新增字体'" :visible.sync="dialogFormVisible">
       <el-form ref="fontForm" :model="fontForm" :rules="rules" label-width="100px" label-position="left" size="small">
         <el-form-item label="字体名称" prop="font_name">
@@ -108,7 +97,7 @@
       </el-form>
     </el-dialog>
 
-    <el-dialog center :title="fontDetail.font_name" :visible.sync="fontDetailDialog">
+    <el-dialog center :title="fontDetail.font_name" :visible.sync="fontDetailDialog" class="font-dialog">
       <div style="text-align: center" class="font-box">
         <div v-for="(item,key) in fontDetail.font_content" :key="key" class="font-item">
           <span>{{ key }}：</span>
@@ -272,6 +261,27 @@ export default {
     .font-item{
       width: 20%;
       margin-bottom: 20px;
+    }
+  }
+}
+
+</style>
+<style lang="scss">
+.font-dialog{
+  .el-dialog{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: 0 !important;
+    transform: translate(-50%, -50%);
+    max-height: calc(100% - 30px);
+    max-width: calc(100% - 30px);
+    display: flex;
+    flex-direction: column;
+    height: 60vh;
+    overflow: hidden;
+    .el-dialog__body {
+      overflow: auto;
     }
   }
 }

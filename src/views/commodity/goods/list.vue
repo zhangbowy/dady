@@ -120,7 +120,7 @@
                 v-if="scope.row.status==3"
                 size="mini"
                 type="danger"
-                @click.stop="changeStates(scope.row.id, 2)"
+                @click.stop="changeStates(scope.row.id, 2,scope.row.status)"
               >下架</el-button>
               <router-link :to="`/commodity/goodsEdit?id=${scope.row.id}`">
                 <el-button
@@ -223,8 +223,8 @@ export default {
       this.multipleSelection = val
     },
     // 修改商品状态
-    changeStates(id, status) {
-      this.$confirm(`${status === 1 ? '审核通过后可以上架' : status === 2 ? '是否立即上架？' : '是否下架改商品？'}`, '提示', {
+    changeStates(id, status, nowStatus) {
+      this.$confirm(`${status === 1 ? '是否取消审核？' : nowStatus === 3 && status === 2 ? '是否下架该商品？' : status === 2 ? '审核通过后可以上架' : '是否立即上架？'}`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
