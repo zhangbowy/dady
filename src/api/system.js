@@ -157,3 +157,130 @@ export const expressApi = {
     })
   }
 }
+
+export const customCateApi = {
+  /**
+   * 获取定制分类列表
+   * @param {* }
+   */
+  getCategoryList(params) {
+    return request({
+      url: '/system/customCategory',
+      method: 'get',
+      params
+    })
+  },
+  /**
+   * 添加可定制分类
+   * @param {*} data
+   */
+  addCustomCate(data) {
+    return request({
+      url: '/system/addCustomCate',
+      method: 'post',
+      data
+    })
+  },
+  /**
+   * 编辑可定制分类
+   * @param {*} data
+   */
+  editCustomCate(data) {
+    return request({
+      url: '/system/editCustomCate',
+      method: 'post',
+      data
+    })
+  },
+  /**
+   * 关联机器
+   * @param {*} data
+   */
+  relationMachine(data) {
+    return request({
+      url: '/system/relationMachine',
+      method: 'post',
+      data
+    })
+  },
+  /**
+   * 解除关联机器
+   * @param {*} data
+   */
+  unRelationMachine(data) {
+    return request({
+      url: '/system/unRelationMachine',
+      method: 'post',
+      data
+    })
+  },
+  /**
+  * 删除可定制分类
+  * @param {* custom_category_id}
+  */
+  delCustomCate(data) {
+    return request({
+      url: '/system/delCustomCate',
+      method: 'post',
+      data
+    })
+  },
+  /**
+  * 根据定制分类id获取机器
+  * @param {* custom_category_id}
+  */
+  getMachineById(params) {
+    return request({
+      url: '/system/getMachineById',
+      method: 'get',
+      params
+    })
+  }
+}
+
+export const machineApi = {
+  /**
+   * 获取机器列表
+   * @param {* }
+   */
+  getMachine(params) {
+    return request({
+      url: '/system/getMachine',
+      method: 'get',
+      params
+    })
+  },
+  /**
+  * 添加机器
+  * @param {* }
+  */
+  addMachine(data) {
+    return request({
+      url: '/system/addMachine',
+      method: 'post',
+      data
+    })
+  },
+  /**
+  * 编辑机器
+  * @param {* machine_id}
+  */
+  editMachine(data) {
+    return request({
+      url: '/system/editMachine',
+      method: 'post',
+      data
+    })
+  },
+  /**
+  * 删除机器
+  * @param {* machine_id}
+  */
+  delMachine(data) {
+    return request({
+      url: '/system/delMachine',
+      method: 'post',
+      data
+    })
+  }
+}

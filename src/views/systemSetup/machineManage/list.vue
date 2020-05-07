@@ -1,11 +1,11 @@
 <template>
-  <div class="shops-list main-content">
+  <div class="machine-list main-content">
     <div class="screen-box">
       <div class="screen-item">
         <el-input
           v-model="keywords"
           size="small"
-          placeholder="请输入设备名称"
+          placeholder="请输入机器名称"
           clearable
           style="width:220px"
           @keyup.enter.native="fetchData"
@@ -18,6 +18,7 @@
     </div>
     <div class="content">
       <el-table
+        v-loading="loading"
         :data="machinesList"
         style="width: 100%"
         fit
@@ -31,28 +32,25 @@
           type="index"
         />
         <el-table-column
-          label="设备码"
-          align="center"
-          width="100"
-        >
-          <template slot-scope="scope">
-            <img :src="`${baseUrl}/`+scope.row.logo" alt="" width="60" height="60">
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="shop_name"
-          label="设备名称"
+          prop="machine_code"
+          label="机器码"
           align="center"
         />
-        <!-- <el-table-column
-          label="设备状态"
+        <el-table-column
+          prop="machine_name"
+          label="机器名称"
           align="center"
-          width="250"
-        >
-          <template slot-scope="scope">
-            <el-tag :type="scope.row.del | statusFilter">{{ scope.row.del==0?'已打烊':'营业中' }}</el-tag>
-          </template>
-        </el-table-column> -->
+        />
+        <el-table-column
+          prop="desc"
+          label="机器描述"
+          align="center"
+        />
+        <el-table-column
+          prop="custom_category_name"
+          label="所属定制分类"
+          align="center"
+        />
         <el-table-column
           prop="created_at"
           label="创建时间"
@@ -71,7 +69,7 @@
             <el-button
               size="mini"
               type="danger"
-              @click="handleDelete(scope.row.shop_id)"
+              @click="handleDelete(scope.row.machine_id)"
             >删除</el-button>
           </template>
         </el-table-column>
@@ -84,25 +82,26 @@
         :total="toatl"
       />
     </div>
-    <!-- 设备新增，详情，编辑弹框 -->
-    <el-dialog center :title="dialogType=='add'? '新增设备': dialogType=='edit'? '编辑设备': '设备详情'" :visible.sync="dialogFormVisible">
+    <!-- 机器新增，详情，编辑弹框 -->
+    <el-dialog center :title="dialogType=='add'? '新增机器': dialogType=='edit'? '编辑机器': '机器详情'" :visible.sync="dialogFormVisible">
       <el-form ref="machineForm" :model="machineForm" :rules="rules" label-width="100px" label-position="left" size="small">
-        <el-form-item label="设备名称" prop="name">
-          <el-input v-model="machineForm.name " :disabled="dialogType=='detail'" />
+        <el-form-item label="机器名称" prop="machine_name">
+          <el-input v-model="machineForm.machine_name " :disabled="dialogType=='detail'" />
         </el-form-item>
-        <el-form-item label="设备码" prop="code">
-          <el-input v-model="machineForm.code " :disabled="dialogType=='detail'" />
+        <el-form-item label="机器码" prop="machine_code">
+          <el-input v-model="machineForm.machine_code " :disabled="dialogType=='detail'" />
         </el-form-item>
-        <el-form-item label="设备描述">
+        <el-form-item label="机器描述">
           <el-input
             v-model="machineForm.desc"
+            :disabled="dialogType=='detail'"
             type="textarea"
             :rows="2"
-            placeholder="请输入设备描述"
+            placeholder="请输入机器描述"
           />
         </el-form-item>
         <el-form-item>
-          <el-button v-if="dialogType!=='detail'" type="primary" @click="onSubmit('shopForm')">保存</el-button>
+          <el-button v-if="dialogType!=='detail'" type="primary" @click="onSubmit('machineForm')">保存</el-button>
           <el-button v-else type="primary" @click="dialogType='edit'">编辑</el-button>
           <el-button @click="dialogFormVisible = false">取消</el-button>
         </el-form-item>
@@ -112,36 +111,27 @@
 </template>
 
 <script>
-import { getList, delShop, addShop, editShop } from '@/api/shop'
+import { machineApi } from '@/api/system'
 export default {
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        1: 'success',
-        0: 'danger',
-        2: 'danger'
-      }
-      return statusMap[status]
-    }
-  },
   data() {
     return {
+      loading: true,
       keywords: '',
       toatl: 0,
       machinesList: [],
       dialogFormVisible: false,
       machineForm: {
-        name: '',
-        code: '',
+        machine_name: '',
+        machine_code: '',
         desc: ''
       },
       rules: {
-        name: [
-          { required: true, message: '请填写设备名称', trigger: 'blur' },
-          { min: 3, max: 15, message: '长度在 1 到 15 个字符', trigger: 'blur' }
+        machine_name: [
+          { required: true, message: '请填写机器名称', trigger: 'blur' },
+          { min: 1, max: 15, message: '长度在 1 到 15 个字符', trigger: 'blur' }
         ],
-        code: [
-          { required: true, message: '请填写设备码', trigger: 'blur' }
+        machine_code: [
+          { required: true, message: '请填写机器码', trigger: 'blur' }
         ]
       },
       dialogType: 'add'
@@ -150,46 +140,43 @@ export default {
   watch: {
     dialogFormVisible(val) {
       if (val === false) {
-        console.log(1)
         this.$refs['machineForm'].resetFields()
+        this.machineForm = {
+          machine_name: '',
+          machine_code: '',
+          desc: ''
+        }
       }
     }
   },
   mounted() {
-    // this.fetchData()
+    this.fetchData()
   },
   methods: {
     fetchData() {
-      // 获取设备列表
-      getList({ name: this.keywords }).then(res => {
+      // 获取机器列表
+      machineApi.getMachine({ name: this.keywords }).then(res => {
+        this.loading = false
         this.machinesList = res.data.data
       })
     },
     showDialog(type, form) {
       this.dialogType = type
       this.dialogFormVisible = true
-      if (form && form.shop_id) {
+      if (form && form.machine_id) {
         // 请求分类详情
-        this.machineForm.shop_id = form.shop_id
-        this.machineForm.name = form.admin.name
-        this.machineForm.phone = form.admin.phone
-        this.machineForm.system_end_time = form.system_end_time
-        this.machineForm.logo = form.logo
-        this.imageUrl = this.baseUrl + '/' + form.logo
-        this.fileList.push({
-          url: this.baseUrl + '/' + form.logo
-        })
+        this.machineForm.machine_id = form.machine_id
+        this.machineForm.machine_name = form.machine_name
+        this.machineForm.machine_code = form.machine_code
+        this.machineForm.desc = form.desc
       }
     },
     onSubmit(formName) {
       const _this = this
       _this.$refs[formName].validate((valid) => {
         if (valid) {
-          if (_this.shopForm.shop_id) {
-            if (this.shopForm.password === '') {
-              delete this.shopForm.password
-            }
-            editShop(_this.shopForm).then(res => {
+          if (_this.machineForm.machine_id) {
+            machineApi.editMachine(_this.machineForm).then(res => {
               if (res.code === 0) {
                 this.$message({
                   type: 'success',
@@ -204,7 +191,7 @@ export default {
               }
             })
           } else {
-            addShop(_this.shopForm).then(res => {
+            machineApi.addMachine(_this.machineForm).then(res => {
               if (res.code === 0) {
                 this.$message({
                   type: 'success',
@@ -225,13 +212,13 @@ export default {
       })
     },
     handleDelete(id) {
-      this.$confirm('是否删除该设备?', '提示', {
+      this.$confirm('是否删除该机器?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
         confirmButtonClass: 'danger'
       }).then(() => {
-        delShop({ shop_id: id }).then(res => {
+        machineApi.delMachine({ machine_id: id }).then(res => {
           this.$message({
             type: 'success',
             message: '删除成功!'
@@ -250,7 +237,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.shops-list{
+.machine-list{
   .screen-box{
     .screen-item{
       text-align: left;

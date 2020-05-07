@@ -51,7 +51,52 @@
             </el-table-column>
           </el-table>
         </el-tab-pane>
-        <el-tab-pane label="特殊定制" name="2" />
+        <el-tab-pane label="特殊定制" name="2">
+          <el-table
+            v-loading="loading"
+            :data="templates"
+            style="width: 100%"
+            fit
+            highlight-current-row
+            tooltip-effect="dark"
+          >
+            <el-table-column
+              prop="template_name"
+              label="模板名称"
+              align="center"
+            />
+            <el-table-column
+              label="模板图片"
+              align="left"
+            >
+              <template slot-scope="scope">
+                <img-upload
+                  :img-data="scope.row.cover_image"
+                  :pic-max="1"
+                  @chooseImg="imageChoose($event, scope.row.id)"
+                />
+              </template>
+            </el-table-column>
+            <el-table-column
+              fixed="right"
+              label="操作"
+              align="center"
+              width="250"
+            >
+              <template slot-scope="scope">
+                <el-button
+                  size="mini"
+                  @click="showDialog('detail', scope.row, scope.$index)"
+                >详情</el-button>
+                <!-- <el-button
+                  size="mini"
+                  type="danger"
+                  @click="handleDelete(scope.row.id)"
+                >删除</el-button> -->
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-tab-pane>
       </el-tabs>
       <!-- 新增，详情，编辑弹框 -->
       <el-dialog center :title="dialogType=='add'? '新增模板': dialogType=='edit'? '编辑模板': '模板详情'" :visible.sync="dialogFormVisible">

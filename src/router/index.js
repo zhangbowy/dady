@@ -132,19 +132,6 @@ export const constantRoutes = [
     }]
   },
   {
-    path: '/machineManage',
-    component: Layout,
-    alwaysShow: true,
-    redirect: '/machineManage/machineList',
-    meta: { title: '设备管理', icon: 'machine' },
-    children: [{
-      path: 'machineList',
-      name: 'MachineList',
-      component: () => import('@/views/machineManage/machine/list'),
-      meta: { title: '设备列表' }
-    }]
-  },
-  {
     path: '/fontLibrary',
     component: Layout,
     alwaysShow: true,
@@ -163,30 +150,41 @@ export const constantRoutes = [
     alwaysShow: true,
     redirect: '/system/logisticTemplate',
     meta: { title: '系统设置', icon: 'system' },
-    children: [{
-      path: 'logisticTemplate',
-      name: 'LogisticTemplate',
-      component: () => import('@/views/systemSetup/logisticTemplate/list'),
-      meta: { title: '物流模板设置' }
-    },
-    {
-      path: 'logisticTempEdit:id(\\d+)?',
-      name: 'LogisticTempEdit',
-      hidden: true,
-      component: () => import('@/views/systemSetup/logisticTemplate/edit'),
-      meta: { title: '物流模板编辑' }
-    },
-    {
-      path: 'embroidTemplate',
-      name: 'EmbroidTemplate',
-      component: () => import('@/views/systemSetup/embroidTemplate/index'),
-      meta: { title: '刺绣模板设置' }
-    }, {
-      path: 'adsense',
-      name: 'Adsense',
-      component: () => import('@/views/systemSetup/adsense/index'),
-      meta: { title: '广告位设置' }
-    }]
+    children: [
+      {
+        path: '/machineManage',
+        name: 'machineManage',
+        component: () => import('@/views/systemSetup/machineManage/list'),
+        meta: { title: '机器管理' }
+      }, {
+        path: 'adsense',
+        name: 'Adsense',
+        component: () => import('@/views/systemSetup/adsense/index'),
+        meta: { title: '广告位' }
+      }, {
+        path: 'customizable',
+        name: 'Customizable',
+        component: () => import('@/views/systemSetup/customizable/index'),
+        meta: { title: '定制分类' }
+      }, {
+        path: 'logisticTemplate',
+        name: 'LogisticTemplate',
+        component: () => import('@/views/systemSetup/logisticTemplate/list'),
+        meta: { title: '物流模板' }
+      },
+      {
+        path: 'logisticTempEdit:id(\\d+)?',
+        name: 'LogisticTempEdit',
+        hidden: true,
+        component: () => import('@/views/systemSetup/logisticTemplate/edit'),
+        meta: { title: '物流模板编辑' }
+      },
+      {
+        path: 'embroidTemplate',
+        name: 'EmbroidTemplate',
+        component: () => import('@/views/systemSetup/embroidTemplate/index'),
+        meta: { title: '刺绣模板' }
+      }]
   },
   {
     path: '/manage',
