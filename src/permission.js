@@ -3,7 +3,7 @@ import store from './store'
 // import { Message } from 'element-ui'
 import NProgress from 'nprogress' // 进度条
 import 'nprogress/nprogress.css' // 进度条样式
-import { getStatus } from '@/utils/auth' // 从cookie中获取token
+import { getToken } from '@/utils/auth' // 从cookie中获取token
 import getPageTitle from '@/utils/get-page-title'
 
 NProgress.configure({ showSpinner: false }) // NProgress配置
@@ -18,9 +18,9 @@ router.beforeEach(async(to, from, next) => {
   document.title = getPageTitle(to.meta.title)
 
   // 确定用户是否已登录
-  const islogin = getStatus()
+  const token = getToken()
 
-  if (islogin) {
+  if (token) {
     if (to.path === '/login') {
       // 如果已经登录，重定向到首页
       next({ path: '/' })

@@ -37,7 +37,7 @@
           width="100"
         >
           <template slot-scope="scope">
-            <img :src="`${baseUrl}/`+scope.row.logo" alt="" width="60" height="60">
+            <img :src="scope.row.logo" alt="" width="60" height="60">
           </template>
         </el-table-column>
         <el-table-column
@@ -116,6 +116,7 @@
         </el-form-item>
         <el-form-item label="店铺logo" prop="logo">
           <img-upload
+            :disabled="dialogType=='detail'"
             :img-data="shopForm.logo"
             :pic-max="1"
             @chooseImg="imageChoose"

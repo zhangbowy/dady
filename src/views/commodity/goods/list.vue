@@ -67,6 +67,12 @@
           sortable
         />
         <el-table-column
+          prop="pv"
+          label="浏览量"
+          align="center"
+          sortable
+        />
+        <el-table-column
           prop="sum_stock"
           label="库存"
           align="center"
@@ -75,7 +81,6 @@
         <el-table-column
           label="状态"
           align="center"
-          width="250"
         >
           <template slot-scope="scope">
             <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status==1?'待审核':scope.row.status==2? '待上架':'已上架' }}</el-tag>

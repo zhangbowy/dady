@@ -15,6 +15,15 @@ import router from './router'
 
 import './icons' // icon
 import '@/permission' // 路由拦截器-权限控制
+// import VueSocketIO from 'vue-socket.io'
+
+// Vue.use(new VueSocketIO({
+//   debug: true,
+//   // 服务器端地址
+//   connection: 'http://localhost:3000',
+//   vuex: {
+//   }
+// }))
 
 // set ElementUI lang to EN
 // Vue.use(ElementUI, { locale })

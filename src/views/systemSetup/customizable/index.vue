@@ -100,8 +100,8 @@
               :h="form.disign_height"
               :x="form.design_left"
               :y="form.design_top"
-              :min-width="150"
-              :min-height="150"
+              :min-width="1"
+              :min-height="1"
               :max-width="150"
               :max-height="150"
               :parent="true"
@@ -163,7 +163,7 @@
 import { customCateApi, machineApi } from '@/api/system'
 import ImgUpload from '@/components/ImgUpload'
 import VueDraggableResizable from 'vue-draggable-resizable'
-// import 'vue-draggable-resizable/dist/VueDraggableResizable.css'
+import 'vue-draggable-resizable/dist/VueDraggableResizable.css'
 export default {
   components: {
     ImgUpload,
@@ -384,8 +384,8 @@ export default {
     onResize(x, y, width, height) {
       this.form.design_left = x
       this.form.design_top = y
-      this.width = width
-      this.height = height
+      this.form.design_width = width
+      this.form.disign_height = height
     },
     // 拖动
     onDrag(x, y) {

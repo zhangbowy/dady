@@ -41,7 +41,7 @@
         </span>
       </el-form-item>
 
-      <!-- <el-form-item prop="code">
+      <el-form-item prop="code">
         <span class="svg-container">
           <svg-icon icon-class="vercode" />
         </span>
@@ -51,13 +51,12 @@
           placeholder="验证码"
           name="code"
           tabindex="3"
-          auto-complete="on"
           @keyup.enter.native="handleLogin"
         />
         <span class="show-pwd">
-          <img :src="codeImg" alt="" width="120" height="60">
+          <img ref="codeImg" src="" alt="" width="120" height="40" @click="changeCode">
         </span>
-      </el-form-item> -->
+      </el-form-item>
 
       <el-button class="login-btn" :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">立即登录</el-button>
     </el-form>
@@ -66,7 +65,6 @@
 
 <script>
 // import { validUsername } from '@/utils/validate'
-import { getCaptcha } from '@/api/common'
 export default {
   name: 'Login',
   data() {
@@ -90,7 +88,7 @@ export default {
         password: '111111',
         code: ''
       },
-      codeImg: '',
+      baseUrl: process.env.VUE_APP_BASE_API,
       loginRules: {
         username: [{ required: true, trigger: 'blur', message: '用户名不能为空' }],
         password: [{ required: true, trigger: 'blur', validator: validatePassword }],
@@ -109,15 +107,25 @@ export default {
       immediate: true
     }
   },
-  created() {
-    // this.getCaptchas()
+  mounted() {
+    this.changeCode()
   },
 
   methods: {
-    getCaptchas() {
-      getCaptcha().then(res => {
-        console.log(res)
-      })
+    changeCode() {
+      const captcha_key = this.getCaptchaKey()
+      this.loginForm.captcha_key = captcha_key
+      this.$refs.codeImg.setAttribute(
+        'src',
+        this.baseUrl + '/admin/getCaptcha?a=' +
+           captcha_key
+      )
+    },
+    getCaptchaKey() {
+      const captchaKey = Math.random()
+        .toString(36)
+        .substring(2)
+      return captchaKey
     },
     showPwd() {
       if (this.passwordType === 'password') {

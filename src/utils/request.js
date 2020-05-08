@@ -2,7 +2,7 @@ import axios from 'axios'
 import qs from 'qs'
 import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
-// import { getToken } from '@/utils/auth'
+import { getToken } from '@/utils/auth'
 import router from './../router/index'
 
 // 创建axios相应拦截器
@@ -17,12 +17,12 @@ service.interceptors.request.use(
   config => {
     // do something before request is sent
 
-    // if (store.getters.token) {
-    //   // 使每个请求头携带token
-    //   // ['X-Token'] 是header请求头中的key
-    //   // 请根据实际情况修改
-    //   config.headers['X-Token'] = getToken()
-    // }
+    if (store.getters.token) {
+      // 使每个请求头携带token
+      // ['X-Token'] 是header请求头中的key
+      // 请根据实际情况修改
+      config.headers['adm_sign'] = getToken()
+    }
     if (config.method === 'post') { // 支持2种方法，默认使用Form Data
       // 如果useRequestBody=false, 默认支持Form Data
       // SpringMVC Controller 中不需要使用@RequestBody，默认使用@RequestParam

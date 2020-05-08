@@ -47,17 +47,39 @@
               </div>
             </div>
             <div class="form-content-item">
+              <div class="block-title"><card-tag tag-name="开启定制" /></div>
+              <div class="block-content">
+                <el-form-item label="">
+                  <el-switch
+                    v-model="form.is_custom"
+                    active-text="开启"
+                    inactive-text="关闭"
+                    :active-value="1"
+                    :inactive-value="0"
+                  />
+                  <el-select v-model="form.custom_category_id" placeholder="请选择定制分类" :disabled="form.is_custom==0">
+                    <el-option
+                      v-for="item in customCategory"
+                      :key="item.custom_category_id"
+                      :label="item.custom_category_name"
+                      :value="item.custom_category_id"
+                    />
+                  </el-select>
+                </el-form-item>
+              </div>
+            </div>
+            <div class="form-content-item">
               <div class="block-title"><card-tag tag-name="物流信息" /></div>
               <div class="block-content">
                 <el-form-item label="物流设置">
-                  <el-radio-group v-model="form.logisticsType">
-                    <el-radio :label="0" style="margin-right: 0">统一运费： </el-radio>
-                    <el-input v-model="form.freight" type="number" style="width: 25%; margin-right: 30px" :disabled="form.logisticsType!=0">
+                  <el-radio-group v-model="form.express_type">
+                    <el-radio :label="0">包邮</el-radio>
+                    <el-radio :label="1" style="margin-right: 0">统一运费： </el-radio>
+                    <el-input v-model="form.express_fee" type="number" style="width: 25%; margin-right: 30px" :disabled="form.express_type!=1">
                       <template slot="append">元</template>
                     </el-input>
-                    <el-radio :label="1">包邮</el-radio>
                     <el-radio :label="2" style="margin-right: 0">物流模板：  </el-radio>
-                    <el-select v-model="form.logistics" placeholder="请选择物流模板" :disabled="form.logisticsType!=2">
+                    <el-select v-model="form.express_template_id" placeholder="请选择物流模板" :disabled="form.express_type!=2">
                       <el-option
                         v-for="item in expressList"
                         :key="item.express_template_id"
@@ -198,7 +220,7 @@ import SkuTable from '@/components/VueSku/sku-table' // skulist
 import { createUniqueString, uniqueArr } from '@/utils'
 import { addGood, editGood, goodDetail, Category } from '@/api/goods'
 import { mapGetters } from 'vuex'
-import { expressApi } from '@/api/system'
+import { expressApi, customCateApi } from '@/api/system'
 export default {
   components: {
     CardTag,
@@ -261,6 +283,7 @@ export default {
       },
       categories: [], // 商品分类
       expressList: [], // 运费模板
+      customCategory: [], // 可定制分类
       // 分组选择配置项
       optionProps: {
         checkStrictly: true,
@@ -288,20 +311,29 @@ export default {
   created() {
     this.getCategory()
     this.getExpressList()
+    this.getCategoryList()
     this.id = this.$route.query.id ? this.$route.query.id : ''
     if (this.$route.query.id) {
       this.fetchData(this.$route.query.id)
     }
   },
   methods: {
+    // 获取分类
     getCategory() {
       Category.getList().then(res => {
         this.categories = res.data
       })
     },
+    // 获取物流模板
     getExpressList() {
       expressApi.getExpressList().then(res => {
         this.expressList = res.data.data
+      })
+    },
+    // 获取定制分类列表
+    getCategoryList() {
+      customCateApi.getCategoryList().then(res => {
+        this.customCategory = res.data
       })
     },
     // 初始化商品详情
@@ -339,7 +371,6 @@ export default {
                   message: res.msg || '修改成功!'
                 })
                 // 重置表单
-                _this.$refs[formName].resetFields()
                 _this.$router.replace({ path: '/commodity/goodsList' })
               } else {
                 this.$message.success(res.msg || '修改失败!')
@@ -353,7 +384,6 @@ export default {
                   message: res.msg || '添加成功!'
                 })
                 // 重置表单
-                _this.$refs[formName].resetFields()
                 _this.$router.replace({ path: '/commodity/goodsList' })
               } else {
                 this.$message.success(res.msg || '添加失败!')
@@ -417,8 +447,6 @@ export default {
     // 鼠标单击的事件
     onClick(e, editor) {
       console.log('Element clicked')
-      console.log(e)
-      console.log(editor)
     },
     // 清空内容
     clear() {

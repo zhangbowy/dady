@@ -18,6 +18,7 @@
     </div>
     <div class="content">
       <el-table
+        v-loading="load"
         :data="memberList"
         style="width: 100%"
         fit
@@ -36,12 +37,12 @@
           width="100"
         >
           <template slot-scope="scope">
-            <img :src="`${baseUrl}/`+scope.row.avator" alt="" width="60" height="60">
+            <img :src="scope.row.headimgurl" alt="" width="60" height="60">
           </template>
         </el-table-column>
         <el-table-column
-          prop="name"
-          label="会员名称"
+          prop="nickname"
+          label="会员昵称"
           align="center"
         />
         <el-table-column
@@ -49,15 +50,6 @@
           label="手机号"
           align="center"
         />
-        <!-- <el-table-column
-          label="店铺状态"
-          align="center"
-          width="250"
-        >
-          <template slot-scope="scope">
-            <el-tag :type="scope.row.del | statusFilter">{{ scope.row.del==0?'已打烊':'营业中' }}</el-tag>
-          </template>
-        </el-table-column> -->
         <el-table-column
           prop="created_at"
           label="注册时间"
@@ -73,10 +65,10 @@
               size="mini"
               @click.native="showDialog('detail', scope.row)"
             >查看</el-button>
-            <!-- <el-button
+            <el-button
               size="mini"
               @click.native="showDialog('edit', scope.row)"
-            >编辑</el-button> -->
+            >编辑</el-button>
             <el-button
               size="mini"
               type="danger"
@@ -97,140 +89,95 @@
           @current-change="handleCurrentChange"
         />
       </div>
+      <el-dialog center :title="dialogType=='add'? '新增会员': dialogType=='edit'? '编辑信息': '会员详情'" :visible.sync="dialogFormVisible">
+        <el-form ref="memberForm" :model="memberForm" label-width="100px" label-position="left" size="small">
+          <el-form-item label="会员昵称">
+            <el-input v-model="memberForm.nickname " :disabled="dialogType=='detail'" />
+          </el-form-item>
+          <el-form-item label="真实姓名">
+            <el-input v-model="memberForm.name " :disabled="dialogType=='detail'" />
+          </el-form-item>
+          <el-form-item label="手机号">
+            <el-input v-model="memberForm.phone " :disabled="dialogType=='detail'" />
+          </el-form-item>
+          <el-form-item label="会员头像">
+            <img-upload
+              :disabled="dialogType=='detail'"
+              :img-data="memberForm.headimgurl"
+              :pic-max="1"
+              @chooseImg="imageChoose"
+            />
+          </el-form-item>
+          <el-form-item label="生日">
+            <el-date-picker
+              v-model="memberForm.birthday"
+              type="date"
+              format="yyyy-MM-dd"
+              :disabled="dialogType=='detail'"
+              placeholder="选择日期"
+            />
+          </el-form-item>
+          <el-form-item>
+            <el-button v-if="dialogType!=='detail'" type="primary" @click="onSubmit('memberForm')">保存</el-button>
+            <el-button v-else type="primary" @click="dialogType='edit'">编辑</el-button>
+            <el-button @click="dialogFormVisible = false">取消</el-button>
+          </el-form-item>
+        </el-form>
+      </el-dialog>
     </div>
-    <!-- 店铺新增，详情，编辑弹框 -->
-    <el-dialog center :title="dialogType=='add'? '新增店铺': dialogType=='edit'? '编辑店铺': '会员详情'" :visible.sync="dialogFormVisible">
-      <el-form ref="shopForm" :model="shopForm" :rules="rules" label-width="100px" label-position="left" size="small">
-        <el-form-item label="会员名称" prop="name">
-          <el-input v-model="shopForm.shop_name " :disabled="dialogType=='detail'" />
-        </el-form-item>
-        <el-form-item label="手机号" prop="phone">
-          <el-input v-model="shopForm.phone " :disabled="dialogType=='detail'" />
-        </el-form-item>
-        <el-form-item v-if="dialogType!=='detail'" label="密码" prop="password">
-          <el-input v-model="shopForm.password " :disabled="dialogType=='detail'" />
-        </el-form-item>
-        <el-form-item label="店铺logo" prop="logo">
-          <el-upload
-            class="logo-uploader"
-            :action="uploadUrl"
-            :data="{type: 'shop_logo'}"
-            name="image"
-            :file-list="fileList"
-            :with-credentials="true"
-            :show-file-list="false"
-            :on-success="handleAvatarSuccess"
-            :before-upload="beforeAvatarUpload"
-            :disabled="dialogType=='detail'"
-          >
-            <img v-if="imageUrl" :src="imageUrl" class="logo">
-            <i v-else class="el-icon-plus logo-uploader-icon" />
-          </el-upload>
-        </el-form-item>
-        <el-form-item>
-          <el-button v-if="dialogType!=='detail'" type="primary" @click="onSubmit('shopForm')">保存</el-button>
-          <!-- <el-button v-else type="primary" @click="dialogType='edit'">编辑</el-button> -->
-          <el-button @click="dialogFormVisible = false">取消</el-button>
-        </el-form-item>
-      </el-form>
-    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getList, delShop, addShop, editShop } from '@/api/shop'
-import { validPhone } from '@/utils/validate'
+import { member } from '@/api/member'
+import ImgUpload from '@/components/ImgUpload'
 export default {
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        1: 'success',
-        0: 'danger',
-        2: 'danger'
-      }
-      return statusMap[status]
-    }
+  components: {
+    ImgUpload
   },
   data() {
-    const validatePhone = (rule, value, callback) => {
-      if (!validPhone(value)) {
-        callback(new Error('手机号不正确'))
-      } else {
-        callback()
-      }
-    }
-    const validatePassword = (rule, value, callback) => {
-      if (this.dialogType === 'add' && this.shopForm.password === '') {
-        callback(new Error('请输入密码'))
-      } else {
-        callback()
-      }
-    }
     return {
       load: true,
       keywords: '',
-      baseUrl: process.env.VUE_APP_BASE_API,
       memberList: [],
       multipleSelection: [],
       dialogFormVisible: false,
-      shopForm: {
-        shop_name: '',
+      memberForm: {
         name: '',
+        nickname: '',
         phone: '',
-        password: '',
-        system_end_time: '',
-        logo: ''
+        birthday: '',
+        headimgurl: ''
+      },
+      rules: {
+        nickname: [
+          { required: true, message: '请填写会员昵称', trigger: 'blur' }
+        ]
       },
       pageSize: 5,
       currentPage: 1,
       total: 0,
-      imageUrl: '',
-      fileList: [],
-      rules: {
-        shop_name: [
-          { required: true, message: '请填写店铺名称', trigger: 'blur' },
-          { min: 3, max: 15, message: '长度在 1 到 15 个字符', trigger: 'blur' }
-        ],
-        name: [
-          { required: true, message: '请填写管理员姓名', trigger: 'blur' }
-        ],
-        phone: [
-          { required: true, trigger: 'blur', validator: validatePhone }
-        ],
-        password: [
-          { trigger: 'blur', validator: validatePassword }
-        ],
-        system_end_time: [
-          { required: true, message: '请输入选择店铺到期时间', trigger: 'blur' }
-        ],
-        logo: [
-          { required: true, message: '请上传店铺logo', trigger: 'blur' }
-        ]
-      },
       dialogType: 'add'
     }
   },
   watch: {
     dialogFormVisible(val) {
       if (val === false) {
-        console.log(1)
-        this.$refs['shopForm'].resetFields()
-        this.fileList = []
-        this.imageUrl = ''
+        this.$refs['memberForm'].resetFields()
       }
     }
   },
   mounted() {
-    // this.fetchData()
+    this.fetchData()
   },
   methods: {
     fetchData() {
-      // 获取店铺列表
-      getList({
-        shop_name: this.keywords,
+      // 获取用户列表
+      member.userList({
         pageSize: this.pageSize,
         currentPage: this.currentPage
       }).then(res => {
+        this.load = false
         this.memberList = res.data.data
         this.total = res.data.count
       })
@@ -238,62 +185,14 @@ export default {
     showDialog(type, form) {
       this.dialogType = type
       this.dialogFormVisible = true
-      if (form && form.shop_id) {
-        // 请求分类详情
-        this.shopForm.shop_id = form.shop_id
-        this.shopForm.shop_name = form.shop_name
-        this.shopForm.name = form.admin.name
-        this.shopForm.phone = form.admin.phone
-        this.shopForm.system_end_time = form.system_end_time
-        this.shopForm.logo = form.logo
-        this.imageUrl = this.baseUrl + '/' + form.logo
-        this.fileList.push({
-          url: this.baseUrl + '/' + form.logo
-        })
+      if (form && form.id) {
+        this.memberForm = form
       }
     },
-    onSubmit(formName) {
-      const _this = this
-      _this.$refs[formName].validate((valid) => {
-        if (valid) {
-          if (_this.shopForm.shop_id) {
-            if (this.shopForm.password === '') {
-              delete this.shopForm.password
-            }
-            editShop(_this.shopForm).then(res => {
-              if (res.code === 0) {
-                this.$message({
-                  type: 'success',
-                  message: res.msg || '修改成功!'
-                })
-                // 重置表单
-                _this.$refs[formName].resetFields()
-                this.dialogFormVisible = false
-                this.fetchData()
-              } else {
-                this.$message.success(res.msg || '修改失败!')
-              }
-            })
-          } else {
-            addShop(_this.shopForm).then(res => {
-              if (res.code === 0) {
-                this.$message({
-                  type: 'success',
-                  message: res.msg || '添加成功!'
-                })
-                // 重置表单
-                _this.$refs[formName].resetFields()
-                this.dialogFormVisible = false
-                this.fetchData()
-              } else {
-                this.$message.success(res.msg || '添加失败!')
-              }
-            })
-          }
-        } else {
-          return false
-        }
-      })
+    // 图片上传模块
+    imageChoose(img) {
+      this.memberForm.headimgurl = img
+      this.$refs.shopForm.validateField('headimgurl')
     },
     handleCurrentChange(val) {
       this.currentPage = val
@@ -302,44 +201,6 @@ export default {
     handleSizeChange(val) {
       this.pageSize = val
       this.fetchData()
-    },
-    handleDelete(id) {
-      this.$confirm('是否删除该店铺?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-        confirmButtonClass: 'danger'
-      }).then(() => {
-        delShop({ shop_id: id }).then(res => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          })
-          this.fetchData()
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        })
-      })
-    },
-    handleAvatarSuccess(res, file) {
-      console.log(res)
-      this.imageUrl = URL.createObjectURL(file.raw)
-      this.shopForm.logo = res.data.url
-    },
-    beforeAvatarUpload(file) {
-      const isJPG = file.type === 'image/jpeg' || 'image/png'
-      const isLt2M = file.size / 1024 / 1024 < 2
-
-      if (!isJPG) {
-        this.$message.error('店铺logo只能是 JPG/PNG 格式!')
-      }
-      if (!isLt2M) {
-        this.$message.error('店铺logo大小不能超过 2MB!')
-      }
-      return isJPG && isLt2M
     }
   }
 }

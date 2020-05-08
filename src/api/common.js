@@ -54,14 +54,7 @@ export default function getCityData(params) {
     params
   })
 }
-// 获取验证码
-export function getCaptcha(params) {
-  return request({
-    url: '/user/getCaptcha',
-    method: 'get',
-    params
-  })
-}
+
 // 获取快递公司列表
 export function getExpressList(params) {
   return request({

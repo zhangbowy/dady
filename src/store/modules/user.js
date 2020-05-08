@@ -1,10 +1,10 @@
 import { login, logout, getInfo, checkLogin } from '@/api/user'
-import { getStatus, setStatus, removeStatus } from '@/utils/auth'
+import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
 const getDefaultState = () => {
   return {
-    isLogin: getStatus(),
+    token: getToken(),
     name: '',
     avatar: ''
   }
@@ -17,7 +17,7 @@ const mutations = {
     Object.assign(state, getDefaultState())
   },
   SET_STATUS: (state, status) => {
-    state.isLogin = status
+    state.token = status
   },
   SET_NAME: (state, name) => {
     state.name = name
@@ -30,12 +30,12 @@ const mutations = {
 const actions = {
   // user login
   login({ commit }, userInfo) {
-    const { username, password } = userInfo
+    const { username, password, code } = userInfo
     return new Promise((resolve, reject) => {
-      login({ phone: username.trim(), passWord: password }).then(response => {
-        // const { data } = response
-        commit('SET_STATUS', true)
-        setStatus(true)
+      login({ phone: username.trim(), passWord: password, code: code }).then(response => {
+        const { data } = response
+        commit('SET_STATUS', data)
+        setToken(data)
         resolve()
       }).catch(error => {
         reject(error)
@@ -48,13 +48,10 @@ const actions = {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
         const { data } = response
-
         if (!data) {
           reject('Verification failed, please Login again.')
         }
-
         const { name, avatar } = data
-
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
         resolve(data)
@@ -68,7 +65,7 @@ const actions = {
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {
       logout().then(() => {
-        removeStatus() // must remove  token  first
+        removeToken() // must remove  token  first
         resetRouter()
         commit('RESET_STATE')
         resolve()
@@ -81,7 +78,7 @@ const actions = {
   checkLogin({ commit, state }) {
     return new Promise((resolve, reject) => {
       checkLogin().then(() => {
-        removeStatus() // must remove  token  first
+        removeToken() // must remove  token  first
         resetRouter()
         commit('RESET_STATE')
         resolve()
@@ -94,7 +91,7 @@ const actions = {
   // remove 登录状态
   resetToken({ commit }) {
     return new Promise(resolve => {
-      removeStatus() // must remove  token  first
+      removeToken() // must remove  token  first
       commit('RESET_STATE')
       resolve()
     })
