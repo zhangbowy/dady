@@ -45,6 +45,14 @@
           label="店铺名称"
           align="center"
         />
+        <el-table-column
+          label="管理员"
+          align="center"
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.admin.name }}/{{ scope.row.admin.phone }}</span>
+          </template>
+        </el-table-column>
         <!-- <el-table-column
           label="店铺状态"
           align="center"
@@ -189,7 +197,7 @@ export default {
         system_end_time: '',
         logo: ''
       },
-      pageSize: 5,
+      pageSize: 10,
       currentPage: 1,
       total: 0,
       imageUrl: '',

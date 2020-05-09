@@ -33,7 +33,7 @@
         <el-tab-pane
           v-for="(value, key) in orderCount"
           :key="key"
-          :label="`${key==0?'全部':key==1?'待支付':key==2?'待发货':key==3?'待收货':key==4?'已完成':key==5?'询价中':key==6?'已回复':'已取消'}${value}`"
+          :label="`${key==0?'全部':key==1?'待支付':key==2?'待发货':key==3?'待收货':key==4?'已完成':key==5?'询价中':key==6?'已回复':'已取消'}(${value})`"
           :name="key"
         />
         <!-- <el-tab-pane label="待付款" name="1" />

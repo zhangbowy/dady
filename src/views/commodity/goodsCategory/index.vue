@@ -67,13 +67,6 @@
           </template>
         </el-table-column>
       </el-table>
-      <!-- 分页 -->
-      <el-pagination
-        :hide-on-single-page="true"
-        background
-        layout="prev, pager, next"
-        :total="categories.length"
-      />
     </div>
     <!-- 新增，详情，编辑弹框 -->
     <el-dialog center :title="dialogType=='add'? '新增分类': dialogType=='edit'? '编辑分类': '分类详情'" :visible.sync="dialogFormVisible">

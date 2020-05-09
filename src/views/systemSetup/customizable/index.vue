@@ -97,7 +97,7 @@
           <div class="text-event" :style="{backgroundImage: `url(${form.design_bg})`}">
             <vue-draggable-resizable
               :w="form.design_width"
-              :h="form.disign_height"
+              :h="form.design_height"
               :x="form.design_left"
               :y="form.design_top"
               :min-width="1"
@@ -110,9 +110,8 @@
               @dragging="onDrag"
               @resizing="onResize"
             >
-              <!-- 开发时用 -->
               <p>
-                left: {{ form.design_left }} / top: {{ form.design_top }} - Width: {{ form.design_width }} / Height: {{ form.disign_height }}
+                left: {{ form.design_left }} / top: {{ form.design_top }} - Width: {{ form.design_width }} / Height: {{ form.design_height }}
               </p>
             </vue-draggable-resizable>
           </div>
@@ -181,11 +180,11 @@ export default {
         custom_category_name: '', // 分类名称
         design_bg: '', // 背景图片
         design_width: 150, // 设计区域宽度
-        disign_height: 150, // 设计区域高度
+        design_height: 150, // 设计区域高度
         design_top: 0, // x轴距离
         design_left: 0, // y轴距离
-        design_bg_width: 500, // 背景宽度
-        design_bg_height: 500 // 背景高度
+        design_bg_width: 375, // 背景宽度
+        design_bg_height: 375 // 背景高度
       },
       rules: {
         custom_category_name: [
@@ -209,11 +208,11 @@ export default {
           custom_category_name: '',
           design_bg: '',
           design_width: 150, // 设计区域宽度
-          disign_height: 150, // 设计区域高度
+          design_height: 150, // 设计区域高度
           design_top: 0, // x轴距离
           design_left: 0, // y轴距离
-          design_bg_width: 500, // 背景宽度
-          design_bg_height: 500 // 背景高度
+          design_bg_width: 375, // 背景宽度
+          design_bg_height: 375 // 背景高度
         }
       }
     },
@@ -251,11 +250,9 @@ export default {
         this.form.custom_category_id = form.custom_category_id
         this.form.custom_category_name = form.custom_category_name
         this.form.design_width = form.design_width // 设计区域宽度
-        this.form.disign_height = form.disign_height// 设计区域高度
+        this.form.design_height = form.design_height// 设计区域高度
         this.form.design_top = form.design_top // x轴距离
         this.form.design_left = form.design_left // y轴距离
-        this.form.design_bg_width = form.design_bg_width // 背景宽度
-        this.form.design_bg_height = form.design_bg_height // 背景高度
         this.form.design_bg = form.design_bg
       }
     },
@@ -385,7 +382,7 @@ export default {
       this.form.design_left = x
       this.form.design_top = y
       this.form.design_width = width
-      this.form.disign_height = height
+      this.form.design_height = height
     },
     // 拖动
     onDrag(x, y) {
@@ -409,8 +406,8 @@ export default {
     right: 0;
   }
   .text-event {
-    height: 500px;
-    width: 500px;
+    height: 375px;
+    width: 375px;
     border: 1px solid #f5f5f5;
     position: relative;
     background-repeat: no-repeat;
