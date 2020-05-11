@@ -123,12 +123,7 @@ export const constantRoutes = [
       path: 'designerTeam',
       name: 'DesignerTeam',
       component: () => import('@/views/designer/designerTeam/list'),
-      meta: { title: '团队列表' }
-    }, {
-      path: 'designerList',
-      name: 'DesignerList',
-      component: () => import('@/views/designer/designerList/list'),
-      meta: { title: '设计师列表' }
+      meta: { title: '设计师团队' }
     }]
   },
   {

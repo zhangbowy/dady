@@ -186,7 +186,6 @@ export default {
 
 <style lang="scss" scoped>
 .order-list{
-  padding: 0 20px;
   .screen-box{
     .screen-item{
       text-align: left;
