@@ -116,9 +116,6 @@
         <el-form-item label="管理者手机号" prop="designer_phone">
           <el-input v-model="form.designer_phone " :disabled="dialogType=='detail'" style="width:100%" />
         </el-form-item>
-        <el-form-item v-if="dialogType!=='detail'" label="登录密码" prop="password">
-          <el-input v-model="form.password " :disabled="dialogType=='detail'" style="width:100%" />
-        </el-form-item>
         <!-- <el-form-item label="管理者logo" prop="logo">
           <el-upload
             class="logo-uploader"
@@ -138,8 +135,8 @@
         </el-form-item> -->
         <el-form-item>
           <el-button v-if="dialogType!=='detail'" type="primary" @click="onSubmit('form')">保存</el-button>
-          <el-button v-else type="primary" @click="dialogType='edit'">编辑</el-button>
-          <el-button @click="dialogFormVisible = false">取消</el-button>
+          <!-- <el-button v-else type="primary" @click="dialogType='edit'">编辑</el-button> -->
+          <el-button @click="dialogFormVisible = false">关闭</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -232,12 +229,14 @@ export default {
     showDialog(type, form) {
       this.dialogType = type
       this.dialogFormVisible = true
-      if (form && form.designer_id) {
-        this.form.designer_id = form.designer_id
-        this.form.designer_team_name = form.designer_team_name
-        this.form.designer_name = form.designer_name
-        this.form.designer_phone = form.designer_phone
+      console.log(form)
+      if (form && form.designer.length > 0) {
+        this.form = form.designer.find(i => {
+          return i.is_leader === 1
+        })
       }
+      this.form.designer_team_name = form.designer_team_name
+      this.form.designer_team_id = form.designer_team_id
     },
     onSubmit(formName) {
       const _this = this
