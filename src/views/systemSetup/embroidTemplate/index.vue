@@ -27,7 +27,7 @@
                 <img-upload
                   :img-data="scope.row.cover_image"
                   :pic-max="1"
-                  @chooseImg="imageChoose($event, scope.row.id)"
+                  @chooseImg="imageChoose($event, scope.row.emb_template_id)"
                 />
               </template>
             </el-table-column>
@@ -122,7 +122,7 @@
                   type="danger"
                   icon="el-icon-remove-outline"
                   style="vertical-align: top;"
-                  @click="deleteTemplate(item.id, item.template_id)"
+                  @click="deleteTemplate(item.id, item.emb_template_id)"
                 >删除</el-button>
               </el-col>
               <el-col :span="24">
@@ -142,7 +142,7 @@
                   :disabled="dialogType=='detail'"
                   icon="el-icon-remove-outline"
                   style="vertical-align: top;"
-                  @click="addTemplate(form.id)"
+                  @click="addTemplate(form.emb_template_id)"
                 >添加</el-button>
               </el-col>
             </el-row>
@@ -240,7 +240,7 @@ export default {
     },
     addTemplate(id) {
       embTemplate.addTemplate({
-        id: id,
+        emb_template_id: id,
         name: '111',
         price: this.addPriceForm.price,
         width: this.addPriceForm.width,
@@ -272,10 +272,11 @@ export default {
         })
       })
     },
-    deleteTemplate(id, template_id) {
+    deleteTemplate(id, emb_template_id) {
+      console.log(id, emb_template_id)
       embTemplate.deleteTemplate({
         id: id,
-        template_id: template_id
+        template_id: emb_template_id
       }).then(res => {
         this.getEmbTemplate()
         if (res.code === 0) {
