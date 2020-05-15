@@ -447,7 +447,9 @@ export default {
             message: '删除成功!'
           })
         })
-        this.fetchData()
+        setTimeout(() => {
+          this.fetchData()
+        }, 500)
       }).catch(() => {
         this.$message({
           type: 'info',

@@ -1,28 +1,15 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-
-Vue.use(Router)
-
 /* Layout */
 import Layout from '@/layout'
-
-export const constantRoutes = [
+export const asyncRouter = [
   {
-    path: '/login',
-    component: () => import('@/views/login/index'),
-    hidden: true
-  },
-
-  {
-    path: '/404',
-    component: () => import('@/views/404'),
-    hidden: true
-  },
-  {
+    pid: 0,
+    id: 1,
     path: '/',
     component: Layout,
     redirect: '/home',
     children: [{
+      pid: 1,
+      id: 10,
       path: 'home',
       name: 'Home',
       component: () => import('@/views/home/index'),
@@ -30,12 +17,16 @@ export const constantRoutes = [
     }]
   },
   {
+    pid: 0,
+    id: 2,
     path: '/shopManage',
     component: Layout,
     alwaysShow: true,
     redirect: '/shopManage/shopList',
     meta: { title: '店铺管理', icon: 'shop' },
     children: [{
+      pid: 2,
+      id: 11,
       path: 'shopList',
       name: 'ShopList',
       component: () => import('@/views/shopManage/shop/list'),
@@ -44,12 +35,16 @@ export const constantRoutes = [
     }]
   },
   {
+    pid: 0,
+    id: 3,
     path: '/member',
     component: Layout,
     alwaysShow: true,
     redirect: '/member/memberList',
     meta: { title: '会员管理', icon: 'member' },
     children: [{
+      pid: 3,
+      id: 12,
       path: 'memberList',
       name: 'MemberList',
       component: () => import('@/views/memberCenter/member/list'),
@@ -58,35 +53,47 @@ export const constantRoutes = [
     }]
   },
   {
+    pid: 0,
+    id: 4,
     path: '/commodity',
     component: Layout,
     alwaysShow: true,
     redirect: '/commodity/goodsCategory',
     meta: { title: '商品管理', icon: 'goods' },
     children: [{
+      pid: 4,
+      id: 13,
       path: 'goodsCategory',
       name: 'GoodsCategory',
       component: () => import('@/views/commodity/goodsCategory/index'),
       meta: { title: '商品分类' }
     },
     {
+      pid: 4,
+      id: 14,
       path: 'goodsList',
       name: 'GoodsList',
       component: () => import('@/views/commodity/goods/list'),
       meta: { title: '商品列表', activeMenu: '/commodity/goodsList' }
     }, {
+      pid: 4,
+      id: 15,
       path: 'goodsEdit:id(\\d+)?',
       name: 'GoodsEdit',
       hidden: true,
       component: () => import('@/views/commodity/goods/edit'),
       meta: { title: '商品编辑', activeMenu: '/commodity/goodsList' }
     }, {
+      pid: 4,
+      id: 16,
       path: 'goodsDetail:id(\\d+)?',
       name: 'GoodsDetail',
       hidden: true,
       component: () => import('@/views/commodity/goods/detail'),
       meta: { title: '商品详情', activeMenu: '/commodity/goodsList' }
     }, {
+      pid: 4,
+      id: 17,
       path: 'resources',
       name: 'Resources',
       component: () => import('@/views/commodity/resources'),
@@ -94,18 +101,24 @@ export const constantRoutes = [
     }]
   },
   {
+    pid: 0,
+    id: 5,
     path: '/orderManage',
     component: Layout,
     alwaysShow: true,
     redirect: '/orderManage/orderList',
     meta: { title: '订单管理', icon: 'order' },
     children: [{
+      pid: 5,
+      id: 18,
       path: 'orderList',
       name: 'OrderList',
       component: () => import('@/views/orderManage/order/list'),
       meta: { title: '订单列表' }
     },
     {
+      pid: 5,
+      id: 19,
       path: 'orderDetail:order_no(\\d+)?',
       name: 'OrderDetail',
       hidden: true,
@@ -114,12 +127,16 @@ export const constantRoutes = [
     }]
   },
   {
+    pid: 0,
+    id: 6,
     path: '/designerManage',
     component: Layout,
     alwaysShow: true,
     redirect: '/designerManage/designerTeam',
     meta: { title: '设计师管理', icon: 'designer' },
     children: [{
+      pid: 6,
+      id: 20,
       path: 'designerTeam',
       name: 'DesignerTeam',
       component: () => import('@/views/designer/designerTeam/list'),
@@ -127,12 +144,16 @@ export const constantRoutes = [
     }]
   },
   {
+    pid: 0,
+    id: 7,
     path: '/fontLibrary',
     component: Layout,
     alwaysShow: true,
     redirect: '/fontLibrary/list',
     meta: { title: '字体库', icon: 'fontLib' },
     children: [{
+      pid: 7,
+      id: 21,
       path: 'list',
       name: 'FontList',
       component: () => import('@/views/fontLibrary/list/index'),
@@ -140,6 +161,8 @@ export const constantRoutes = [
     }]
   },
   {
+    pid: 0,
+    id: 8,
     path: '/system',
     component: Layout,
     alwaysShow: true,
@@ -147,27 +170,37 @@ export const constantRoutes = [
     meta: { title: '系统设置', icon: 'system' },
     children: [
       {
+        pid: 8,
+        id: 22,
         path: '/machineManage',
         name: 'machineManage',
         component: () => import('@/views/systemSetup/machineManage/list'),
         meta: { title: '机器管理' }
       }, {
+        pid: 8,
+        id: 23,
         path: 'adsense',
         name: 'Adsense',
         component: () => import('@/views/systemSetup/adsense/index'),
         meta: { title: '广告位' }
       }, {
+        pid: 8,
+        id: 24,
         path: 'customizable',
         name: 'Customizable',
         component: () => import('@/views/systemSetup/customizable/index'),
         meta: { title: '定制分类' }
       }, {
+        pid: 8,
+        id: 25,
         path: 'logisticTemplate',
         name: 'LogisticTemplate',
         component: () => import('@/views/systemSetup/logisticTemplate/list'),
         meta: { title: '物流模板' }
       },
       {
+        pid: 8,
+        id: 26,
         path: 'logisticTempEdit:id(\\d+)?',
         name: 'LogisticTempEdit',
         hidden: true,
@@ -175,6 +208,8 @@ export const constantRoutes = [
         meta: { title: '物流模板编辑' }
       },
       {
+        pid: 8,
+        id: 27,
         path: 'embroidTemplate',
         name: 'EmbroidTemplate',
         component: () => import('@/views/systemSetup/embroidTemplate/index'),
@@ -182,6 +217,8 @@ export const constantRoutes = [
       }]
   },
   {
+    pid: 0,
+    id: 9,
     path: '/manage',
     name: 'Manage',
     component: Layout,
@@ -189,12 +226,16 @@ export const constantRoutes = [
     meta: { title: '权限管理', icon: 'manage' },
     children: [
       {
+        pid: 9,
+        id: 28,
         path: 'admin',
         name: 'Admin',
         component: () => import('@/views/manage/admin/list'),
-        meta: { title: '管理员列表' }
+        meta: { title: '管理员' }
       },
       {
+        pid: 9,
+        id: 29,
         path: 'roles',
         name: 'Roles',
         redirect: '/manage/roles/list',
@@ -202,6 +243,8 @@ export const constantRoutes = [
         meta: { title: '角色管理' },
         children: [
           {
+            pid: 29,
+            id: 30,
             path: 'list',
             name: 'RolesList',
             hidden: true,
@@ -209,6 +252,8 @@ export const constantRoutes = [
             meta: { title: '角色列表', activeMenu: '/manage/roles' }
           },
           {
+            pid: 29,
+            id: 31,
             path: 'edit:id(\\d+)?',
             name: 'RolesEdit',
             hidden: true,
@@ -216,6 +261,8 @@ export const constantRoutes = [
             meta: { title: '角色编辑', activeMenu: '/manage/roles' }
           },
           {
+            pid: 29,
+            id: 32,
             path: 'detail:id(\\d+)?',
             name: 'RolesDetail',
             hidden: true,
@@ -225,28 +272,13 @@ export const constantRoutes = [
         ]
       },
       {
+        pid: 9,
+        id: 33,
         path: 'rules',
         name: 'Rules',
         component: () => import('@/views/manage/rules/list'),
         meta: { title: '权限规则' }
       }
     ]
-  },
-  // 404 页面必须在底部 !!!
-  { path: '*', redirect: '/404', hidden: true }
+  }
 ]
-
-const createRouter = () => new Router({
-  // mode: 'history', // require service support
-  scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes
-})
-
-const router = createRouter()
-
-export function resetRouter() {
-  const newRouter = createRouter()
-  router.matcher = newRouter.matcher // 重置router
-}
-
-export default router

@@ -5,7 +5,6 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import Egrid from 'egrid' // 封装element table
 import { limetedStr, getUrl } from '@/utils'
-import 'mavon-editor/dist/css/index.css'
 // import locale from 'element-ui/lib/locale/lang/en' // lang i18n
 import '@/styles/index.scss' // 公共样式
 
@@ -17,17 +16,6 @@ import './icons' // icon
 import '@/permission' // 路由拦截器-权限控制
 // import VueSocketIO from 'vue-socket.io'
 
-// Vue.use(new VueSocketIO({
-//   debug: true,
-//   // 服务器端地址
-//   connection: 'http://localhost:3000',
-//   vuex: {
-//   }
-// }))
-
-// set ElementUI lang to EN
-// Vue.use(ElementUI, { locale })
-// 如果想要中文版 element-ui，按如下方式声明
 Vue.use(ElementUI)
 // Vue.use(ElementUI, { size: 'small' })
 Vue.use(Egrid)

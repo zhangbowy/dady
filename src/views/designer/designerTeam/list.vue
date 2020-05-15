@@ -36,23 +36,6 @@
           label="团队名称"
           align="center"
         />
-        <!-- <el-table-column
-          label="团队管理者"
-          align="center"
-        >
-          <template slot-scope="scope">
-            <span>{{ scope.row.designer_name }}/{{ scope.row.designer_phone }}</span>
-          </template>
-        </el-table-column> -->
-        <!-- <el-table-column
-          label="管理者状态"
-          align="center"
-          width="250"
-        >
-          <template slot-scope="scope">
-            <el-tag :type="scope.row.del | statusFilter">{{ scope.row.del==0?'已打烊':'营业中' }}</el-tag>
-          </template>
-        </el-table-column> -->
         <el-table-column
           prop="created_at"
           label="创建时间"
@@ -94,22 +77,12 @@
         />
       </div>
     </div>
-    <!-- 管理者新增，详情，编辑弹框 -->
+    <!-- 团队新增，详情，编辑弹框 -->
     <el-dialog center :title="dialogType=='add'? '新增设计师团队': dialogType=='edit'? '编辑设计师团队': '设计师团队详情'" :visible.sync="dialogFormVisible" width="40%">
       <el-form ref="form" :model="form" :rules="rules" label-width="120px" label-position="left" size="small">
         <el-form-item label="团队名称" prop="designer_team_name">
           <el-input v-model="form.designer_team_name " :disabled="dialogType=='detail'" style="width:100%" />
         </el-form-item>
-        <!-- <el-form-item label="到期时间" prop="system_end_time">
-          <el-date-picker
-            v-model="form.system_end_time"
-            type="date"
-            format="yyyy-MM-dd"
-            :disabled="dialogType=='detail'"
-            placeholder="选择团队到期时间"
-            style="width:100%"
-          />
-        </el-form-item> -->
         <el-form-item label="管理者名称" prop="designer_name">
           <el-input v-model="form.designer_name " :disabled="dialogType=='detail'" style="width:100%" />
         </el-form-item>
@@ -155,13 +128,6 @@ export default {
         callback()
       }
     }
-    const validatePassword = (rule, value, callback) => {
-      if (this.dialogType === 'add' && this.form.password === '') {
-        callback(new Error('请输入密码'))
-      } else {
-        callback()
-      }
-    }
     return {
       load: true,
       keywords: '',
@@ -188,11 +154,7 @@ export default {
         ],
         designer_phone: [
           { required: true, trigger: 'blur', validator: validatePhone }
-        ],
-        password: [
-          { trigger: 'blur', validator: validatePassword }
         ]
-
       },
       dialogType: 'add'
     }
@@ -229,7 +191,6 @@ export default {
     showDialog(type, form) {
       this.dialogType = type
       this.dialogFormVisible = true
-      console.log(form)
       if (form && form.designer.length > 0) {
         this.form = form.designer.find(i => {
           return i.is_leader === 1

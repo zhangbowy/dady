@@ -1,5 +1,5 @@
 <template>
-  <div class="goods-edit">
+  <div class="goods-detail">
     <div class="title-info">
       <card-tag tag-name="商品详情" />
     </div>
@@ -274,7 +274,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.goods-edit{
+.goods-detail{
   padding: 15px;
   .title-info{
     background: #fff;

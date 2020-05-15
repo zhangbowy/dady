@@ -144,6 +144,8 @@
             </el-row>
           </div>
         </el-checkbox-group>
+        <!-- 没有订单 -->
+        <div v-if="data.length===0" class="no-data">暂无订单...</div>
       </div>
     </div>
     <!-- 发货/修改发货弹窗 -->
@@ -493,6 +495,9 @@ export default {
       }
     }
   }
+}
+.no-data{
+  text-align: center;
 }
 .order-address-info{
   padding: 20px 0;

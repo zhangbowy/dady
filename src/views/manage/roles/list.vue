@@ -20,25 +20,19 @@
         <el-button size="small" icon="el-icon-search" type="primary">搜索</el-button>
       </div>
       <div class="operation">
-        <router-link :to="'/manage/rolesEdit'">
+        <router-link :to="'/manage/roles/edit'">
           <el-button size="small" icon="el-icon-plus" type="primary">新增</el-button>
         </router-link>
       </div>
     </div>
     <div class="content">
       <el-table
-        ref="multipleTable"
         :data="rolesList"
         style="width: 100%"
         fit
         highlight-current-row
         tooltip-effect="dark"
-        @selection-change="handleSelectionChange"
       >
-        <el-table-column
-          type="selection"
-          width="55"
-        />
         <el-table-column
           prop="name"
           label="角色名称"
@@ -69,12 +63,12 @@
           align="center"
         >
           <template slot-scope="scope">
-            <router-link :to="`/manage/rolesDetail?id=${scope.row.id}`">
+            <router-link :to="`/manage/roles/detail?id=${scope.row.id}`">
               <el-button
                 size="mini"
               >查看</el-button>
             </router-link>
-            <router-link :to="`/manage/rolesEdit?id=${scope.row.id}`">
+            <router-link :to="`/manage/roles/edit?id=${scope.row.id}`">
               <el-button
                 size="mini"
               >编辑</el-button>
@@ -138,9 +132,6 @@ export default {
     }
   },
   methods: {
-    handleSelectionChange(val) {
-      this.multipleSelection = val
-    },
     handleDelete(id) {
       this.$confirm('是否删除该角色?', '提示', {
         confirmButtonText: '确定',
