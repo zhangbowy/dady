@@ -1,25 +1,26 @@
 <template>
-  <div class="role-edit">
+  <div class="role-edit roles">
     <div class="title-info">
       <card-tag :tag-name="id!=''? '编辑角色': '新增角色'" />
     </div>
     <div class="form-info">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px" label-position="top" size="small">
-        <el-form-item label="角色名称" prop="name">
-          <el-input v-model="form.name" style="width: 30%" />
+        <el-form-item label="角色名称" prop="admin_role_name">
+          <el-input v-model="form.admin_role_name" style="width: 30%" />
         </el-form-item>
         <el-form-item label="角色权限">
           <!-- <el-input v-model="form.name" style="width: 30%" /> -->
-          <el-tree
-            ref="tree"
-            :data="getRulesList"
-            :default-checked-keys="defaultChecked"
-            :props="defaultProps"
-            default-expand-all
-            show-checkbox
-            node-key="id"
-            @check="checkHandle"
-          />
+          <div v-loading="loading" class="permission-tree">
+            <el-tree
+              ref="tree"
+              :data="getRulesList"
+              :props="defaultProps"
+              default-expand-all
+              show-checkbox
+              node-key="id"
+              @check="checkHandle"
+            />
+          </div>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit('form')">保存</el-button>
@@ -41,17 +42,17 @@ export default {
   data() {
     return {
       id: '',
-      roleInfo: {},
+      loading: false,
       authorityList: [],
-      defaultChecked: [],
       form: {
-        name: ''
+        admin_role_name: '',
+        authority_list: []
       },
       rules: {
-        name: [{ required: true, message: '请输入角色名称', trigger: 'blur' }]
+        admin_role_name: [{ required: true, message: '请输入角色名称', trigger: 'blur' }]
       },
       defaultProps: {
-        children: 'authority',
+        children: 'children',
         label: 'auth_name'
       }
     }
@@ -62,33 +63,54 @@ export default {
     }
   },
   created() {
+    this.getPermission()
     this.id = this.$route.query.id ? this.$route.query.id : ''
     if (this.$route.query.id) {
       this.getRoleInfo(this.$route.query.id)
     }
-    this.getPermission()
   },
   methods: {
-    getPermission() {
-      rolesApi.authorityList().then(res => {
+    // 获取权限列表
+    async getPermission() {
+      await rolesApi.authorityList().then(res => {
         this.authorityList = res.data
       })
     },
-    getRoleInfo() {
+    loadNode(node, resolve) {
+      console.log(node)
 
+      resolve()
+    },
+    // 获取角色详情
+    async getRoleInfo(id) {
+      const _this = this
+      this.loading = true
+      await rolesApi.roleDetail({
+        admin_role_id: id
+      }).then(res => {
+        this.form.admin_role_id = res.data.admin_role_id
+        this.form.admin_role_name = res.data.admin_role_name
+        this.form.authority_list = res.data.authority_list.join(',')
+        setTimeout(() => {
+          res.data.authority_list.forEach(value => {
+            _this.$refs.tree.setChecked(value, true, false)
+          })
+          _this.loading = false
+        }, 500)
+      })
     },
     // 提交check
     checkHandle(data) {
       const halfCheckedKeys = this.$refs.tree.getHalfCheckedKeys().join(',')
       const checkedKeys = this.$refs.tree.getCheckedKeys().join(',')
       if (halfCheckedKeys.length && checkedKeys.length) {
-        this.temp.config = halfCheckedKeys + ',' + checkedKeys
+        this.form.authority_list = halfCheckedKeys + ',' + checkedKeys
       } else if (halfCheckedKeys.length && checkedKeys.length === 0) {
-        this.temp.config = halfCheckedKeys
+        this.form.authority_list = halfCheckedKeys
       } else if (halfCheckedKeys.length === 0 && checkedKeys.length) {
-        this.temp.config = checkedKeys
+        this.form.authority_list = checkedKeys
       } else {
-        this.temp.config = ''
+        this.form.authority_list = ''
       }
     },
     // 提交按钮
@@ -96,10 +118,32 @@ export default {
       const _this = this
       _this.$refs[formName].validate((valid) => {
         if (valid) {
-          if (_this.form.id) {
-            console.log(1)
+          if (_this.form.admin_role_id) {
+            rolesApi.editRole(this.form).then(res => {
+              this.$message({
+                type: 'success',
+                message: res.msg
+              })
+              _this.$router.go(-1)
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: '创建失败'
+              })
+            })
           } else {
-            console.log(2)
+            rolesApi.addRole(this.form).then(res => {
+              this.$message({
+                type: 'success',
+                message: res.msg
+              })
+              _this.$router.go(-1)
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: '创建失败'
+              })
+            })
           }
         } else {
           return false
@@ -130,6 +174,23 @@ export default {
           width: 50%;
         }
       }
+    }
+  }
+}
+</style>
+
+<style lang="scss">
+
+.roles{
+  .permission-tree {
+    border: 1px solid #f2f2f2;
+    padding: 10px 15px;
+    border-radius: 5px;
+  }
+  .el-tree-node__children{
+    .el-tree-node__content {
+      float:left;
+      width:228px;
     }
   }
 }

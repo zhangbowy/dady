@@ -9,18 +9,10 @@
           clearable
           style="width:220px"
         />
-        <el-select v-model="status" size="small" multiple placeholder="请选择">
-          <el-option
-            v-for="item in statusOption"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
-        <el-button size="small" icon="el-icon-search" type="primary">搜索</el-button>
+        <el-button size="small" icon="el-icon-search" type="primary" @click="doSearch">搜索</el-button>
       </div>
       <div class="operation">
-        <router-link :to="'/manage/roles/edit'">
+        <router-link :to="'/manage/rolesEdit'">
           <el-button size="small" icon="el-icon-plus" type="primary">新增</el-button>
         </router-link>
       </div>
@@ -34,7 +26,12 @@
         tooltip-effect="dark"
       >
         <el-table-column
-          prop="name"
+          prop="admin_role_id"
+          label="ID"
+          align="center"
+        />
+        <el-table-column
+          prop="admin_role_name"
           label="角色名称"
           align="center"
         />
@@ -48,12 +45,12 @@
           </template>
         </el-table-column>
         <el-table-column
-          prop="create_time"
+          prop="created_at"
           label="创建时间"
           align="center"
         />
         <el-table-column
-          prop="update_time"
+          prop="updated_at"
           label="最后更新时间"
           align="center"
         />
@@ -63,43 +60,50 @@
           align="center"
         >
           <template slot-scope="scope">
-            <router-link :to="`/manage/roles/detail?id=${scope.row.id}`">
+            <!-- <router-link :to="`/manage/roles/detail?id=${scope.row.admin_role_id}`">
               <el-button
                 size="mini"
               >查看</el-button>
-            </router-link>
-            <router-link :to="`/manage/roles/edit?id=${scope.row.id}`">
+            </router-link> -->
+            <router-link :to="`/manage/rolesEdit?id=${scope.row.admin_role_id}`">
               <el-button
+                type="primary"
                 size="mini"
               >编辑</el-button>
             </router-link>
             <el-button
               size="mini"
               type="danger"
-              @click="handleDelete(scope.row.id)"
+              @click="handleDelete(scope.row.admin_role_id)"
             >删除</el-button>
           </template>
         </el-table-column>
       </el-table>
       <!-- 分页 -->
-      <el-pagination
-        :hide-on-single-page="true"
-        background
-        layout="prev, pager, next"
-        :total="rolesList.length"
-      />
+      <!-- 分页 -->
+      <div class="pagination-box">
+        <el-pagination
+          :total="total"
+          :current-page="currentPage"
+          :page-sizes="[5, 10, 50, 100]"
+          :page-size="pageSize"
+          layout="total, sizes, prev, pager, next, jumper"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import { rolesApi } from '@/api/manage'
 export default {
   filters: {
     statusFilter(status) {
       const statusMap = {
         1: 'success',
-        0: 'danger',
-        2: 'danger'
+        0: 'danger'
       }
       return statusMap[status]
     }
@@ -107,31 +111,37 @@ export default {
   data() {
     return {
       keywords: '',
-      rolesList: [{
-        id: 1,
-        name: '超级管理员',
-        status: 1,
-        create_time: '2020-4-14 15:40:28',
-        update_time: '2020-4-14 15:47:28'
-      }, {
-        id: 2,
-        name: '产品管理员',
-        status: 0,
-        create_time: '2020-4-14 15:40:28',
-        update_time: '2020-4-14 15:47:28'
-      }],
-      statusOption: [{
-        value: '0',
-        label: '正常'
-      }, {
-        value: '1',
-        label: '禁用'
-      }],
-      status: '',
-      multipleSelection: []
+      total: 0,
+      pageSize: 10,
+      currentPage: 1,
+      rolesList: []
     }
   },
+  created() {
+    this.getRoleList()
+  },
   methods: {
+    getRoleList() {
+      rolesApi.roleList({
+        currentPage: this.currentPage,
+        pageSize: this.pageSize
+      }).then(res => {
+        this.rolesList = res.data.data
+        this.total = res.data.count
+      })
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val
+      this.getRoleList()
+    },
+    handleSizeChange(val) {
+      this.pageSize = val
+      this.getRoleList()
+    },
+    doSearch() {
+      this.currentPage = 1
+      this.getRoleList()
+    },
     handleDelete(id) {
       this.$confirm('是否删除该角色?', '提示', {
         confirmButtonText: '确定',
@@ -140,9 +150,12 @@ export default {
         confirmButtonClass: 'danger',
         center: true
       }).then(() => {
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
+        rolesApi.delRole({ admin_role_id: id }).then(res => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+          this.getRoleList()
         })
       }).catch(() => {
         this.$message({

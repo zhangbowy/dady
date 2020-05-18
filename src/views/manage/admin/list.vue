@@ -1,5 +1,5 @@
 <template>
-  <div class="shops-list main-content">
+  <div class="admin-list main-content">
     <div class="screen-box">
       <div class="screen-item">
         <el-input
@@ -44,7 +44,7 @@
           align="center"
         />
         <!-- <el-table-column
-          label="店铺状态"
+          label="管理员状态"
           align="center"
           width="250"
         >
@@ -74,7 +74,7 @@
             <el-button
               size="mini"
               type="danger"
-              @click="handleDelete(scope.row.shop_id)"
+              @click="handleDelete(scope.row.id)"
             >删除</el-button>
           </template>
         </el-table-column>
@@ -92,25 +92,25 @@
         />
       </div>
     </div>
-    <!-- 店铺新增，详情，编辑弹框 -->
+    <!-- 管理员新增，详情，编辑弹框 -->
     <el-dialog center :title="dialogType=='add'? '新增管理员': dialogType=='edit'? '编辑管理员': '管理员详情'" :visible.sync="dialogFormVisible">
-      <el-form ref="form" :model="form" :rules="rules" label-width="100px" label-position="left" size="small">
-        <el-form-item label="管理员名称" prop="name">
+      <el-form ref="form" :model="form" :rules="rules" label-width="100px" label-position="rigth" size="small">
+        <el-form-item label="管理员姓名" prop="name">
           <el-input v-model="form.name " :disabled="dialogType=='detail'" />
         </el-form-item>
         <el-form-item label="手机号" prop="phone">
           <el-input v-model="form.phone " :disabled="dialogType=='detail'" />
         </el-form-item>
-        <el-form-item v-if="dialogType!=='detail'" label="密码" prop="password">
-          <el-input v-model="form.password " :disabled="dialogType=='detail'" />
+        <el-form-item v-if="dialogType!=='detail'" label="密码">
+          <el-input v-model="form.password " type="password" :disabled="dialogType=='detail'" />
         </el-form-item>
-        <el-form-item label="管理员角色" prop="role">
-          <el-select v-model="form.role" placeholder="请选择" style="width: 100%" :disabled="dialogType=='detail'">
+        <el-form-item label="管理员角色" prop="role_id">
+          <el-select v-model="form.role_id" placeholder="请选择" style="width: 100%" :disabled="dialogType=='detail'">
             <el-option
-              v-for="item in roleList"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              v-for="item in rolesList"
+              :key="item.admin_role_id"
+              :label="item.admin_role_name"
+              :value="item.admin_role_id"
             />
           </el-select>
         </el-form-item>
@@ -125,15 +125,14 @@
 </template>
 
 <script>
-import { getList, delShop, addShop, editShop } from '@/api/shop'
+import { adminApi, rolesApi } from '@/api/manage'
 import { validPhone } from '@/utils/validate'
 export default {
   filters: {
     statusFilter(status) {
       const statusMap = {
         1: 'success',
-        0: 'danger',
-        2: 'danger'
+        0: 'danger'
       }
       return statusMap[status]
     }
@@ -146,74 +145,30 @@ export default {
         callback()
       }
     }
-    const validatePassword = (rule, value, callback) => {
-      if (this.dialogType === 'add' && this.form.password === '') {
-        callback(new Error('请输入密码'))
-      } else {
-        callback()
-      }
-    }
     return {
       load: true,
       keywords: '',
-      baseUrl: process.env.VUE_APP_BASE_API,
-      adminList: [{
-        id: 1,
-        name: 'admin',
-        phone: '18895364554',
-        role_name: '超级管理员',
-        created_at: '2020-4-16 10:51:33',
-        role: '1'
-      }],
-      multipleSelection: [],
+      adminList: [],
       dialogFormVisible: false,
       form: {
-        shop_name: '',
         name: '',
         phone: '',
         password: '',
-        system_end_time: '',
-        logo: ''
+        role_id: ''
       },
-      pageSize: 5,
+      pageSize: 10,
       currentPage: 1,
       total: 0,
-      imageUrl: '',
-      fileList: [],
-      roleList: [
-        {
-          value: '1',
-          label: '超级管理员'
-        }, {
-          value: '2',
-          label: '仓库管理员'
-        }, {
-          value: '3',
-          label: '产品管理员'
-        }, {
-          value: '4',
-          label: '订单管理员'
-        }
-      ],
+      rolesList: [],
       rules: {
-        shop_name: [
-          { required: true, message: '请填写店铺名称', trigger: 'blur' },
-          { min: 3, max: 15, message: '长度在 1 到 15 个字符', trigger: 'blur' }
-        ],
         name: [
           { required: true, message: '请填写管理员姓名', trigger: 'blur' }
         ],
         phone: [
           { required: true, trigger: 'blur', validator: validatePhone }
         ],
-        password: [
-          { trigger: 'blur', validator: validatePassword }
-        ],
-        system_end_time: [
-          { required: true, message: '请输入选择店铺到期时间', trigger: 'blur' }
-        ],
-        logo: [
-          { required: true, message: '请上传店铺logo', trigger: 'blur' }
+        role_id: [
+          { required: true, message: '请选择角色', trigger: 'change' }
         ]
       },
       dialogType: 'add'
@@ -222,26 +177,35 @@ export default {
   watch: {
     dialogFormVisible(val) {
       if (val === false) {
-        console.log(1)
-        this.$refs['form'].resetFields()
-        this.fileList = []
-        this.imageUrl = ''
+        this.$refs.form.resetFields()
+        this.$refs.form.clearValidate()
+        this.form = {
+          name: '',
+          phone: '',
+          password: '',
+          role_id: ''
+        }
       }
     }
   },
   mounted() {
-    // this.fetchData()
+    this.fetchData()
+    this.getRoleList()
   },
   methods: {
     fetchData() {
-      // 获取店铺列表
-      getList({
-        shop_name: this.keywords,
+      // 获取管理员列表
+      adminApi.getAdminList({
         pageSize: this.pageSize,
         currentPage: this.currentPage
       }).then(res => {
-        this.shopsList = res.data.data
+        this.adminList = res.data.data
         this.total = res.data.count
+      })
+    },
+    getRoleList() {
+      rolesApi.roleList().then(res => {
+        this.rolesList = res.data.data
       })
     },
     showDialog(type, form) {
@@ -250,10 +214,9 @@ export default {
       if (form && form.id) {
         // 请求分类详情
         this.form.id = form.id
-        this.form.shop_name = form.shop_name
         this.form.name = form.name
-        this.form.role = form.role
-        this.form.created_at = form.created_at
+        this.form.password = form.password
+        this.form.role_id = form.role_id
         this.form.phone = form.phone
       }
     },
@@ -261,18 +224,20 @@ export default {
       const _this = this
       _this.$refs[formName].validate((valid) => {
         if (valid) {
-          if (_this.form.shop_id) {
-            if (this.form.password === '') {
-              delete this.form.password
+          if (_this.form.id) {
+            if (_this.form.password === '') {
+              delete _this.form.password
             }
-            editShop(_this.form).then(res => {
+            adminApi.editAdmin(_this.form).then(res => {
               if (res.code === 0) {
                 this.$message({
                   type: 'success',
                   message: res.msg || '修改成功!'
                 })
                 // 重置表单
-                _this.$refs[formName].resetFields()
+                this.$nextTick(() => {
+                  _this.$refs[formName].resetFields()
+                })
                 this.dialogFormVisible = false
                 this.fetchData()
               } else {
@@ -280,14 +245,16 @@ export default {
               }
             })
           } else {
-            addShop(_this.form).then(res => {
+            adminApi.addAdmin(_this.form).then(res => {
               if (res.code === 0) {
                 this.$message({
                   type: 'success',
                   message: res.msg || '添加成功!'
                 })
                 // 重置表单
-                _this.$refs[formName].resetFields()
+                this.$nextTick(() => {
+                  _this.$refs[formName].resetFields()
+                })
                 this.dialogFormVisible = false
                 this.fetchData()
               } else {
@@ -309,13 +276,13 @@ export default {
       this.fetchData()
     },
     handleDelete(id) {
-      this.$confirm('是否删除该店铺?', '提示', {
+      this.$confirm('是否删除该管理员?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
         confirmButtonClass: 'danger'
       }).then(() => {
-        delShop({ shop_id: id }).then(res => {
+        adminApi.delAdmin({ id: id }).then(res => {
           this.$message({
             type: 'success',
             message: '删除成功!'
@@ -328,30 +295,13 @@ export default {
           message: '已取消删除'
         })
       })
-    },
-    handleAvatarSuccess(res, file) {
-      console.log(res)
-      this.imageUrl = URL.createObjectURL(file.raw)
-      this.form.logo = res.data.url
-    },
-    beforeAvatarUpload(file) {
-      const isJPG = file.type === 'image/jpeg' || 'image/png'
-      const isLt2M = file.size / 1024 / 1024 < 2
-
-      if (!isJPG) {
-        this.$message.error('店铺logo只能是 JPG/PNG 格式!')
-      }
-      if (!isLt2M) {
-        this.$message.error('店铺logo大小不能超过 2MB!')
-      }
-      return isJPG && isLt2M
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.shops-list{
+.admin-list{
   .screen-box{
     .screen-item{
       text-align: left;

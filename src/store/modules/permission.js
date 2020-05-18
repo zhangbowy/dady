@@ -1,4 +1,5 @@
-import { constantRoutes } from '@/router'
+import { constantRoutes } from '@/router' // 静态路由
+import { asyncRouter } from '@/router/asyncRouter' // 动态路由
 
 const permission = {
   state: {
@@ -7,7 +8,6 @@ const permission = {
   },
   mutations: {
     SET_ROUTERS: (state, routers) => {
-      // console.log(routers);
       state.addRouters = routers
       state.routers = constantRoutes.concat(routers)
     }
@@ -15,28 +15,23 @@ const permission = {
   actions: {
     GenerateRoutes({ commit }, data) {
       return new Promise((resolve, reject) => {
-        const accessedRouters = data
-        // 一级
-        accessedRouters.map(function(item) {
-          const item_component = item.component
-          item.component = () => import(`@/views/${item_component}`)
+        const userPermission = data
+        let accessedRouters = []
+        // 根据角色权限，动态生成新路由
+        // 返回一级
+        accessedRouters = asyncRouter.filter(item => {
+          return userPermission.indexOf(item.id) > -1
+        })
+        // 返回二级路由
+        accessedRouters.map((item) => {
           if (item.children) {
-            // 二级
-            item.children.map(function(child) {
-              const child_component = child.component
-              child.component = () => import(`@/views/${child_component}`)
-              // 三级
-              if (child.children) {
-                child.children.map(function(san) {
-                  const san_component = san.component
-                  san.component = () => import(`@/views/${san_component}`)
-                })
-              }
+            item.children = item.children.filter(child => {
+              return userPermission.indexOf(child.id) > -1
             })
           }
         })
+        // accessedRouters = asyncRouter
         accessedRouters.push({ path: '*', redirect: '/404', hidden: true })
-        // console.log(accessedRouters)
         commit('SET_ROUTERS', accessedRouters)
         //  reject();
         resolve()

@@ -22,7 +22,9 @@
       </div>
       <div class="operation">
         <router-link :to="'/commodity/goodsEdit'">
-          <el-button size="small" icon="el-icon-plus" type="primary">新增</el-button>
+          <div>
+            <el-button v-has="15" size="small" icon="el-icon-plus" type="primary">新增</el-button>
+          </div>
         </router-link>
       </div>
     </div>

@@ -26,24 +26,27 @@ router.beforeEach(async(to, from, next) => {
       next({ path: '/' })
       NProgress.done()
     } else {
-      next()
-      // const hasGetUserInfo = store.getters.name
-      // if (hasGetUserInfo) {
-      //   next()
-      // } else {
-      //   try {
-      //     // 获取用户信息
-      //     await store.dispatch('user/getInfo')
-
-      //     next()
-      //   } catch (error) {
-      //     // 移除token并跳转到登录页重新登录
-      //     await store.dispatch('user/resetToken')
-      //     Message.error(error || 'Has Error')
-      //     next(`/login?redirect=${to.path}`)
-      //     NProgress.done()
-      //   }
-      // }
+      // next()
+      // 判断vuex里边是否有权限表
+      if (store.getters.permission.length > 0) {
+        next()
+      } else {
+        // 没有请求用户信息，获取权限表
+        store.dispatch('user/getInfo').then(res => {
+          const permission = res.authority_list
+          store.dispatch('GenerateRoutes', permission).then(() => { // 根据roles权限生成可访问的路由表
+            router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
+            next({ ...to, replace: true }) // hack方法 确保addRoutes已完成
+          })
+        }).catch((err) => {
+          console.log(err)
+          store.dispatch('user/logout').then(() => {
+            store.dispatch('user/resetToken')
+            // Message.error(err || '验证失败，请重新登陆')
+            next({ path: '/' })
+          })
+        })
+      }
     }
   } else {
   /* 没有token*/

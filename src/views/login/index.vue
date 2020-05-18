@@ -142,6 +142,8 @@ export default {
         if (valid) {
           this.loading = true
           this.$store.dispatch('user/login', this.loginForm).then(() => {
+            // 获取用户数据
+            // this.$store.dispatch('user/getInfo')
             this.$router.push({ path: this.redirect || '/' })
             this.loading = false
           }).catch(() => {

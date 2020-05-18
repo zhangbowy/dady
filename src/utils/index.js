@@ -392,4 +392,3 @@ export function getUrl(file) {
   }
   return url
 }
-

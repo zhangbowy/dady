@@ -10,7 +10,7 @@ export function login(data) {
 
 export function getInfo(params) {
   return request({
-    url: '/user/info',
+    url: '/admin/info',
     method: 'get',
     params
   })

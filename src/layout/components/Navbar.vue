@@ -8,7 +8,8 @@
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <img src="@/assets/images/avator.jpg" class="user-avatar">
-          <i class="el-icon-caret-bottom" />
+          <span>{{ adminInfo.name }}</span>
+          <!-- <i class="el-icon-caret-bottom" /> -->
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
           <router-link to="/">
@@ -38,7 +39,8 @@ export default {
   computed: {
     ...mapGetters([
       'sidebar',
-      'avatar'
+      'avatar',
+      'adminInfo'
     ])
   },
   methods: {
@@ -109,14 +111,19 @@ export default {
       margin-right: 30px;
 
       .avatar-wrapper {
-        margin-top: 5px;
         position: relative;
 
         .user-avatar {
           cursor: pointer;
           width: 40px;
           height: 40px;
+          display: inline-block;
+          vertical-align: middle;
           border-radius: 10px;
+        }
+        span{
+          display: inline-block;
+          vertical-align: middle;
         }
 
         .el-icon-caret-bottom {

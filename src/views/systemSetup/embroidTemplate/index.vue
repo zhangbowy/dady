@@ -122,6 +122,7 @@
                   type="danger"
                   icon="el-icon-remove-outline"
                   style="vertical-align: top;"
+                  :loading="delLoading"
                   @click="deleteTemplate(item.id, item.emb_template_id)"
                 >删除</el-button>
               </el-col>
@@ -142,6 +143,7 @@
                   :disabled="dialogType=='detail'"
                   icon="el-icon-remove-outline"
                   style="vertical-align: top;"
+                  :loading="addBtnLoading"
                   @click="addTemplate(form.emb_template_id)"
                 >添加</el-button>
               </el-col>
@@ -170,6 +172,8 @@ export default {
   data() {
     return {
       loading: true,
+      addBtnLoading: false,
+      delLoading: false,
       templates: [],
       listIndex: '',
       dialogTableVisible: false,
@@ -239,9 +243,10 @@ export default {
       })
     },
     addTemplate(id) {
+      this.addBtnLoading = true
       embTemplate.addTemplate({
         emb_template_id: id,
-        name: '111',
+        name: '1',
         price: this.addPriceForm.price,
         width: this.addPriceForm.width,
         height: this.addPriceForm.height
@@ -261,11 +266,13 @@ export default {
               height: '',
               price: ''
             }
+            this.addBtnLoading = false
             // 更新弹框数据
             this.form = this.templates[this.listIndex]
           }, 1000)
         }
       }).catch(() => {
+        this.addBtnLoading = false
         this.$message({
           type: 'info',
           message: '保存失败!'
@@ -274,6 +281,7 @@ export default {
     },
     deleteTemplate(id, emb_template_id) {
       console.log(id, emb_template_id)
+      this.delLoading = true
       embTemplate.deleteTemplate({
         id: id,
         template_id: emb_template_id
@@ -287,6 +295,7 @@ export default {
           setTimeout(() => {
             // 更新弹框数据
             this.form = this.templates[this.listIndex]
+            this.delLoading = false
           }, 1000)
         }
       })

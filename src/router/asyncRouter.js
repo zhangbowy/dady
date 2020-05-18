@@ -238,46 +238,26 @@ export const asyncRouter = [
         id: 29,
         path: 'roles',
         name: 'Roles',
-        redirect: '/manage/roles/list',
-        component: () => import('@/views/manage/roles/index'),
-        meta: { title: '角色管理' },
-        children: [
-          {
-            pid: 29,
-            id: 30,
-            path: 'list',
-            name: 'RolesList',
-            hidden: true,
-            component: () => import('@/views/manage/roles/list'),
-            meta: { title: '角色列表', activeMenu: '/manage/roles' }
-          },
-          {
-            pid: 29,
-            id: 31,
-            path: 'edit:id(\\d+)?',
-            name: 'RolesEdit',
-            hidden: true,
-            component: () => import('@/views/manage/roles/edit'),
-            meta: { title: '角色编辑', activeMenu: '/manage/roles' }
-          },
-          {
-            pid: 29,
-            id: 32,
-            path: 'detail:id(\\d+)?',
-            name: 'RolesDetail',
-            hidden: true,
-            component: () => import('@/views/manage/roles/detail'),
-            meta: { title: '角色详情', activeMenu: '/manage/roles' }
-          }
-        ]
+        component: () => import('@/views/manage/roles/list'),
+        meta: { title: '角色列表' }
       },
       {
         pid: 9,
-        id: 33,
-        path: 'rules',
-        name: 'Rules',
-        component: () => import('@/views/manage/rules/list'),
-        meta: { title: '权限规则' }
+        id: 30,
+        path: 'rolesEdit:id(\\d+)?',
+        name: 'RolesEdit',
+        hidden: true,
+        component: () => import('@/views/manage/roles/edit'),
+        meta: { title: '角色编辑', activeMenu: '/manage/roles' }
+      },
+      {
+        pid: 9,
+        id: 31,
+        path: 'rolesDetail:id(\\d+)?',
+        name: 'RolesDetail',
+        hidden: true,
+        component: () => import('@/views/manage/roles/detail'),
+        meta: { title: '角色详情', activeMenu: '/manage/roles' }
       }
     ]
   }
