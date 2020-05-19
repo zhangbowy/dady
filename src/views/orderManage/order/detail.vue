@@ -27,7 +27,7 @@
         <div class="order-info-content">
           <el-row class="info-tabel">
             <el-col class="info-th" :span="6">订单号：</el-col>
-            <el-col class="info-th" :span="6">订单类型：</el-col>
+            <el-col class="info-th" :span="6">订单类型：<el-button v-if="orderDetail.order_type==2" type="text" style="padding: 0" @click="designInfo = true">详细信息</el-button></el-col>
             <el-col class="info-th" :span="6">买家信息：<el-button type="text" style="padding: 0" @click="useInfoDialog = true">信息</el-button></el-col>
             <el-col class="info-th" :span="6">下单时间：</el-col>
           </el-row>
@@ -84,7 +84,7 @@
             <el-col class="info-td" :span="6">{{ item.sku_name }}</el-col>
             <el-col class="info-td" :span="6">
               {{ orderDetail.status==1?'未付款': item.express_number?item.express_number:'未发货' }}
-              <el-button type="text" style="padding: 0" @click.stop="getOrderTrace(item.order_item_id)">查看</el-button>
+              <el-button v-has="502" type="text" style="padding: 0" @click.stop="getOrderTrace(item.order_item_id)">查看</el-button>
             </el-col>
           </el-row>
         </div>
@@ -101,11 +101,11 @@
             />
           </div>
           <div class="operation-button">
-            <el-button type="danger" size="mini">确认</el-button>
-            <el-button type="danger" size="mini">取消</el-button>
-            <el-button type="danger" size="mini">付款</el-button>
-            <el-button type="danger" size="mini">无效</el-button>
-            <el-button type="danger" size="mini">售后</el-button>
+            <el-button type="primary" size="mini">确认收货</el-button>
+            <el-button type="primary" size="mini">确认付款</el-button>
+            <el-button type="warning" size="mini">取消订单</el-button>
+            <el-button type="info" size="mini">无效订单</el-button>
+            <el-button type="warning" size="mini">售后订单</el-button>
           </div>
         </div>
       </div>
@@ -120,6 +120,17 @@
       <p>id：{{ orderDetail.user.id }}</p>
       <p>昵称：{{ orderDetail.user.nickname?orderDetail.user.nickname:'' }}</p>
       <p>城市：{{ orderDetail.user.country }}{{ orderDetail.user.province }}{{ orderDetail.user.city }}</p>
+    </el-dialog>
+
+    <el-dialog
+      title="定制详情"
+      :visible.sync="designInfo"
+      width="40%"
+      center
+    >
+      <!-- <p>id：{{ orderDetail.user.id }}</p>
+      <p>昵称：{{ orderDetail.user.nickname?orderDetail.user.nickname:'' }}</p>
+      <p>城市：{{ orderDetail.user.country }}{{ orderDetail.user.province }}{{ orderDetail.user.city }}</p> -->
     </el-dialog>
     <!-- 物流信息弹框 -->
     <el-dialog
@@ -163,6 +174,7 @@ export default {
       remark: '',
       useInfoDialog: false,
       expressDialog: false,
+      designInfo: false,
       order_no: this.$route.query.order_no,
       orderDetail: {
         user: {}

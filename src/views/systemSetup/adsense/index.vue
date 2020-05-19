@@ -13,7 +13,7 @@
         <!-- <el-button size="small" icon="el-icon-search" type="primary" @click.native="fetchData">搜索</el-button> -->
       </div>
       <div class="operation">
-        <el-button size="small" icon="el-icon-plus" type="primary" @click="showDialog('add')">新增</el-button>
+        <el-button v-has="804" size="small" icon="el-icon-plus" type="primary" @click="showDialog('add')">新增</el-button>
       </div>
     </div>
     <div class="content">
@@ -70,6 +70,7 @@
               @click.native="showDialog('detail', scope.row)"
             >查看</el-button>
             <el-button
+              v-has="806"
               size="mini"
               type="danger"
               @click="handleDelete(scope.row.id)"
@@ -111,8 +112,8 @@
           <el-input v-model="form.link " :disabled="dialogType=='detail'" />
         </el-form-item>
         <el-form-item>
-          <el-button v-if="dialogType!=='detail'" type="primary" @click="onSubmit('form')">保存</el-button>
-          <el-button v-else type="primary" @click="dialogType='edit'">编辑</el-button>
+          <el-button v-if="dialogType!=='detail'" v-has="804" type="primary" @click="onSubmit('form')">保存</el-button>
+          <el-button v-else v-has="805" type="primary" @click="dialogType='edit'">编辑</el-button>
           <el-button @click="dialogFormVisible = false">取消</el-button>
         </el-form-item>
       </el-form>

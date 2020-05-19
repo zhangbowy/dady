@@ -13,7 +13,7 @@
         <el-button size="small" icon="el-icon-search" type="primary" @click.native="fetchData">搜索</el-button>
       </div>
       <div class="operation">
-        <el-button size="small" icon="el-icon-plus" type="primary" @click="showDialog('add')">新增</el-button>
+        <el-button v-has="601" size="small" icon="el-icon-plus" type="primary" @click="showDialog('add')">新增</el-button>
       </div>
     </div>
     <div class="content">

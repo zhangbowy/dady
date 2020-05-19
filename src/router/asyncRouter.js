@@ -123,7 +123,7 @@ export const asyncRouter = [
       name: 'OrderDetail',
       hidden: true,
       component: () => import('@/views/orderManage/order/detail'),
-      meta: { title: '订单详情' }
+      meta: { title: '订单详情', activeMenu: '/orderManage/orderList' }
     }]
   },
   {

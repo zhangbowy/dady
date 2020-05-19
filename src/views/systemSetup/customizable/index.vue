@@ -2,7 +2,7 @@
   <div class="customizable main-content">
     <div class="screen-box">
       <div class="operation">
-        <el-button size="small" icon="el-icon-plus" type="primary" @click="showDialog('add')">新增</el-button>
+        <el-button v-has="807" size="small" icon="el-icon-plus" type="primary" @click="showDialog('add')">新增</el-button>
       </div>
     </div>
     <div class="content">
@@ -67,11 +67,13 @@
               @click.native="showDialog('detail', scope.row)"
             >查看</el-button>
             <el-button
+              v-has="810"
               size="mini"
               type="primary"
               @click.native="showRelation(scope.row)"
             >关联机器</el-button>
             <el-button
+              v-has="809"
               size="mini"
               type="danger"
               @click="handleDelete(scope.row.custom_category_id)"
@@ -117,8 +119,8 @@
           </div>
         </el-form-item>
         <el-form-item>
-          <el-button v-if="dialogType!=='detail'" type="primary" @click="onSubmit('form')">保存</el-button>
-          <el-button v-else type="primary" @click="dialogType='edit'">编辑</el-button>
+          <el-button v-if="dialogType!=='detail'" v-has="807" type="primary" @click="onSubmit('form')">保存</el-button>
+          <el-button v-else v-has="808" type="primary" @click="dialogType='edit'">编辑</el-button>
           <el-button @click="dialogFormVisible = false">取消</el-button>
         </el-form-item>
       </el-form>
@@ -135,7 +137,7 @@
           :disabled="item.disabled"
         />
       </el-select>
-      <el-button type="primary" size="mini" @click="addMachine()">添加</el-button>
+      <el-button v-has="810" type="primary" size="mini" @click="addMachine()">添加</el-button>
       <el-table :data="itemMachine" empty-text="未绑定机器">
         <el-table-column property="machine_code" label="机器码" width="150" />
         <el-table-column property="machine_name" label="机器名称" width="200" />
@@ -147,6 +149,7 @@
         >
           <template slot-scope="scope">
             <el-button
+              v-has="811"
               size="mini"
               type="danger"
               @click="deleteMachine(scope.row.machine_id)"

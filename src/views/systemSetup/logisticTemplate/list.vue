@@ -1,7 +1,7 @@
 <template>
   <div class="logistics-template main-content">
     <div class="screen-box">
-      <el-button size="small" icon="el-icon-plus" type="primary" @click="toEdit()">新增</el-button>
+      <el-button v-has="812" size="small" icon="el-icon-plus" type="primary" @click="toEdit()">新增</el-button>
     </div>
     <div class="content">
       <div v-loading="loading" class="logistic-list">
@@ -15,8 +15,8 @@
                 <div class="right-align">
                   <span>创建时间：{{ item.created_at }}</span>
                   <span>
-                    <el-button type="primary" size="mini" @click="toEdit(item.express_template_id)">编辑</el-button>
-                    <el-button type="danger" size="mini" @click="deleteItem(item.express_template_id)">删除</el-button>
+                    <el-button v-has="26" type="primary" size="mini" @click="toEdit(item.express_template_id)">编辑</el-button>
+                    <el-button v-has="814" type="danger" size="mini" @click="deleteItem(item.express_template_id)">删除</el-button>
                   </span>
                 </div>
               </el-col>

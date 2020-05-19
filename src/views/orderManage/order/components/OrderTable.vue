@@ -40,6 +40,7 @@
               <div class="header-btn">
                 <router-link :to="`/orderManage/orderDetail?order_no=${item.order_no}`">
                   <el-button
+                    v-has="19"
                     size="mini"
                     type="text"
                   >查看详情</el-button>
@@ -88,6 +89,7 @@
                     type="primary"
                   >取消订单</el-button>
                   <el-button
+                    v-has="503"
                     size="mini"
                     type="primary"
                     style="margin: 10px 0 0"
@@ -97,6 +99,7 @@
                 <div v-if="item.status==2" class="operate-btn">
                   <p>等待商家发货</p>
                   <el-button
+                    v-has="501"
                     size="mini"
                     type="primary"
                     @click="showDialog(2, item)"
@@ -110,6 +113,7 @@
                     @click="showDialog(3, item)"
                   >修改发货</el-button>
                   <el-button
+                    v-has="504"
                     size="mini"
                     type="primary"
                     style="margin: 10px 0 0"

@@ -108,29 +108,34 @@
             <div class="operate-btn">
               <router-link :to="`/commodity/goodsDetail?id=${scope.row.id}`">
                 <el-button
+                  v-has="16"
                   size="mini"
                 >查看</el-button>
               </router-link>
               <el-button
                 v-if="scope.row.status==1"
+                v-has="400"
                 size="mini"
                 type="success"
                 @click.stop="changeStates(scope.row.id, 2)"
               >审核</el-button>
               <el-button
                 v-if="scope.row.status==2"
+                v-has="400"
                 size="mini"
                 type="success"
                 @click.stop="changeStates(scope.row.id, 3)"
               >上架</el-button>
               <el-button
                 v-if="scope.row.status==3"
+                v-has="400"
                 size="mini"
                 type="danger"
                 @click.stop="changeStates(scope.row.id, 2,scope.row.status)"
               >下架</el-button>
               <router-link :to="`/commodity/goodsEdit?id=${scope.row.id}`">
                 <el-button
+                  v-has="404"
                   size="mini"
                   type="primary"
                 >编辑</el-button>
@@ -142,6 +147,7 @@
               >删除</el-button>
               <el-button
                 v-if="scope.row.status==2"
+                v-has="400"
                 size="mini"
                 type="danger"
                 @click.stop="changeStates(scope.row.id, 1)"

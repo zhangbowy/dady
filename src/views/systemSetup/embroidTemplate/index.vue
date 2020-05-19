@@ -118,6 +118,7 @@
                 </el-input>
                 <!-- <el-button size="small" style="vertical-align: top;" @click="addRules">添加</el-button> -->
                 <el-button
+                  v-has="818"
                   size="small"
                   type="danger"
                   icon="el-icon-remove-outline"
@@ -138,6 +139,7 @@
                 </el-input>
                 <!-- <el-button size="small" style="vertical-align: top;" @click="addRules">添加</el-button> -->
                 <el-button
+                  v-has="817"
                   size="small"
                   type="primary"
                   :disabled="dialogType=='detail'"
@@ -153,7 +155,7 @@
           <el-form-item :label-width="formLabelWidth">
             <el-button size="small" @click="dialogFormVisible = false">关闭</el-button>
             <!-- <el-button v-if="dialogType==='add' || dialogType==='edit'" size="small" type="primary" @click="dialogFormVisible = false">保存</el-button> -->
-            <el-button v-if="dialogType==='detail'" type="primary" size="small" @click="dialogType = 'edit'">编辑</el-button>
+            <el-button v-if="dialogType==='detail'" v-has="816" type="primary" size="small" @click="dialogType = 'edit'">编辑</el-button>
           </el-form-item>
         </el-form>
 

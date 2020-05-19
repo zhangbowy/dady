@@ -2,7 +2,7 @@
   <div class="fonts-list main-content">
     <div class="screen-box">
       <div class="operation">
-        <el-button size="small" icon="el-icon-upload" type="primary" @click="showDialog('add')">上传</el-button>
+        <el-button v-has="701" size="small" icon="el-icon-upload" type="primary" @click="showDialog('add')">上传</el-button>
       </div>
     </div>
     <div class="content">
@@ -45,6 +45,7 @@
               @click.native="showDetail(scope.row)"
             >查看</el-button>
             <el-button
+              v-has="702"
               size="mini"
               type="danger"
               @click="handleDelete(scope.row.font_id)"
@@ -91,7 +92,7 @@
           </el-upload>
         </el-form-item>
         <el-form-item>
-          <el-button v-if="dialogType!=='detail'" type="primary" @click="onSubmit('fontForm')">保存</el-button>
+          <el-button v-if="dialogType!=='detail'" v-has="701" type="primary" @click="onSubmit('fontForm')">保存</el-button>
           <el-button @click="dialogFormVisible = false">取消</el-button>
         </el-form-item>
       </el-form>

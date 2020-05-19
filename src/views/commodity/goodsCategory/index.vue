@@ -1,7 +1,7 @@
 <template>
   <div class="goods-category main-content">
     <div class="screen-box">
-      <el-button size="small" icon="el-icon-plus" type="primary" @click="showDialog('add')">新增</el-button>
+      <el-button v-has="401" size="small" icon="el-icon-plus" type="primary" @click="showDialog('add')">新增</el-button>
     </div>
     <div class="content">
       <el-table
@@ -60,6 +60,7 @@
               @click="showDialog('detail', scope.row)"
             >查看</el-button>
             <el-button
+              v-has="403"
               size="mini"
               type="danger"
               @click="handleDelete(scope.row.id)"
@@ -111,7 +112,7 @@
         </el-form-item> -->
         <el-form-item :label-width="formLabelWidth">
           <el-button v-if="dialogType!=='detail'" type="primary" @click="onSubmit('form')">保存</el-button>
-          <el-button v-else type="primary" @click="dialogType='edit'">编辑</el-button>
+          <el-button v-else v-has="402" type="primary" @click="dialogType='edit'">编辑</el-button>
           <el-button @click="dialogFormVisible = false">取消</el-button></el-form-item>
       </el-form>
     </el-dialog>

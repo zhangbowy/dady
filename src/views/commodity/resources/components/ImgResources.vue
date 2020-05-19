@@ -2,7 +2,7 @@
   <div class="img-resources">
     <el-row>
       <el-col :span="12">
-        <el-button type="primary" size="small" @click.native="showUpload">上传图片</el-button>
+        <el-button v-has="405" type="primary" size="small" @click.native="showUpload">上传图片</el-button>
       </el-col>
       <el-col :span="12" style="text-align: right">
         <el-input v-model="keyword" size="small" placeholder="请输入内容" class="input-with-select" style="width: 40%">
@@ -13,6 +13,7 @@
     <el-row v-loading="loading" class="content">
       <el-col :span="6" style="background: #f5f5f5;padding: 20px 10px">
         <el-button
+          v-has="407"
           size="small"
           icon="el-icon-folder-add"
           style="width:100%"
@@ -62,10 +63,10 @@
                   <el-button type="text" size="mini" icon="el-icon-plus" @click.stop="() => addCategoryShow(data)" />
                 </el-tooltip>
                 <el-tooltip v-if="data.group_id !== 0" class="item" content="重命名" placement="top">
-                  <el-button type="text" size="mini" icon="el-icon-edit" @click.stop="() => goInput(node, data)" />
+                  <el-button v-has="408" type="text" size="mini" icon="el-icon-edit" @click.stop="() => goInput(node, data)" />
                 </el-tooltip>
                 <el-tooltip v-if="data.group_id !== 0" class="item" content="删除分类" placement="top">
-                  <el-button type="text" size="mini" icon="el-icon-delete" @click.stop="() => remove(node, data)" />
+                  <el-button v-has="409" type="text" size="mini" icon="el-icon-delete" @click.stop="() => remove(node, data)" />
                 </el-tooltip>
               </span>
             </span>
@@ -78,10 +79,10 @@
             <img :src="item.oss_path" alt="">
             <el-checkbox v-model="item.checked" :label="limetedStr(item.img_name,16)" :title="item.img_name" />
             <el-col>
-              <el-button type="text" @click.stop="showdialog('modifyName',item)">改名</el-button>
+              <el-button v-has="412" type="text" @click.stop="showdialog('modifyName',item)">改名</el-button>
               <!-- <el-button type="text" @click.stop="showdialog('modifyUrl',item)">链接</el-button> -->
-              <el-button type="text" @click.stop="showdialog('modifyGroup',item)">分组</el-button>
-              <el-button type="text" @click.stop="deleteImg(item.id)">删除</el-button>
+              <el-button v-has="410" type="text" @click.stop="showdialog('modifyGroup',item)">分组</el-button>
+              <el-button v-has="413" type="text" @click.stop="deleteImg(item.id)">删除</el-button>
             </el-col>
           </div>
           <div v-if="imgList.length==0">
@@ -93,7 +94,7 @@
             <el-button size="mini" @click="checkAll">全选</el-button>
             <el-button size="mini" @click="unCheckAll">取消全选</el-button>
             <!-- <el-button size="mini" @click="showdialog('modifyGroup')">修改分组</el-button> -->
-            <el-button size="mini" @click="deleteImg()">删除</el-button>
+            <el-button v-has="413" size="mini" @click="deleteImg()">删除</el-button>
           </div>
           <div v-if="pageInfo.count" class="page-ctn">
             <el-pagination
@@ -146,7 +147,7 @@
         </el-form-item>
         <el-form-item :label-width="formLabelWidth">
           <el-button @click="uploadDialog = false">取 消</el-button>
-          <el-button type="primary" @click="fileUpload">确 定</el-button>
+          <el-button v-has="405" type="primary" @click="fileUpload">确 定</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -167,7 +168,7 @@
         </el-form-item>
         <el-form-item :label-width="formLabelWidth">
           <el-button @click="addGroupDialog = false">取 消</el-button>
-          <el-button type="primary" @click="addGrops">确 定</el-button>
+          <el-button v-has="407" type="primary" @click="addGrops">确 定</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -188,7 +189,7 @@
         </el-form-item>
         <el-form-item :label-width="formLabelWidth">
           <el-button @click="changeGroupDialog = false">取 消</el-button>
-          <el-button type="primary" @click="ensureChange">确 定</el-button>
+          <el-button v-has="408" type="primary" @click="ensureChange">确 定</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
