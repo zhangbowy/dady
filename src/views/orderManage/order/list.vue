@@ -31,10 +31,10 @@
     <div class="content">
       <el-tabs v-model="activeName" v-loading="loading" type="card" @tab-click="handleClick">
         <el-tab-pane
-          v-for="(value, key) in orderCount"
-          :key="key"
-          :label="`${key==0?'全部':key==1?'待支付':key==2?'待发货':key==3?'待收货':key==4?'已完成':key==5?'询价中':key==6?'已回复':'已取消'}(${value})`"
-          :name="key"
+          v-for="(item, index) in orderCount"
+          :key="index"
+          :label="`${item._status}(${item.count})`"
+          :name="`${item.status}`"
         />
         <!-- <el-tab-pane label="待付款" name="1" />
         <el-tab-pane label="待发货" name="2" />

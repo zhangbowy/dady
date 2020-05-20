@@ -21,7 +21,6 @@ export default {
   // },
   inserted: function(el, binding) {
     if (!Vue.prototype.$_has(binding.value)) {
-      console.log(el.parentNode)
       el.parentNode.removeChild(el)
     }
   }

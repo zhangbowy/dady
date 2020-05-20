@@ -63,7 +63,7 @@
               <el-col :span="3" class="td-item">
                 <div>
                   <el-tag :type="item.status | statusFilter">
-                    {{ item.status==1?'待支付': item.status==2? '待发货':item.status==3?'待收货':item.status==4?'已完成':item.status==5?'询价中':item.status==6?'已回复': '已取消' }}
+                    {{ item._status }}
                   </el-tag>
                 </div>
               </el-col>
