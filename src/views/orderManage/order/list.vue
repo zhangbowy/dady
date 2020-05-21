@@ -162,6 +162,7 @@ export default {
       this.currentPage = 1
       this.status = tab.name
       this.loading = true
+      this.getOrderCount()
       this.fetchData()
     },
     // 执行搜索

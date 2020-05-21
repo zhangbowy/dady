@@ -73,7 +73,7 @@
                 <img-upload
                   :img-data="scope.row.cover_image"
                   :pic-max="1"
-                  @chooseImg="imageChoose($event, scope.row.id)"
+                  @chooseImg="imageChoose($event, scope.row.emb_template_id)"
                 />
               </template>
             </el-table-column>

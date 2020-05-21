@@ -91,6 +91,17 @@ export const orderApi = {
       method: 'post',
       data
     })
+  },
+  /**
+   * 订单发货
+   * @param {*order_id designer_team_id} data
+   */
+  dispatchOrder(data) {
+    return request({
+      url: '/order/dispatchOrder',
+      method: 'post',
+      data
+    })
   }
 
 }

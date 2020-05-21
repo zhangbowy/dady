@@ -96,6 +96,14 @@
                     @click.native="confirmPayment(item.id)"
                   >确认付款</el-button>
                 </div>
+                <div v-if="item.status==7" class="operate-btn">
+                  <p>已支付 待派单</p>
+                  <el-button
+                    size="mini"
+                    type="primary"
+                    @click="dispatch(7, item)"
+                  >派单</el-button>
+                </div>
                 <div v-if="item.status==2" class="operate-btn">
                   <p>等待商家发货</p>
                   <el-button
@@ -105,6 +113,7 @@
                     @click="showDialog(2, item)"
                   >发货</el-button>
                 </div>
+
                 <div v-if="item.status==3" class="operate-btn">
                   <p>商家已经发货</p>
                   <el-button
@@ -213,15 +222,37 @@
               <el-button type="primary" @click="submitForm('sendForm')">确认</el-button>
             </el-form-item>
           </el-form>
-
         </div>
       </div>
+    </el-dialog>
+
+    <!-- 派单 -->
+    <el-dialog :visible.sync="dispatchDialog" title="派单" width="30%">
+      <el-form ref="dispatchForm" :model="dispatchForm" :rules="dispatchRules" label-width="100px" label-position="right" size="small">
+        <el-form-item label="设计师团队" style="width: 100%" prop="designer_team_id">
+          <el-select v-model="dispatchForm.designer_team_id" placeholder="请选择设计师团队">
+            <el-option
+              v-for="item in designerList"
+              :key="item.designer_team_id"
+              :label="item.designer_team_name"
+              :value="item.designer_team_id"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="价格" prop="price">
+          <el-input v-model.number="dispatchForm.price" placeholder="请输入价格" />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="doDispatch('dispatchForm')">确认</el-button>
+        </el-form-item>
+      </el-form>
     </el-dialog>
   </div>
 </template>
 
 <script>
 import { getExpressList } from '@/api/common'
+import { getTeamList } from '@/api/designer'
 import { orderApi } from '@/api/order'
 export default {
   filters: {
@@ -247,16 +278,31 @@ export default {
   data() {
     return {
       orderDiaLog: false,
+      dispatchDialog: false,
       dialogTitle: '', // 弹框标题
       expressOpthions: [], // 物流公司列表
       checkList: [], // 选中的订单id
       sendItem: {}, // 要发货的订单信息
+      designerList: [], // 设计师团队
       checkedGoods: [],
       express_name: '',
       sendForm: {
         checkedGoods: [],
         express_id: '',
         express_number: ''
+      },
+      dispatchForm: {
+        order_id: '',
+        designer_team_id: '',
+        price: ''
+      }, // 派单
+      dispatchRules: {
+        designer_team_id: [
+          { required: true, message: '请选择团队', trigger: 'change' }
+        ],
+        price: [
+          { required: true, message: '请输入价格', trigger: 'blur' }
+        ]
       },
       rules: {
         checkedGoods: [
@@ -320,12 +366,23 @@ export default {
   },
   created() {
     this.getExpress()
+    // 获取设计师团队
+    this.getTeamList()
   },
   methods: {
     // 获取物流公司列表
     getExpress() {
       getExpressList().then(res => {
         this.expressOpthions = res.data
+      })
+    },
+    getTeamList() {
+      // 获取管理者列表
+      getTeamList({
+        pageSize: 100,
+        currentPage: 1
+      }).then(res => {
+        this.designerList = res.data.data
       })
     },
     // 获取订单列表，子组件触发父组件方法
@@ -340,6 +397,11 @@ export default {
       this.dialogTitle = status === 2 ? '订单发货' : '修改发货'
       this.orderDiaLog = true
     },
+    // 显示派单弹框
+    dispatch(status, item) {
+      this.dispatchDialog = true
+      this.dispatchForm.order_id = item.id
+    },
     // 弹框商品选择
     sentGoodsCheck(val) {
       this.sendForm.checkedGoods = val
@@ -348,6 +410,27 @@ export default {
         arr.push(item.order_item_id)
       })
       this.checkedGoods = arr
+    },
+    // 提交派单
+    doDispatch(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          orderApi.dispatchOrder({
+            order_id: this.dispatchForm.order_id,
+            designer_team_id: this.dispatchForm.designer_team_id,
+            designer_price: this.dispatchForm.price
+          }).then(res => {
+            this.$message({
+              type: 'success',
+              message: res.msg
+            })
+          })
+          this.dispatchDialog = false
+          this.getOrderList()
+        } else {
+          return false
+        }
+      })
     },
     // 提交发货
     submitForm(formName) {
@@ -467,7 +550,6 @@ export default {
       .td-item{
         padding: 10px 5px;
         text-align: center;
-        border-right: 1px solid #eee;
         .goods-item{
           border-bottom: 1px solid #fafafa;
           padding: 10px;
