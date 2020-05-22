@@ -230,6 +230,12 @@ export default {
         this.loading = false
         this.goodsList = res.data.data
         this.total = res.data.count
+      }).catch(() => {
+        this.loading = false
+        this.$message({
+          type: 'info',
+          message: '获取失败！'
+        })
       })
     },
     handleSelectionChange(val) {
@@ -255,7 +261,10 @@ export default {
           this.fetchData()
         })
       }).catch(() => {
-
+        this.$message({
+          type: 'info',
+          message: '修改失败！'
+        })
       })
     },
     handleDelete(id) {

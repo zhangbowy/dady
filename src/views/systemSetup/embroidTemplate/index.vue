@@ -212,6 +212,8 @@ export default {
       }).then(res => {
         this.loading = false
         this.templates = res.data
+      }).catch(() => {
+        this.loading = false
       })
     },
     showDialog(type, row, index) {

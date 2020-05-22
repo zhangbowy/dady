@@ -250,6 +250,8 @@ export default {
         this.loading = false
         this.shopsList = res.data.data
         this.total = res.data.count
+      }).catch(() => {
+        this.loading = false
       })
     },
     showDialog(type, form) {

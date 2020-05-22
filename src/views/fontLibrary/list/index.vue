@@ -153,6 +153,12 @@ export default {
       fontApi.fontList().then(res => {
         this.loading = false
         this.fontsList = res.data
+      }).catch(() => {
+        this.loading = false
+        this.$message({
+          type: 'info',
+          message: '网络异常！'
+        })
       })
     },
     showDialog(type, form) {
@@ -221,10 +227,15 @@ export default {
           this.fetchData()
           this.dialogFormVisible = false
         }
+      }).catch(() => {
+        loading.close()
+        this.$message({
+          type: 'info',
+          message: '上传失败'
+        })
       })
     },
     beforeUpload(file) {
-      console.log(file.type)
       const isZIP = file.type === 'application/x-zip-compressed'
       const isLt2M = file.size / 1024 / 1024 < 2
 
@@ -237,7 +248,6 @@ export default {
       return isZIP && isLt2M
     },
     handleRemove(file, fileList) {
-      console.log(file, fileList)
     }
   }
 }

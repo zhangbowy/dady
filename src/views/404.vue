@@ -9,25 +9,33 @@
       </div>
       <div class="bullshit">
         <div class="bullshit__oops">OOPS!</div>
-        <div class="bullshit__info">All rights reserved
-          <a style="color:#20a0ff" href="https://wallstreetcn.com" target="_blank">wallstreetcn</a>
-        </div>
         <div class="bullshit__headline">{{ message }}</div>
-        <div class="bullshit__info">请检查您输入的网址是否正确，或单击下面的按钮返回主页。</div>
-        <a href="" class="bullshit__return-home">回到首页</a>
+        <div class="bullshit__info">请检查您输入的网址是否正确，或单击下面的按钮返回当前可进入的首页。</div>
+        <router-link :to="firstPage.path"> <span class="bullshit__return-home">回到首页</span> </router-link>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-
+import { mapGetters } from 'vuex'
 export default {
   name: 'Page404',
+  data() {
+    return {
+      firstPage: {}
+    }
+  },
   computed: {
     message() {
-      return '站长说你不能进入这个页面。。。'
-    }
+      return '您不能进入这个页面。。。'
+    },
+    ...mapGetters([
+      'permission_routers'
+    ])
+  },
+  created() {
+    this.firstPage = this.permission_routers[2]
   }
 }
 </script>

@@ -173,6 +173,8 @@ export default {
       adsense.getAdsenseList().then(res => {
         this.loading = false
         this.adList = res.data
+      }).catch(() => {
+        this.loading = false
       })
     },
     showDialog(type, form) {

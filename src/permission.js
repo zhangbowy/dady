@@ -36,7 +36,11 @@ router.beforeEach(async(to, from, next) => {
           const permission = res.authority_list
           store.dispatch('GenerateRoutes', permission).then(() => { // 根据roles权限生成可访问的路由表
             router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
-            next({ ...to, replace: true }) // hack方法 确保addRoutes已完成
+            if (token) {
+              next({ ...to, replace: true }) // hack方法 确保addRoutes已完成
+            } else {
+              next({ path: store.getters.addRouters[0].path, replace: true }) // hack方法 确保addRoutes已完成
+            }
           })
         }).catch((err) => {
           console.log(err)

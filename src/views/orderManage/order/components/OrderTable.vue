@@ -85,10 +85,6 @@
                 <div v-if="item.status==1" class="operate-btn">
                   <p>等待买家付款</p>
                   <el-button
-                    size="mini"
-                    type="primary"
-                  >取消订单</el-button>
-                  <el-button
                     v-has="503"
                     size="mini"
                     type="primary"
@@ -148,10 +144,6 @@
                 </div>
                 <div v-if="item.status=='-2'" class="operate-btn">
                   <p>交易关闭</p>
-                  <el-button
-                    size="mini"
-                    type="primary"
-                  >删除</el-button>
                 </div>
               </el-col>
             </el-row>

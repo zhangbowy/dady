@@ -182,9 +182,14 @@ export default {
     // 获取所有分类
     fetchData() {
       Category.getList().then(res => {
-        console.log(res)
         this.loading = false
         this.categories = res.data
+      }).catch(() => {
+        this.loading = false
+        this.$message({
+          type: 'info',
+          message: '网络异常！'
+        })
       })
     },
     showDialog(type, form) {

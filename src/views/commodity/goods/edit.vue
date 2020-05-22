@@ -160,10 +160,11 @@
                     <template slot="append">元</template>
                   </el-input>
                 </el-form-item>
-                <el-form-item label="商品现价">
-                  <el-input v-model="priceInfo.minPrice" :disabled="skuList.length>0">
+                <el-form-item label="商品现价" prop="current_price">
+                  <el-input v-model="priceInfo.minPrice" :disabled="skuList.length>0" :max="form.old_price">
                     <template slot="append">元</template>
                   </el-input>
+                  <p style="margin:0;color:#F56C6C"> 注：含sku的商品，商品现价取sku价格最小值。</p>
                 </el-form-item>
                 <el-form-item label="商品库存">
                   <el-input v-model="priceInfo.totalNum" :disabled="skuList.length>0">
@@ -183,7 +184,7 @@
                   </el-input>
                 </el-form-item>
                 <el-form-item label="商品现价" prop="current_price">
-                  <el-input v-model="form.current_price">
+                  <el-input v-model="form.current_price" :max="form.old_price">
                     <template slot="append">元</template>
                   </el-input>
                 </el-form-item>
@@ -229,6 +230,16 @@ export default {
     TinymceEditor
   },
   data() {
+    var validateCPrice = (rule, value, callback) => {
+      console.log(value)
+      if (value === '') {
+        callback(new Error('请输入商品现价'))
+      } else if (value > this.form.old_price) {
+        callback(new Error('商品现价不得高于原价'))
+      } else {
+        callback()
+      }
+    }
     return {
       id: '',
       picMax: 5, // 图片上传
@@ -254,7 +265,7 @@ export default {
       rules: {
         name: [
           { required: true, message: '请输入商品名称', trigger: 'blur' },
-          { min: 3, max: 15, message: '长度在 3 到 15 个字符', trigger: 'blur' }
+          { max: 20, message: '长度不超过20个字符', trigger: 'blur' }
         ],
         old_price: [
           { required: true, message: '请输入商品原价', trigger: 'blur' }
@@ -266,7 +277,7 @@ export default {
           { required: true, message: '请输入商品重量', trigger: 'blur' }
         ],
         current_price: [
-          { required: true, message: '请输入商品现价', trigger: 'blur' }
+          { validator: validateCPrice, trigger: 'blur' }
         ],
         min_buy: [
           { type: 'number', required: true, message: '请输入起购数量', trigger: 'blur' }
@@ -353,16 +364,16 @@ export default {
     // 提交按钮
     onSubmit(formName) {
       const _this = this
+      if (this.skuList.length > 0) {
+        _this.form.current_price = this.priceInfo.minPrice
+        _this.form.weight = this.priceInfo.minWeight
+        _this.form.sum_stock = this.priceInfo.totalNum
+      }
       _this.$refs[formName].validate((valid) => {
         if (valid) {
           _this.form.sku_list = this.skuList // 取store里面的skuList
           _this.form.sku_show = _this.specificationFilter
           _this.form.category_id = _this.form.category_id[_this.form.category_id.length - 1]
-          if (this.skuList.length > 0) {
-            _this.form.current_price = this.priceInfo.minPrice
-            _this.form.weight = this.priceInfo.minWeight
-            _this.form.sum_stock = this.priceInfo.totalNum
-          }
           if (_this.form.id) {
             editGood(_this.form).then(res => {
               if (res.code === 0) {

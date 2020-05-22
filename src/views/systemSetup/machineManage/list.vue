@@ -159,6 +159,8 @@ export default {
       machineApi.getMachine({ name: this.keywords }).then(res => {
         this.loading = false
         this.machinesList = res.data.data
+      }).catch(() => {
+        this.loading = false
       })
     },
     showDialog(type, form) {

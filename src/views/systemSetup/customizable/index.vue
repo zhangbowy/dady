@@ -237,6 +237,8 @@ export default {
       customCateApi.getCategoryList().then(res => {
         this.loading = false
         this.categoryList = res.data
+      }).catch(() => {
+        this.loading = false
       })
     },
     // 获取所有机器

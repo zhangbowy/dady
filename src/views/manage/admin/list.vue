@@ -146,7 +146,7 @@ export default {
       }
     }
     return {
-      load: true,
+      loading: true,
       keywords: '',
       adminList: [],
       dialogFormVisible: false,

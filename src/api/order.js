@@ -29,7 +29,7 @@ export const orderApi = {
    */
   orderCancel(data) {
     return request({
-      url: '',
+      url: '/order/cancel',
       method: 'post',
       data
     })

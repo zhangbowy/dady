@@ -320,6 +320,12 @@ export default {
         this.loading = false
         this.imgList = res.data.data
         this.pageInfo.count = res.data.count
+      }).catch(() => {
+        this.loading = false
+        this.$message({
+          type: 'info',
+          message: '图库获取失败！'
+        })
       })
     },
     // 上传图片弹窗
@@ -370,7 +376,6 @@ export default {
         id: this.changeFrom.img_id,
         img_name: this.changeFrom.img_name
       }).then(res => {
-        console.log(res)
         this.$message({
           type: 'success',
           message: '修改成功!'
@@ -399,16 +404,19 @@ export default {
     },
     // 图片选择 -未上传
     changeImgList(file, fileList) { // 更改上传图片
-      const isJPG = file.raw.type === 'image/jpeg'
-      const isPNG = file.raw.type === 'image/png'
+      const isJPG = file.raw.type === 'image/jpeg' || file.raw.type === 'image/png'
       const isLt2M = file.size / 1024 / 1024 < 2
-      if (!isJPG && !isPNG) {
-        this.$message.error('上传图片只能是 JPG或png 格式!')
+      if (!isJPG) {
+        this.$message.error('上传头像图片只能是 JPG 格式!')
+        this.$refs.upload.clearFiles()
+        return isJPG
       }
       if (!isLt2M) {
-        this.$message.error('上传图片大小不能超过 2MB!')
+        this.$message.error('上传头像图片大小不能超过 2MB!')
+        this.$refs.upload.clearFiles()
+        return isLt2M
       }
-      if ((isPNG || isJPG) && isLt2M) {
+      if (isJPG && isLt2M) {
         this.uploadImageList = fileList
       }
     },
@@ -450,7 +458,7 @@ export default {
         })
         setTimeout(() => {
           this.fetchData()
-        }, 500)
+        }, 1000)
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -593,7 +601,6 @@ export default {
     },
     // 添加分类
     addCategory(data) {
-      console.log(data)
       GroupApi.addGroup({
         group_name: data.group_name,
         parent_id: data.parent_id

@@ -18,7 +18,7 @@
     </div>
     <div class="content">
       <el-table
-        v-loading="load"
+        v-loading="loading"
         :data="memberList"
         style="width: 100%"
         fit
@@ -65,10 +65,6 @@
               size="mini"
               @click.native="showDialog('detail', scope.row)"
             >查看</el-button>
-            <el-button
-              size="mini"
-              @click.native="showDialog('edit', scope.row)"
-            >编辑</el-button>
             <el-button
               size="mini"
               type="danger"
@@ -137,7 +133,7 @@ export default {
   },
   data() {
     return {
-      load: true,
+      loading: true,
       keywords: '',
       memberList: [],
       multipleSelection: [],
@@ -177,9 +173,11 @@ export default {
         pageSize: this.pageSize,
         currentPage: this.currentPage
       }).then(res => {
-        this.load = false
+        this.loading = false
         this.memberList = res.data.data
         this.total = res.data.count
+      }).catch(() => {
+        this.loading = false
       })
     },
     showDialog(type, form) {

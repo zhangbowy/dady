@@ -146,6 +146,8 @@ export default {
         this.loading = false
         this.orderList = res.data.data
         this.total = res.data.count
+      }).catch(() => {
+        this.loading = false
       })
     },
     // 获取各个状态数量统计

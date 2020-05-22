@@ -93,7 +93,7 @@ export default {
       expressData: []
     }
   },
-  mounted() {
+  created() {
     this.fetchData()
   },
   methods: {
@@ -105,6 +105,8 @@ export default {
         this.loading = false
         this.expressData = res.data.data
         this.total = res.data.count
+      }).catch(() => {
+        this.loading = false
       })
     },
     toEdit(id) {
