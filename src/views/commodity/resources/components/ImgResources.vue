@@ -493,6 +493,12 @@ export default {
       const formData = new FormData()
       formData.append('image', e.file)
       formData.append('gallery_group_id', this.uploadForm.group_id)
+      const loading = this.$loading({
+        lock: true,
+        text: '图片上传中',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.2)'
+      })
       imgApi.addImage(formData).then(res => {
         if (res.code === 0) {
           this.$message({
@@ -504,7 +510,9 @@ export default {
           this.checkedGroup = []
           this.uploadImageList = []
           this.$refs.fileUploadForm.resetFields()
+          loading.close()
         } else {
+          loading.close()
           this.$message({
             message: res.msg || '上传失败',
             type: 'error'

@@ -257,7 +257,7 @@ export default {
         sku_show: '', // 规则
         sku_list: '', // 规则列表
         category_id: '', // 分类
-        logisticsType: 0, // 物流类型
+        express_type: 0, // 物流类型
         freight: '', // 运费
         logisticsTemplate: '', // 物流模板id
         detail: '' // 描述

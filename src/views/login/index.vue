@@ -64,7 +64,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 // import { validUsername } from '@/utils/validate'
 export default {
   name: 'Login',
@@ -106,10 +105,7 @@ export default {
         this.redirect = route.query && route.query.redirect
       },
       immediate: true
-    },
-    ...mapGetters([
-      'permission_routers'
-    ])
+    }
   },
   mounted() {
     this.changeCode()

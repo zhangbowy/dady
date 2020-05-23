@@ -284,3 +284,12 @@ export const machineApi = {
     })
   }
 }
+
+// 获取图片源信息
+export function getImgMeta(params) {
+  return request({
+    url: '/system/getImgMeta',
+    method: 'get',
+    params
+  })
+}

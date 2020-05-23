@@ -15,6 +15,7 @@
               ref="cityTree"
               :data="cityModal.cityTree"
               :props="cityModal.treeProp"
+              :default-expanded-keys="defaultExpandedLeft"
               node-key="id"
               show-checkbox
               class="filter-tree"
@@ -29,6 +30,7 @@
                 ref="checkedTree"
                 :data="cityModal.showTree"
                 :props="cityModal.treeProp"
+                :default-expanded-keys="defaultExpanded"
                 node-key="id"
               >
                 <span slot-scope="{ node, data }" class="custom-tree-node">
@@ -72,6 +74,8 @@ export default {
     return {
       filterText: '',
       defaultChecked: [],
+      defaultExpandedLeft: [],
+      defaultExpanded: [],
       // 城市树形
       cityModal: {
         cityTree: [],
@@ -113,16 +117,24 @@ export default {
     },
     // 右侧删除
     remove(node, data) {
+      console.log(node)
+      console.log(data)
+      this.defaultExpanded = []
       // 判断是不是父元素
       if (data.pid !== 100000) {
         const parent = node.parent
         // 判断子元素是否只剩最后一个
         if (parent.data.children.length === 1) {
+          console.log(1)
           this.$refs.cityTree.setChecked(parent.data.id, false, true)
         } else {
+          console.log(2)
           this.$refs.cityTree.setChecked(data.id, false)
+          this.defaultExpanded.push(node.parent.data.id)
+          this.defaultExpandedLeft.push(node.parent.data.id)
         }
       } else {
+        console.log(3)
         this.$refs.cityTree.setChecked(data.id, false, true)
       }
     },

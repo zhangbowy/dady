@@ -82,6 +82,7 @@
         </el-table-column>
       </el-table>
     </div>
+    <!-- 新增可定制分类 -->
     <el-dialog center :title="dialogType=='add'? '新增分类': dialogType=='edit'? '编辑分类': '分类详情'" :visible.sync="dialogFormVisible">
       <el-form ref="form" :model="form" :rules="rules" label-width="100px" label-position="left" size="small">
         <el-form-item label="分类名称" prop="custom_category_name">
@@ -96,7 +97,7 @@
           />
         </el-form-item>
         <el-form-item v-if="form.design_bg" label="定制区域">
-          <div class="text-event" :style="{backgroundImage: `url(${form.design_bg})`}">
+          <div class="text-event" :style="{backgroundImage: `url(${form.design_bg})`,backgroundSize: `${form.design_bg_width}px ${form.design_bg_height}px`, width: `${form.design_bg_width}px`, height: `${form.design_bg_height}px`}">
             <vue-draggable-resizable
               :w="form.design_width"
               :h="form.design_height"
@@ -116,6 +117,16 @@
                 left: {{ form.design_left }} / top: {{ form.design_top }} - Width: {{ form.design_width }} / Height: {{ form.design_height }}
               </p>
             </vue-draggable-resizable>
+            <!-- 辅助线 -->
+            <div
+              v-if="showRefLine"
+              class="vertical"
+              :style="{
+                left: form.design_bg_width/2 + 'px',
+                top: '0px',
+                height: form.design_bg_height + 'px'
+              }"
+            />
           </div>
         </el-form-item>
         <el-form-item>
@@ -162,7 +173,7 @@
 </template>
 
 <script>
-import { customCateApi, machineApi } from '@/api/system'
+import { customCateApi, machineApi, getImgMeta } from '@/api/system'
 import ImgUpload from '@/components/ImgUpload'
 import VueDraggableResizable from 'vue-draggable-resizable'
 import 'vue-draggable-resizable/dist/VueDraggableResizable.css'
@@ -189,6 +200,7 @@ export default {
         design_bg_width: 375, // 背景宽度
         design_bg_height: 375 // 背景高度
       },
+      showRefLine: false, // 显示竖向的辅助线
       rules: {
         custom_category_name: [
           { required: true, message: '请输入分类名称', trigger: 'blur' }
@@ -225,6 +237,18 @@ export default {
         this.checkedItem = {} // 关联设备按钮选中的分类信息
         this.checkedMachine = '' // select选中的设备
       }
+    },
+    'form.design_left': {
+      immediate: true,
+      deep: true,
+      handler(newValue, oldValue) {
+        const middleNum = parseInt(this.form.design_bg_width / 2 - this.form.design_width / 2)
+        if (newValue === middleNum) {
+          this.showRefLine = true
+        } else {
+          this.showRefLine = false
+        }
+      }
     }
   },
   created() {
@@ -256,6 +280,8 @@ export default {
         this.form.custom_category_name = form.custom_category_name
         this.form.design_width = form.design_width // 设计区域宽度
         this.form.design_height = form.design_height// 设计区域高度
+        this.form.design_bg_width = form.design_bg_width // 背景高度
+        this.form.design_bg_height = form.design_bg_height // 背景宽度
         this.form.design_top = form.design_top // x轴距离
         this.form.design_left = form.design_left // y轴距离
         this.form.design_bg = form.design_bg
@@ -358,6 +384,14 @@ export default {
     // 图片上传模块
     imageChoose(img) {
       this.form.design_bg = img
+      if (img) {
+        getImgMeta({
+          image_url: img
+        }).then(res => {
+          this.form.design_bg_width = res.data.width
+          this.form.design_bg_height = res.data.height
+        })
+      }
       this.$refs.form.validateField('design_bg')
     },
 
@@ -422,6 +456,12 @@ export default {
       color: #fff;
       background: #0084ff3b;
     }
+    .vertical{
+        position: absolute;
+        width: 1px;
+        z-index: 999;
+        background-color: #409eff
+      }
 
   }
 }

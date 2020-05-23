@@ -33,7 +33,8 @@ service.interceptors.request.use(
     } else if (config.method === 'get') {
       const newParams = {}
       for (const key in config.params) {
-        newParams[key] = encodeURIComponent(config.params[key])
+        // newParams[key] = encodeURIComponent(config.params[key])
+        newParams[key] = config.params[key]
       }
       config.params = newParams
       config.headers['Content-Type'] = 'application/json;charset=UTF-8'

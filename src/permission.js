@@ -62,7 +62,8 @@ router.beforeEach(async(to, from, next) => {
       await store.dispatch('user/checkLogin').then(() => {
         next()
       }).catch(() => {
-        next(`/login?redirect=${to.path}`)
+        // next(`/login?redirect=${to.path}`)
+        next(`/login`)
       })
       // 没有访问权限的其他页将重定向到登录页。
       NProgress.done()
