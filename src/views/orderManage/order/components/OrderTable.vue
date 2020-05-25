@@ -57,7 +57,7 @@
                       <span class="goods-sku">{{ good.sku_name }}</span>
                     </div>
                   </el-col>
-                  <el-col :span="8" class="alignR"> <div>{{ good.current_price }}元/{{ good.buy_num }}件</div></el-col>
+                  <el-col :span="8" class="alignR"> <div> <span style="color: #ee0a24">￥{{ good.current_price }}</span>/{{ good.buy_num }}件</div></el-col>
                 </el-row>
               </el-col>
               <el-col :span="3" class="td-item">
@@ -77,8 +77,9 @@
               <el-col :span="3" class="td-item"><div>{{ item.buyer_message?item.buyer_message: "买家未留言" }}</div></el-col>
               <el-col :span="3" class="td-item">
                 <div>
-                  ￥{{ item.pay_amount.toFixed(2) }}
-                  <p class="" style="color: orange">（含运费￥{{ item.express_amount.toFixed(2) }}）</p>
+                  <span style="color: #ee0a24">￥{{ item.pay_amount.toFixed(2) }} </span>
+                  <p v-if="item.express_amount>0" class="" style="color: orange">（含运费￥{{ item.express_amount.toFixed(2) }}）</p>
+                  <!-- <p v-if="item.designer_price>0" class="" style="color: orange">（定制价格￥{{ item.designer_price.toFixed(2) }}）</p> -->
                 </div>
               </el-col>
               <el-col :span="3" class="td-item">

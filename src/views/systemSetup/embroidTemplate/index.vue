@@ -97,6 +97,13 @@
             </el-table-column>
           </el-table>
         </el-tab-pane>
+        <el-tab-pane label="手绘" name="3">
+          <el-form>
+            <el-form-item label="是否调用澳洲api">
+              <el-switch v-model="form.delivery" />
+            </el-form-item>
+          </el-form>
+        </el-tab-pane>
       </el-tabs>
       <!-- 新增，详情，编辑弹框 -->
       <el-dialog center :title="dialogType=='add'? '新增模板': dialogType=='edit'? '编辑模板': '模板详情'" :visible.sync="dialogFormVisible">

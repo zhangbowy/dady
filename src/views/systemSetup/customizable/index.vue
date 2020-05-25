@@ -114,7 +114,9 @@
               @resizing="onResize"
             >
               <p>
-                left: {{ form.design_left }} / top: {{ form.design_top }} - Width: {{ form.design_width }} / Height: {{ form.design_height }}
+                x: {{ form.design_left }} / y: {{ form.design_top }}
+                <br>
+                宽: {{ form.design_width }} / 高: {{ form.design_height }}
               </p>
             </vue-draggable-resizable>
             <!-- 辅助线 -->
@@ -447,7 +449,6 @@ export default {
   .text-event {
     height: 375px;
     width: 375px;
-    border: 1px solid #f5f5f5;
     position: relative;
     background-repeat: no-repeat;
     background-size: 100% 100%;

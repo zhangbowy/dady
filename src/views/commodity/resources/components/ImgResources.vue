@@ -497,7 +497,7 @@ export default {
         lock: true,
         text: '图片上传中',
         spinner: 'el-icon-loading',
-        background: 'rgba(0, 0, 0, 0.2)'
+        background: 'rgba(255, 255, 255, 0.5)'
       })
       imgApi.addImage(formData).then(res => {
         if (res.code === 0) {

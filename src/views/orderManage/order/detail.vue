@@ -27,15 +27,15 @@
         <div class="order-info-content">
           <el-row class="info-tabel">
             <el-col class="info-th" :span="6">订单号：</el-col>
-            <el-col class="info-th" :span="6">订单类型：<el-button v-if="orderDetail.order_type==2" type="text" style="padding: 0" @click="designInfo = true">详细信息</el-button></el-col>
+            <el-col class="info-th" :span="6">订单类型：<el-button v-if="orderDetail.order_type==2 || orderDetail.order_type==3 || orderDetail.order_type==4" type="text" style="padding: 0" @click="designInfo = true">定制信息</el-button></el-col>
             <el-col class="info-th" :span="6">买家信息：<el-button type="text" style="padding: 0" @click="useInfoDialog = true">信息</el-button></el-col>
             <el-col class="info-th" :span="6">下单时间：</el-col>
           </el-row>
           <el-row class="info-tabel">
-            <el-col class="info-td" :span="6">{{ orderDetail.order_no }}</el-col>
-            <el-col class="info-td" :span="6">{{ orderDetail._order_type }}</el-col>
-            <el-col class="info-td" :span="6">{{ orderDetail.user.nickname?orderDetail.user.nickname:'' }}</el-col>
-            <el-col class="info-td" :span="6">{{ orderDetail.created_at }}</el-col>
+            <el-col class="info-td" :span="6"><div>{{ orderDetail.order_no }}</div> </el-col>
+            <el-col class="info-td" :span="6"><div>{{ orderDetail._order_type }}</div> </el-col>
+            <el-col class="info-td" :span="6"><div>{{ orderDetail.user.nickname?orderDetail.user.nickname:'' }}</div> </el-col>
+            <el-col class="info-td" :span="6"><div>{{ orderDetail.created_at }}</div></el-col>
           </el-row>
           <el-row class="info-tabel">
             <el-col class="info-th" :span="6">订单状态：</el-col>
@@ -80,11 +80,11 @@
               <img :src="item.image" width="50" height="50" alt="">
               <p>{{ item.name }}</p>
             </el-col>
-            <el-col class="info-td" :span="6">￥{{ item.current_price }}/{{ item.buy_num }}</el-col>
+            <el-col class="info-td" :span="6"> <span style="color: #ee0a24">￥{{ item.current_price }}</span>/{{ item.buy_num }}件</el-col>
             <el-col class="info-td" :span="6">{{ item.sku_name }}</el-col>
             <el-col class="info-td" :span="6">
               {{ orderDetail.status==1?'未付款': item.express_number?item.express_number:'未发货' }}
-              <el-button v-has="502" type="text" style="padding: 0" @click.stop="getOrderTrace(item.order_item_id)">查看</el-button>
+              <el-button v-if=" orderDetail.status===3" v-has="502" type="text" style="padding: 0" @click.stop="getOrderTrace(item.order_item_id)">查看</el-button>
             </el-col>
           </el-row>
         </div>
@@ -119,7 +119,7 @@
     >
       <p>id：{{ orderDetail.user.id }}</p>
       <p>昵称：{{ orderDetail.user.nickname?orderDetail.user.nickname:'' }}</p>
-      <p>城市：{{ orderDetail.user.country }}{{ orderDetail.user.province }}{{ orderDetail.user.city }}</p>
+      <p>城市：{{ orderDetail.user.province }}{{ orderDetail.user.city }}</p>
     </el-dialog>
 
     <el-dialog
@@ -127,11 +127,7 @@
       :visible.sync="designInfo"
       width="40%"
       center
-    >
-      <!-- <p>id：{{ orderDetail.user.id }}</p>
-      <p>昵称：{{ orderDetail.user.nickname?orderDetail.user.nickname:'' }}</p>
-      <p>城市：{{ orderDetail.user.country }}{{ orderDetail.user.province }}{{ orderDetail.user.city }}</p> -->
-    </el-dialog>
+    />
     <!-- 物流信息弹框 -->
     <el-dialog
       title="物流详情"

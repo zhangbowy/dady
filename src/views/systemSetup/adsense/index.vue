@@ -73,8 +73,23 @@
               v-has="806"
               size="mini"
               type="danger"
+              style="margin-left: 0"
               @click="handleDelete(scope.row.id)"
             >删除</el-button>
+            <el-button
+              v-if="scope.$index!==0"
+              v-has="806"
+              size="mini"
+              type="success"
+              style="margin-left: 0"
+            >上移</el-button>
+            <el-button
+              v-if="scope.$index!==adList.length-1"
+              v-has="806"
+              size="mini"
+              type="success"
+              style="margin-left: 0"
+            >下移</el-button>
           </template>
         </el-table-column>
       </el-table>

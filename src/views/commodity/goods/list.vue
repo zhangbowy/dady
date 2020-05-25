@@ -54,7 +54,6 @@
         </el-table-column>
         <el-table-column
           label="商品信息"
-          align="center"
         >
           <template slot-scope="scope">
             <p>{{ scope.row.name }}</p>
