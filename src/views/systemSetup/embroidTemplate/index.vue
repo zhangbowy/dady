@@ -24,11 +24,13 @@
               align="left"
             >
               <template slot-scope="scope">
-                <img-upload
-                  :img-data="scope.row.cover_image"
-                  :pic-max="1"
-                  @chooseImg="imageChoose($event, scope.row.emb_template_id)"
-                />
+                <div style="padding: 5px">
+                  <img-upload
+                    :img-data="scope.row.cover_image"
+                    :pic-max="1"
+                    @chooseImg="imageChoose($event, scope.row.emb_template_id)"
+                  />
+                </div>
               </template>
             </el-table-column>
             <el-table-column
@@ -70,11 +72,13 @@
               align="left"
             >
               <template slot-scope="scope">
-                <img-upload
-                  :img-data="scope.row.cover_image"
-                  :pic-max="1"
-                  @chooseImg="imageChoose($event, scope.row.emb_template_id)"
-                />
+                <div style="padding: 5px">
+                  <img-upload
+                    :img-data="scope.row.cover_image"
+                    :pic-max="1"
+                    @chooseImg="imageChoose($event, scope.row.emb_template_id)"
+                  />
+                </div>
               </template>
             </el-table-column>
             <el-table-column
@@ -97,19 +101,12 @@
             </el-table-column>
           </el-table>
         </el-tab-pane>
-        <el-tab-pane label="手绘" name="3">
-          <el-form>
-            <el-form-item label="是否调用澳洲api">
-              <el-switch v-model="form.delivery" />
-            </el-form-item>
-          </el-form>
-        </el-tab-pane>
       </el-tabs>
       <!-- 新增，详情，编辑弹框 -->
       <el-dialog center :title="dialogType=='add'? '新增模板': dialogType=='edit'? '编辑模板': '模板详情'" :visible.sync="dialogFormVisible">
         <el-form :model="form" label-position="top">
           <el-form-item label="模板名称" :label-width="formLabelWidth">
-            <el-input v-model="form.template_name" :disabled="dialogType=='detail'" autocomplete="off" />
+            <el-input v-model="form.template_name" disabled autocomplete="off" />
           </el-form-item>
           <el-form-item label="参数定价" :label-width="formLabelWidth">
             <el-row>
@@ -203,6 +200,7 @@ export default {
         height: '',
         price: ''
       },
+      status: 0, // 是否调用澳洲接口
       formLabelWidth: '120px',
       dialogType: 'add',
       type: '1'
@@ -210,6 +208,7 @@ export default {
   },
   created() {
     this.getEmbTemplate()
+    // this.getSetting()
   },
   methods: {
     // 获取所有模板
@@ -221,6 +220,11 @@ export default {
         this.templates = res.data
       }).catch(() => {
         this.loading = false
+      })
+    },
+    getSetting() {
+      embTemplate.getSetting().then((res) => {
+        console.log(res)
       })
     },
     showDialog(type, row, index) {

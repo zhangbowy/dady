@@ -27,13 +27,13 @@
         <div class="order-info-content">
           <el-row class="info-tabel">
             <el-col class="info-th" :span="6">订单号：</el-col>
-            <el-col class="info-th" :span="6">订单类型：<el-button v-if="orderDetail.order_type==2 || orderDetail.order_type==3 || orderDetail.order_type==4" type="text" style="padding: 0" @click="designInfo = true">定制信息</el-button></el-col>
+            <el-col class="info-th" :span="6">订单类型：<el-button v-if="orderDetail.order_type==2 || orderDetail.order_type==3 || orderDetail.order_type==4" type="text" style="padding: 0" @click="showDesign(orderDetail)">定制信息</el-button></el-col>
             <el-col class="info-th" :span="6">买家信息：<el-button type="text" style="padding: 0" @click="useInfoDialog = true">信息</el-button></el-col>
             <el-col class="info-th" :span="6">下单时间：</el-col>
           </el-row>
           <el-row class="info-tabel">
             <el-col class="info-td" :span="6"><div>{{ orderDetail.order_no }}</div> </el-col>
-            <el-col class="info-td" :span="6"><div>{{ orderDetail._order_type }}</div> </el-col>
+            <el-col class="info-td" :span="6"><div style="color: orange">{{ orderDetail._order_type }}</div> </el-col>
             <el-col class="info-td" :span="6"><div>{{ orderDetail.user.nickname?orderDetail.user.nickname:'' }}</div> </el-col>
             <el-col class="info-td" :span="6"><div>{{ orderDetail.created_at }}</div></el-col>
           </el-row>
@@ -122,12 +122,13 @@
       <p>城市：{{ orderDetail.user.province }}{{ orderDetail.user.city }}</p>
     </el-dialog>
 
-    <el-dialog
+    <!-- <el-dialog
       title="定制详情"
       :visible.sync="designInfo"
       width="40%"
       center
-    />
+    /> -->
+    <design-dialog v-model="designInfo" :info-item="designInfoItem" @close="designInfo = false" />
     <!-- 物流信息弹框 -->
     <el-dialog
       title="物流详情"
@@ -160,9 +161,11 @@
 <script>
 import CardTag from '@/components/CardTag'
 import { orderApi } from '@/api/order'
+import DesignDialog from './components/DesignDialog'
 export default {
   components: {
-    CardTag
+    CardTag,
+    DesignDialog
   },
   data() {
     return {
@@ -171,6 +174,7 @@ export default {
       useInfoDialog: false,
       expressDialog: false,
       designInfo: false,
+      designInfoItem: {},
       order_no: this.$route.query.order_no,
       orderDetail: {
         user: {}
@@ -192,6 +196,10 @@ export default {
         const status = res.data.status
         this.active = status === 1 ? 0 : status === 2 ? 1 : status === 3 ? 2 : status === 4 ? 3 : status === 5 ? 4 : status === 6 ? 5 : 6
       })
+    },
+    showDesign(orderDetail) {
+      this.designInfo = true
+      this.designInfoItem = orderDetail.order_item[0]
     },
     getOrderTrace(id) {
       const loading = this.$loading({

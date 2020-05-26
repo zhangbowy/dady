@@ -5,7 +5,7 @@
       <draggable v-model="imgList" class="wrapper">
         <transition-group>
           <div v-for="(item, index) in imgList" :key="index+item" class="img-item">
-            <i v-if="!disabled" class="el-icon-close close-btn" @click="deleteImg(index)" />
+            <i v-if="!disabled" class="el-icon-circle-close close-btn" @click="deleteImg(index)" />
             <img v-if="widths" :src="item" style="width:315px;height:88px;">
             <img v-else :src="item">
           </div>
@@ -15,7 +15,7 @@
     <!-- 单图上传 -->
     <div v-if="picMax==1 && imgList !=''" class="img-list">
       <div class="img-item">
-        <i v-if="!disabled" class="el-icon-close close-btn" @click="deleteImg()" />
+        <i v-if="!disabled" class="el-icon-circle-close close-btn" @click="deleteImg()" />
         <img v-if="widths" :src="imgList" :style="`width:{widths}}px;height:88px;`">
         <img v-else :src="imgList" width="100" height="100">
       </div>
@@ -148,6 +148,9 @@ export default {
             float:left;
             position: relative;
             margin-right:15px;
+            border: 1px solid #f5f5f5;
+            border-radius: 5px;
+            line-height: 1;
             img{
                 width: 80px;
                 height: 80px;

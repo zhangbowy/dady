@@ -146,8 +146,8 @@
           </el-upload>
         </el-form-item>
         <el-form-item :label-width="formLabelWidth">
-          <el-button @click="uploadDialog = false">取 消</el-button>
-          <el-button v-has="405" type="primary" @click="fileUpload">确 定</el-button>
+          <el-button size="small" @click="uploadDialog = false">取 消</el-button>
+          <el-button v-has="405" size="small" type="primary" @click="fileUpload">确 定</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -683,6 +683,8 @@ export default {
       .img-item{
         width: 18%;
         margin-right: 2%;
+        border: 1px solid #f5f5f5;
+        border-radius: 5px;
         &:last-child{
           margin: 0;
         }
@@ -707,6 +709,8 @@ export default {
     position: relative;
     display: inline-block;
     margin-right: 5px;
+    border: 1px solid #f5f5f5;
+    border-radius: 5px;
     .delete{
       position: absolute;
       top: -5px;

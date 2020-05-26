@@ -214,6 +214,13 @@ export const asyncRouter = [
         name: 'EmbroidTemplate',
         component: () => import('@/views/systemSetup/embroidTemplate/index'),
         meta: { title: '刺绣模板' }
+      }, {
+        pid: 8,
+        id: 28,
+        path: 'platformSettings',
+        name: 'platformSettings',
+        component: () => import('@/views/systemSetup/platformSettings/index'),
+        meta: { title: '平台设置' }
       }]
   },
   {

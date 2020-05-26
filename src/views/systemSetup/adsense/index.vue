@@ -82,6 +82,8 @@
               size="mini"
               type="success"
               style="margin-left: 0"
+              :loading="btnLoading"
+              @click="sortBtn(scope.row.id, 'up')"
             >上移</el-button>
             <el-button
               v-if="scope.$index!==adList.length-1"
@@ -89,6 +91,8 @@
               size="mini"
               type="success"
               style="margin-left: 0"
+              :loading="btnLoading"
+              @click="sortBtn(scope.row.id, 'down')"
             >下移</el-button>
           </template>
         </el-table-column>
@@ -155,6 +159,7 @@ export default {
         sort: '',
         link: ''
       },
+      btnLoading: false,
       rules: {
         slider_name: [
           { required: true, message: '请输入广告位名称', trigger: 'blur' }
@@ -204,6 +209,28 @@ export default {
         this.form.sort = form.sort
       }
     },
+    sortBtn(id, type) {
+      this.btnLoading = true
+      adsense.sortSlider({
+        id: id,
+        sort: type
+      }).then(res => {
+        this.$message({
+          type: 'success',
+          message: res.msg || '修改成功!'
+        })
+        setTimeout(() => {
+          this.fetchData()
+          this.btnLoading = false
+        }, 500)
+      }).catch(() => {
+        this.btnLoading = false
+        this.$message({
+          type: 'info',
+          message: '修改失败!'
+        })
+      })
+    },
     onSubmit(formName) {
       const _this = this
       _this.$refs[formName].validate((valid) => {
@@ -220,7 +247,10 @@ export default {
                 this.dialogFormVisible = false
                 this.fetchData()
               } else {
-                this.$message.success(res.msg || '修改失败!')
+                this.$message({
+                  type: 'info',
+                  message: res.msg || '修改失败!'
+                })
               }
             })
           } else {

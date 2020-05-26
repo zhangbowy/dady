@@ -134,10 +134,7 @@
                   <el-button
                     size="mini"
                     type="primary"
-                  >取消订单</el-button>
-                  <el-button
-                    size="mini"
-                    type="primary"
+                    @click="showReply"
                   >回复询价</el-button>
                 </div>
                 <div v-if="item.status==6" class="operate-btn">
@@ -272,6 +269,7 @@ export default {
     return {
       orderDiaLog: false,
       dispatchDialog: false,
+      replyDialog: false, // 回复询价
       dialogTitle: '', // 弹框标题
       expressOpthions: [], // 物流公司列表
       checkList: [], // 选中的订单id
@@ -493,6 +491,9 @@ export default {
       }).catch(() => {
 
       })
+    },
+    showReply() {
+      this.replyDialog = true
     }
   }
 }

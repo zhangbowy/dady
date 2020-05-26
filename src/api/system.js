@@ -45,6 +45,7 @@ export const embTemplate = {
       data
     })
   }
+
 }
 
 export const adsense = {
@@ -88,6 +89,17 @@ export const adsense = {
   deleteAdsense(data) {
     return request({
       url: '/system/delSlider',
+      method: 'post',
+      data
+    })
+  },
+  /**
+   * 广告位排序
+   * @param {*id sort}
+   */
+  sortSlider(data) {
+    return request({
+      url: '/system/sortSlider',
       method: 'post',
       data
     })
@@ -292,4 +304,29 @@ export function getImgMeta(params) {
     method: 'get',
     params
   })
+}
+
+export const settingApi = {
+  /**
+   * 获取设置
+   * @param {*} params
+   */
+  getSetting(params) {
+    return request({
+      url: '/system/getSetting',
+      methods: 'get',
+      params
+    })
+  },
+  /**
+   * 编辑设置
+   * @param {*key value} data
+   */
+  editSetting(data) {
+    return request({
+      url: '/system/editSetting',
+      method: 'post',
+      data
+    })
+  }
 }

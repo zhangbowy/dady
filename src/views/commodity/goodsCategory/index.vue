@@ -21,11 +21,11 @@
           width="200"
         />
         <el-table-column
-          label="分类logo"
+          label="logo"
           align="center"
         >
           <template slot-scope="scope">
-            <img :src="scope.row.logo" alt="" width="60" height="60">
+            <img :src="scope.row.logo" alt="" width="20" height="20">
           </template>
         </el-table-column>
         <el-table-column
@@ -33,7 +33,7 @@
           align="center"
         >
           <template slot-scope="scope">
-            <img :src="scope.row.image_path" alt="" width="120" height="60">
+            <img :src="scope.row.image_path" alt="" width="40" height="20">
           </template>
         </el-table-column>
         <el-table-column
@@ -85,7 +85,7 @@
           />
           <span style="color: #F56C6C">tip：顶级分类无需选择</span>
         </el-form-item>
-        <el-form-item label="分类logo" :label-width="formLabelWidth" prop="logo">
+        <el-form-item label="logo" :label-width="formLabelWidth" prop="logo">
           <img-upload
             :img-data="form.logo"
             :pic-max="1"
@@ -93,7 +93,7 @@
             @chooseImg="logoChoose"
           />
         </el-form-item>
-        <el-form-item label="分类广告位" :label-width="formLabelWidth" prop="image_path">
+        <el-form-item label="分类广告图" :label-width="formLabelWidth" prop="image_path">
           <img-upload
             :img-data="form.image_path"
             :pic-max="1"
