@@ -102,6 +102,17 @@ export const orderApi = {
       method: 'post',
       data
     })
+  },
+  /**
+   * 回复询价
+   * @param {*order_id price} data
+   */
+  replyOrder(data) {
+    return request({
+      url: '/order/replyOrder',
+      method: 'post',
+      data
+    })
   }
 
 }

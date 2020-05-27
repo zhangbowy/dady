@@ -115,7 +115,6 @@
       title="买家信息"
       :visible.sync="useInfoDialog"
       width="30%"
-      center
     >
       <p>id：{{ orderDetail.user.id }}</p>
       <p>昵称：{{ orderDetail.user.nickname?orderDetail.user.nickname:'' }}</p>

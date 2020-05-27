@@ -11,7 +11,7 @@
       </el-col>
     </el-row>
     <el-row v-loading="loading" class="content">
-      <el-col :span="6" style="background: #f5f5f5;padding: 20px 10px">
+      <el-col :span="4" style="background: #f5f5f5;padding: 20px 10px">
         <el-button
           v-has="407"
           size="small"
@@ -73,7 +73,7 @@
           </el-tree>
         </div>
       </el-col>
-      <el-col :span="18" style="padding: 0 20px">
+      <el-col :span="20" style="padding: 0 20px">
         <div class="img-list">
           <div v-for="(item,index) in imgList" :key="index" class="img-item">
             <img :src="item.oss_path" alt="">
@@ -114,7 +114,7 @@
     <!-- 上传图片的dialog -->
     <el-dialog title="上传图片" :visible.sync="uploadDialog">
       <el-form ref="fileUploadForm" :model="uploadForm" :rules="uploadRules">
-        <el-form-item label="图片分组" :label-width="formLabelWidth">
+        <el-form-item label="图片分组">
           <el-cascader
             v-model="checkedGroup"
             :options="groupData"
@@ -123,7 +123,7 @@
             @change="imgGroupChose"
           />
         </el-form-item>
-        <el-form-item label="本地图片" :label-width="formLabelWidth" prop="images">
+        <el-form-item label="本地图片" prop="images">
           <span v-for="(item,index) in uploadImageList" :key="index" class="show-imgBox">
             <i class="el-icon-circle-close delete" @click="deleteShowImg(index)" />
             <img :src="getUrl(item.raw)" alt="" width="100" height="100" @click="preview(getUrl(item.raw))">
@@ -145,7 +145,7 @@
             />
           </el-upload>
         </el-form-item>
-        <el-form-item :label-width="formLabelWidth">
+        <el-form-item>
           <el-button size="small" @click="uploadDialog = false">取 消</el-button>
           <el-button v-has="405" size="small" type="primary" @click="fileUpload">确 定</el-button>
         </el-form-item>
@@ -154,7 +154,7 @@
 
     <el-dialog title="添加分组" :visible.sync="addGroupDialog">
       <el-form ref="groupForm" :model="groupForm" :rules="groupRules">
-        <el-form-item label="所属分组" :label-width="formLabelWidth">
+        <el-form-item label="所属分组">
           <el-cascader
             v-model="checkedGroup"
             :options="groupData"
@@ -163,10 +163,10 @@
             @change="handleChange"
           />
         </el-form-item>
-        <el-form-item label="分组名称" :label-width="formLabelWidth" prop="group_name">
+        <el-form-item label="分组名称" prop="group_name">
           <el-input v-model="groupForm.group_name" placeholder="请输入分组名称" />
         </el-form-item>
-        <el-form-item :label-width="formLabelWidth">
+        <el-form-item>
           <el-button @click="addGroupDialog = false">取 消</el-button>
           <el-button v-has="407" type="primary" @click="addGrops">确 定</el-button>
         </el-form-item>
@@ -175,7 +175,7 @@
 
     <el-dialog :title="changeFormName=='modifyName'?'修改名称':'修改分组'" :visible.sync="changeGroupDialog" width="30%">
       <el-form ref="changeFrom" :model="changeFrom" :rules="groupRules">
-        <el-form-item v-if="changeFormName=='modifyGroup'" label="选择分组" :label-width="formLabelWidth">
+        <el-form-item v-if="changeFormName=='modifyGroup'" label="选择分组">
           <el-cascader
             v-model="checkedGroup"
             :options="groupData"
@@ -184,10 +184,10 @@
             @change="setImgGroup"
           />
         </el-form-item>
-        <el-form-item v-if="changeFormName=='modifyName'" label="图片名称" :label-width="formLabelWidth" prop="img_name">
+        <el-form-item v-if="changeFormName=='modifyName'" label="图片名称" prop="img_name">
           <el-input v-model="changeFrom.img_name" placeholder="请输入图片名称" />
         </el-form-item>
-        <el-form-item :label-width="formLabelWidth">
+        <el-form-item>
           <el-button @click="changeGroupDialog = false">取 消</el-button>
           <el-button v-has="408" type="primary" @click="ensureChange">确 定</el-button>
         </el-form-item>
@@ -266,7 +266,6 @@ export default {
           { required: true, message: '请输入分组名称', trigger: 'blur' }
         ]
       },
-      formLabelWidth: '120px',
       uploadCount: 0, // 上传图片数
       selectGroupId: -1, // 选择的分组节点id  0表示为分组 -1表示全部
       // 分页信息
@@ -671,6 +670,9 @@ export default {
           margin-bottom: 20px;
           text-align: center;
         }
+        span:hover{
+          color: #409EFF;
+        }
       }
       .writeInput{
         width: 100%;
@@ -685,6 +687,8 @@ export default {
         margin-right: 2%;
         border: 1px solid #f5f5f5;
         border-radius: 5px;
+        margin-bottom: 10px;
+        padding: 10px;
         &:last-child{
           margin: 0;
         }

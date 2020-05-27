@@ -267,8 +267,6 @@ export default {
       })
     },
     fileChange(file, fileList) {
-      console.log(file)
-      console.log(fileList)
       const isZIP = file.raw.type === 'application/x-zip-compressed'
       if (!isZIP) {
         this.$message.error('上传文件只能是 ZIP 格式!')
@@ -277,7 +275,6 @@ export default {
       this.fileList.push(file)
     },
     beforeUpload(file, fileList) {
-      console.log(file)
       const isZIP = file.type === 'application/x-zip-compressed'
       const isLt2M = file.size / 1024 / 1024 < 2
 

@@ -234,7 +234,7 @@ export default {
       console.log(value)
       if (value === '') {
         callback(new Error('请输入商品现价'))
-      } else if (value > this.form.old_price) {
+      } else if (parseFloat(value) > parseFloat(this.form.old_price)) {
         callback(new Error('商品现价不得高于原价'))
       } else {
         callback()

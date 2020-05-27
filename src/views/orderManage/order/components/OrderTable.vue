@@ -1,5 +1,5 @@
 <template>
-  <div class="order-list">
+  <div class="order-table-list">
     <div class="order-item">
       <el-row class="order-header">
         <el-col :span="6" class="header-item">
@@ -134,7 +134,7 @@
                   <el-button
                     size="mini"
                     type="primary"
-                    @click="showReply"
+                    @click="showReplay(item.id)"
                   >回复询价</el-button>
                 </div>
                 <div v-if="item.status==6" class="operate-btn">
@@ -233,7 +233,21 @@
           <el-input v-model.number="dispatchForm.price" placeholder="请输入价格" />
         </el-form-item>
         <el-form-item>
+          <el-button @click="dispatchDialog = false">取消</el-button>
           <el-button type="primary" @click="doDispatch('dispatchForm')">确认</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+
+    <!-- 回复询价 -->
+    <el-dialog :visible.sync="replayDialog" title="回复询价" width="30%">
+      <el-form ref="replayForm" :model="replayForm" :rules="replayRules" label-width="80px" label-position="right" size="small">
+        <el-form-item label="价格" prop="price">
+          <el-input v-model="replayForm.price" type="number" />
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="replayDialog = false">取消</el-button>
+          <el-button type="primary" @click="confirmReplay('replayForm')">确认</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -269,7 +283,7 @@ export default {
     return {
       orderDiaLog: false,
       dispatchDialog: false,
-      replyDialog: false, // 回复询价
+      replayDialog: false, // 回复询价
       dialogTitle: '', // 弹框标题
       expressOpthions: [], // 物流公司列表
       checkList: [], // 选中的订单id
@@ -304,6 +318,15 @@ export default {
         ],
         express_number: [
           { required: true, message: '请输入快递单号', trigger: 'blur' }
+        ]
+      },
+      replayForm: {
+        order_id: '',
+        price: ''
+      },
+      replayRules: {
+        price: [
+          { required: true, message: '请输入价格', trigger: 'blur' }
         ]
       }
     }
@@ -392,6 +415,28 @@ export default {
     dispatch(status, item) {
       this.dispatchDialog = true
       this.dispatchForm.order_id = item.id
+    },
+    // 回复询价
+    showReplay(id) {
+      this.replayDialog = true
+      this.replayForm.order_id = id
+    },
+    // 确认回复询价
+    confirmReplay(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          orderApi.replyOrder(this.replayForm).then(res => {
+            this.$message({
+              type: 'success',
+              message: res.msg
+            })
+          })
+          this.replayDialog = false
+          this.getOrderList()
+        } else {
+          return false
+        }
+      })
     },
     // 弹框商品选择
     sentGoodsCheck(val) {
@@ -491,9 +536,6 @@ export default {
       }).catch(() => {
 
       })
-    },
-    showReply() {
-      this.replyDialog = true
     }
   }
 }
@@ -528,6 +570,7 @@ export default {
     .item-header{
       padding: 10px;
       background: #f5f5f5;
+      border-radius: 5px 5px 0 0;
       span{
         margin-left: 10px;
       }
@@ -596,10 +639,10 @@ export default {
 </style>
 
 <style lang="scss">
-.order-list{
+.order-table-list{
+  padding: 0 10px;
   .el-checkbox__label{
-    display: none
-    ;
+    display: none;
   }
 }
 </style>
