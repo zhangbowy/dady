@@ -407,12 +407,12 @@ export default {
       const isLt2M = file.size / 1024 / 1024 < 2
       if (!isJPG) {
         this.$message.error('上传头像图片只能是 JPG 格式!')
-        this.$refs.upload.clearFiles()
+        fileList.pop()
         return isJPG
       }
       if (!isLt2M) {
         this.$message.error('上传头像图片大小不能超过 2MB!')
-        this.$refs.upload.clearFiles()
+        fileList.pop()
         return isLt2M
       }
       if (isJPG && isLt2M) {
