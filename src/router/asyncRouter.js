@@ -71,26 +71,38 @@ export const asyncRouter = [
     {
       pid: 4,
       id: 14,
-      path: 'goodsList',
-      name: 'GoodsList',
-      component: () => import('@/views/commodity/goods/list'),
-      meta: { title: '商品列表', activeMenu: '/commodity/goodsList' }
-    }, {
-      pid: 4,
-      id: 15,
-      path: 'goodsEdit:id(\\d+)?',
-      name: 'GoodsEdit',
-      hidden: true,
-      component: () => import('@/views/commodity/goods/edit'),
-      meta: { title: '商品编辑', activeMenu: '/commodity/goodsList' }
-    }, {
-      pid: 4,
-      id: 16,
-      path: 'goodsDetail:id(\\d+)?',
-      name: 'GoodsDetail',
-      hidden: true,
-      component: () => import('@/views/commodity/goods/detail'),
-      meta: { title: '商品详情', activeMenu: '/commodity/goodsList' }
+      path: 'goods',
+      name: 'Goods',
+      redirect: '/commodity/goods/list',
+      component: () => import('@/views/commodity/goods/index'),
+      meta: { title: '商品列表' },
+      children: [
+        {
+          pid: 4,
+          id: 14,
+          path: 'list',
+          name: 'GoodsList',
+          hidden: true,
+          component: () => import('@/views/commodity/goods/list'),
+          meta: { activeMenu: '/commodity/goods' }
+        }, {
+          pid: 4,
+          id: 15,
+          path: 'edit:id(\\d+)?',
+          name: 'GoodsEdit',
+          hidden: true,
+          component: () => import('@/views/commodity/goods/edit'),
+          meta: { title: '商品编辑', activeMenu: '/commodity/goods' }
+        }, {
+          pid: 4,
+          id: 16,
+          path: 'detail:id(\\d+)?',
+          name: 'GoodsDetail',
+          hidden: true,
+          component: () => import('@/views/commodity/goods/detail'),
+          meta: { title: '商品详情', activeMenu: '/commodity/goods' }
+        }
+      ]
     }, {
       pid: 4,
       id: 17,
@@ -245,27 +257,40 @@ export const asyncRouter = [
         id: 29,
         path: 'roles',
         name: 'Roles',
-        component: () => import('@/views/manage/roles/list'),
-        meta: { title: '角色列表' }
-      },
-      {
-        pid: 9,
-        id: 30,
-        path: 'rolesEdit:id(\\d+)?',
-        name: 'RolesEdit',
-        hidden: true,
-        component: () => import('@/views/manage/roles/edit'),
-        meta: { title: '角色编辑', activeMenu: '/manage/roles' }
-      },
-      {
-        pid: 9,
-        id: 31,
-        path: 'rolesDetail:id(\\d+)?',
-        name: 'RolesDetail',
-        hidden: true,
-        component: () => import('@/views/manage/roles/detail'),
-        meta: { title: '角色详情', activeMenu: '/manage/roles' }
+        redirect: '/manage/roles/list',
+        component: () => import('@/views/manage/roles/index'),
+        meta: { title: '角色列表' },
+        children: [
+          {
+            pid: 9,
+            id: 29,
+            path: 'list',
+            name: 'RolesEdit',
+            hidden: true,
+            component: () => import('@/views/manage/roles/list'),
+            meta: { activeMenu: '/manage/roles' }
+          },
+          {
+            pid: 9,
+            id: 30,
+            path: 'edit:id(\\d+)?',
+            name: 'RolesEdit',
+            hidden: true,
+            component: () => import('@/views/manage/roles/edit'),
+            meta: { title: '角色编辑', activeMenu: '/manage/roles' }
+          },
+          {
+            pid: 9,
+            id: 31,
+            path: 'detail:id(\\d+)?',
+            name: 'RolesDetail',
+            hidden: true,
+            component: () => import('@/views/manage/roles/detail'),
+            meta: { title: '角色详情', activeMenu: '/manage/roles' }
+          }
+        ]
       }
+
     ]
   }
 ]

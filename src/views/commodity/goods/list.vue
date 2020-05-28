@@ -21,7 +21,7 @@
         <el-button size="small" icon="el-icon-refresh-right" @click="reset">重置</el-button>
       </div>
       <div class="operation">
-        <router-link :to="'/commodity/goodsEdit'">
+        <router-link :to="'/commodity/goods/edit'">
           <div>
             <el-button v-has="15" size="small" icon="el-icon-plus" type="primary">新增</el-button>
           </div>
@@ -105,7 +105,7 @@
         >
           <template slot-scope="scope">
             <div class="operate-btn">
-              <router-link :to="`/commodity/goodsDetail?id=${scope.row.id}`">
+              <router-link :to="`/commodity/goods/detail?id=${scope.row.id}`">
                 <el-button
                   v-has="16"
                   size="mini"
@@ -132,7 +132,7 @@
                 type="danger"
                 @click.stop="changeStates(scope.row.id, 2,scope.row.status)"
               >下架</el-button>
-              <router-link :to="`/commodity/goodsEdit?id=${scope.row.id}`">
+              <router-link :to="`/commodity/goods/edit?id=${scope.row.id}`">
                 <el-button
                   v-has="404"
                   size="mini"

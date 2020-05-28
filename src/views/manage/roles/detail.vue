@@ -25,7 +25,7 @@
           </div>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="()=>this.$router.push({path:`/manage/rolesEdit?id=${id}`})">编辑</el-button>
+          <el-button type="primary" @click="()=>this.$router.push({path:`/manage/roles/edit?id=${id}`})">编辑</el-button>
           <el-button @click="()=>this.$router.go(-1)">返回</el-button>
         </el-form-item>
       </el-form>
@@ -131,43 +131,3 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.role-edit{
-  padding: 15px;
-  .title-info{
-    background: #fff;
-    border-radius: 10px 10px;
-  }
-  .form-info{
-    padding: 10px;
-    background: #fff;
-    .form-content-item{
-      margin-bottom: 20px;
-      box-shadow: 0px 10px 20px #f3f4f3;
-      .block-content{
-        padding: 10px 30px 20px;
-        background: #fff;
-        .el-input{
-          width: 50%;
-        }
-      }
-    }
-  }
-}
-</style>
-<style lang="scss">
-
-.roles{
-  .permission-tree {
-    border: 1px solid #f2f2f2;
-    padding: 10px 15px;
-    border-radius: 5px;
-  }
-  .el-tree-node__children{
-    .el-tree-node__content {
-      float:left;
-      width:228px;
-    }
-  }
-}
-</style>

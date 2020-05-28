@@ -24,16 +24,6 @@
                     disabled
                   />
                 </el-form-item>
-                <el-form-item label="起购数量" prop="min_buy">
-                  <el-input-number v-model="form.min_buy" disabled>
-                    <template slot="append">件</template>
-                  </el-input-number>
-                </el-form-item>
-                <el-form-item label="限购数量" prop="max_buy">
-                  <el-input-number v-model="form.max_buy" disabled>
-                    <template slot="append">件</template>
-                  </el-input-number>
-                </el-form-item>
                 <el-form-item label="商品分类" prop="category_id">
                   <el-cascader
                     v-model="form.category_id"
@@ -172,7 +162,7 @@
         </el-tabs>
 
         <el-form-item>
-          <el-button type="primary" @click="()=>this.$router.push({path: `/commodity/goodsEdit?id=${form.id}`})">编辑</el-button>
+          <el-button type="primary" @click="()=>this.$router.push({path: `/commodity/goods/edit?id=${form.id}`})">编辑</el-button>
           <el-button @click="()=>this.$router.go(-1)">返回</el-button>
         </el-form-item>
       </el-form>

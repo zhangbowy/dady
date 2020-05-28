@@ -25,16 +25,6 @@
                     @changePsit="changeImg"
                   />
                 </el-form-item>
-                <el-form-item label="起购数量" prop="min_buy">
-                  <el-input-number v-model="form.min_buy">
-                    <template slot="append">件</template>
-                  </el-input-number>
-                </el-form-item>
-                <el-form-item label="限购数量" prop="max_buy">
-                  <el-input-number v-model="form.max_buy">
-                    <template slot="append">件</template>
-                  </el-input-number>
-                </el-form-item>
                 <el-form-item label="商品分类" prop="category_id">
                   <el-cascader
                     v-model="form.category_id"
@@ -251,8 +241,6 @@ export default {
         current_price: '', // 当前价格
         sum_stock: '', // 库存
         weight: '', // 重量
-        min_buy: '', // 起购数量
-        max_buy: '', // 限购数量
         images: [], // 主图
         sku_show: '', // 规则
         sku_list: '', // 规则列表
@@ -278,12 +266,6 @@ export default {
         ],
         current_price: [
           { validator: validateCPrice, trigger: 'blur' }
-        ],
-        min_buy: [
-          { type: 'number', required: true, message: '请输入起购数量', trigger: 'blur' }
-        ],
-        max_buy: [
-          { type: 'number', required: true, message: '请输入限购数量', trigger: 'blur' }
         ],
         images: [
           { required: true, message: '请上传商品主图', trigger: 'blur' }

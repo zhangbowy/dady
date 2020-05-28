@@ -12,7 +12,7 @@
         <el-button size="small" icon="el-icon-search" type="primary" @click="doSearch">搜索</el-button>
       </div>
       <div class="operation">
-        <router-link :to="'/manage/rolesEdit'">
+        <router-link :to="'/manage/roles/edit'">
           <el-button size="small" icon="el-icon-plus" type="primary">新增</el-button>
         </router-link>
       </div>
@@ -65,7 +65,7 @@
                 size="mini"
               >查看</el-button>
             </router-link> -->
-            <router-link :to="`/manage/rolesEdit?id=${scope.row.admin_role_id}`">
+            <router-link :to="`/manage/roles/edit?id=${scope.row.admin_role_id}`">
               <el-button
                 type="primary"
                 size="mini"
