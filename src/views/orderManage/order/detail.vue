@@ -5,19 +5,37 @@
     </div>
     <div class="order-detail-content">
       <div class="detail-header">
-        <el-steps v-if="orderDetail.order_type==1" align-center :space="200" :active="active" finish-status="success">
+        <!-- 普通订单状态 -->
+        <el-steps v-if="orderDetail.order_type==1" align-center :space="200" :active="active">
           <el-step title="待支付" />
           <el-step title="待发货" />
           <el-step title="待收货" />
           <el-step title="已完成" />
           <el-step title="已关闭" />
         </el-steps>
-        <el-steps v-if="orderDetail.order_type==2" align-center :space="200" :active="active" finish-status="success">
+        <!-- 一般定制状态  手绘状态 -->
+        <el-steps v-if="orderDetail.order_type==2 || orderDetail.order_type==4" align-center :space="200" :active="active">
           <el-step title="待支付" />
+          <el-step title="待派单" />
+          <el-step title="派单中" />
+          <el-step title="处理中" />
+          <el-step title="下发机器" />
           <el-step title="待发货" />
           <el-step title="待收货" />
+          <el-step title="已完成" />
+          <el-step title="已关闭" />
+        </el-steps>
+        <!-- 特殊定制状态 -->
+        <el-steps v-if="orderDetail.order_type==3" align-center :space="200" :active="active">
           <el-step title="询价中" />
           <el-step title="已回复" />
+          <el-step title="待支付" />
+          <el-step title="待派单" />
+          <el-step title="派单中" />
+          <el-step title="处理中" />
+          <el-step title="下发机器" />
+          <el-step title="待发货" />
+          <el-step title="待收货" />
           <el-step title="已完成" />
           <el-step title="已关闭" />
         </el-steps>
@@ -178,7 +196,8 @@ export default {
       orderDetail: {
         user: {}
       },
-      order_trace: {}
+      order_trace: {},
+      active: 0
     }
   },
   created() {
@@ -193,7 +212,12 @@ export default {
         this.orderDetail = res.data
         this.loading = false
         const status = res.data.status
-        this.active = status === 1 ? 0 : status === 2 ? 1 : status === 3 ? 2 : status === 4 ? 3 : status === 5 ? 4 : status === 6 ? 5 : 6
+        // 普通订单
+        if (res.data.order_type === 1) this.active = status === 1 ? 0 : status === 2 ? 1 : status === 3 ? 2 : status === 4 ? 3 : status === 5 ? 4 : status === 6 ? 5 : 6
+        // 一般定制订单 // 手绘订单
+        if (res.data.order_type === 2 || res.data.order_type === 4) this.active = status === 1 ? 0 : status === 7 ? 1 : status === 8 ? 2 : status === 9 ? 3 : status === 10 ? 4 : status === 2 ? 5 : status === 3 ? 6 : status === 4 ? 7 : 8
+        // 特殊定制订单
+        if (res.data.order_type === 3) this.active = status === 5 ? 0 : status === 6 ? 1 : status === 1 ? 2 : status === 7 ? 3 : status === 8 ? 4 : status === 9 ? 5 : status === 10 ? 6 : status === 2 ? 7 : status === 3 ? 8 : status === 4 ? 9 : 10
       })
     },
     showDesign(orderDetail) {

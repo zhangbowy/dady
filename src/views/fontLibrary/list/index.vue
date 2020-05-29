@@ -28,10 +28,9 @@
         <el-table-column
           label="样板展示"
           align="center"
-          width="100"
         >
           <template slot-scope="scope">
-            <img :src="scope.row.font_content[0]" alt="" width="40" height="40">
+            <img :src="scope.row.font_content[0]" alt="" height="40">
           </template>
         </el-table-column>
         <el-table-column
@@ -72,12 +71,29 @@
         <el-form-item label="字体名称" prop="font_name">
           <el-input v-model="fontForm.font_name " :disabled="dialogType=='detail'" />
         </el-form-item>
-        <el-form-item label="最小高度" prop="minSize">
-          <el-input v-model.number="fontForm.minSize" style="width: 45%" :disabled="dialogType=='detail'" />
+        <el-form-item label="最小高度" prop="min_height">
+          <el-input-number v-model="fontForm.min_height" :min="8" :max="80" label="字体最小高度" />
         </el-form-item>
-        <el-form-item label="最大高度" prop="maxSize">
-          <el-input v-model.number="fontForm.maxSize" style="width: 45%" :disabled="dialogType=='detail'" />
+        <el-form-item label="最大高度" prop="max_height">
+          <el-input-number v-model="fontForm.max_height" :min="8" :max="80" label="字体最大高度" />
         </el-form-item>
+        <!-- <el-form-item label="预览图" prop="preview_img">
+          <el-upload
+            class="logo-uploader"
+            :action="`${baseUrl}/design/uploadImg`"
+            name="image"
+            :headers="{'adm_sign': token}"
+            :file-list="fileList"
+            :with-credentials="true"
+            :show-file-list="false"
+            :on-success="handleAvatarSuccess"
+            :before-upload="beforeAvatarUpload"
+            :disabled="dialogType=='detail'"
+          >
+            <img v-if="imageUrl" :src="imageUrl" class="logo">
+            <i v-else class="el-icon-plus logo-uploader-icon" />
+          </el-upload>
+        </el-form-item> -->
         <el-form-item label="字体文件" prop="file">
           <el-upload
             ref="upload"
@@ -109,7 +125,8 @@
       <div style="text-align: center" class="font-box">
         <div v-for="(item,key) in fontDetail.font_content" :key="key" class="font-item">
           <span>{{ key }}：</span>
-          <img :src="item" alt="" width="40">
+          <el-image :key="item" class="image" :src="item" lazy />
+          <!-- <img :src="item" alt="" width="40"> -->
         </div>
       </div>
     </el-dialog>
@@ -118,6 +135,7 @@
 
 <script>
 import fontApi from '@/api/common/font'
+import { getToken } from '../../../utils/auth'
 export default {
   data() {
     var validateFiles = (rule, value, callback) => {
@@ -129,6 +147,7 @@ export default {
     }
     return {
       loading: true,
+      token: getToken(),
       keywords: '',
       baseUrl: process.env.VUE_APP_BASE_API,
       fontsList: [],
@@ -136,8 +155,8 @@ export default {
       fontDetailDialog: false,
       fontForm: {
         font_name: '',
-        minSize: '',
-        maxSize: ''
+        min_height: '',
+        max_height: ''
       },
       pageSize: 5,
       currentPage: 1,
@@ -148,10 +167,10 @@ export default {
         font_name: [
           { required: true, message: '请填写字体名称', trigger: 'blur' }
         ],
-        minSize: [
+        min_height: [
           { required: true, message: '请输入最小高度', trigger: 'blur' }
         ],
-        maxSize: [
+        max_height: [
           { required: true, message: '请输入最大高度', trigger: 'blur' }
         ],
         file: [
@@ -237,6 +256,8 @@ export default {
       const formData = new FormData()
       formData.append('font', e.file)
       formData.append('font_name', this.fontForm.font_name)
+      formData.append('min_height', this.fontForm.min_height)
+      formData.append('max_height', this.fontForm.max_height)
       const loading = this.$loading({
         lock: true,
         text: '文件上传中',
@@ -312,6 +333,9 @@ export default {
     .font-item{
       width: 20%;
       margin-bottom: 20px;
+      .image{
+        width: 40px;
+      }
     }
   }
 }
@@ -333,6 +357,32 @@ export default {
     overflow: hidden;
     .el-dialog__body {
       overflow: auto;
+    }
+  }
+  // 上传logo
+  .logo-uploader{
+    .el-upload {
+      border: 1px dashed #d9d9d9;
+      border-radius: 6px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    .el-upload:hover {
+      border-color: #409EFF;
+    }
+    .logo-uploader-icon {
+      font-size: 28px;
+      color: #8c939d;
+      width: 200px;
+      height: 150px;
+      line-height: 150px;
+      text-align: center;
+    }
+    .logo {
+      width: 200px;
+      height: 150px;
+      display: block;
     }
   }
 }

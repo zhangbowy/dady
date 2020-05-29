@@ -217,7 +217,7 @@ export const asyncRouter = [
         name: 'LogisticTempEdit',
         hidden: true,
         component: () => import('@/views/systemSetup/logisticTemplate/edit'),
-        meta: { title: '物流模板编辑' }
+        meta: { title: '物流模板编辑', activeMenu: '/system/logisticTemplate' }
       },
       {
         pid: 8,

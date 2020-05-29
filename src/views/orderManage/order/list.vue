@@ -36,13 +36,6 @@
           :label="`${item._status}(${item.count})`"
           :name="`${item.status}`"
         />
-        <!-- <el-tab-pane label="待付款" name="1" />
-        <el-tab-pane label="待发货" name="2" />
-        <el-tab-pane label="已发货" name="3" />
-        <el-tab-pane label="已完成" name="4" />
-        <el-tab-pane label="询价中" name="5" />
-        <el-tab-pane label="已回复" name="6" />
-        <el-tab-pane label="已关闭" name="-2" /> -->
         <div class="tab-content">
           <order-table :data="orderList" @getList="getListData" />
         </div>

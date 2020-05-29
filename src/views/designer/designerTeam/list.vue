@@ -123,7 +123,7 @@ export default {
   data() {
     const validatePhone = (rule, value, callback) => {
       if (!validPhone(value)) {
-        callback(new Error('手机号不正确'))
+        callback(new Error('手机号格式不正确'))
       } else {
         callback()
       }
@@ -162,7 +162,6 @@ export default {
   watch: {
     dialogFormVisible(val) {
       if (val === false) {
-        console.log(1)
         this.$refs['form'].resetFields()
         this.form = {
           designer_team_name: '',
@@ -195,9 +194,9 @@ export default {
         this.form = form.designer.find(i => {
           return i.is_leader === 1
         })
+        this.form.designer_team_name = form.designer_team_name
+        this.form.designer_team_id = form.designer_team_id
       }
-      this.form.designer_team_name = form.designer_team_name
-      this.form.designer_team_id = form.designer_team_id
     },
     onSubmit(formName) {
       const _this = this

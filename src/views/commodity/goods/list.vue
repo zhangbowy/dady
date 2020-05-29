@@ -49,7 +49,8 @@
           width="100"
         >
           <template slot-scope="scope">
-            <img :src="scope.row.thumb_image_path" alt="" width="60" height="60">
+            <el-image :key="scope.row.thumb_image_path" class="goods_img" :src="scope.row.thumb_image_path" lazy />
+            <!-- <img :src="scope.row.thumb_image_path" alt="" width="60" height="60"> -->
           </template>
         </el-table-column>
         <el-table-column
@@ -322,6 +323,10 @@ export default {
     button{
       margin-bottom: 5px;
     }
+  }
+  .goods_img{
+    width: 60px;
+    height: 60px;
   }
 }
 

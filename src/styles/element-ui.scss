@@ -48,6 +48,7 @@
   box-sizing: content-box;
 }
 .el-tag{
-  border-color: transparent;
-  background-color: transparent;
+  border-color: transparent !important;
+  background-color: transparent !important;
+  white-space: normal;
 }
