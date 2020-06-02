@@ -76,7 +76,8 @@
       <el-col :span="20" style="padding: 0 20px">
         <div class="img-list">
           <div v-for="(item,index) in imgList" :key="index" class="img-item">
-            <img :src="item.oss_path" alt="">
+            <!-- <img :src="item.oss_path" alt=""> -->
+            <el-image :src="item.oss_path" lazy />
             <el-checkbox v-model="item.checked" :label="limetedStr(item.img_name,16)" :title="item.img_name" />
             <el-col>
               <el-button v-has="412" type="text" @click.stop="showdialog('modifyName',item)">改名</el-button>
@@ -683,14 +684,14 @@ export default {
       flex-flow: wrap;
       align-items: center;
       .img-item{
-        width: 18%;
+        width: 18.4%;
         margin-right: 2%;
         border: 1px solid #f5f5f5;
         border-radius: 5px;
         margin-bottom: 10px;
         padding: 10px;
-        &:last-child{
-          margin: 0;
+        &:nth-child(5n){
+          margin-right: 0;
         }
         img{
           width: 100%;

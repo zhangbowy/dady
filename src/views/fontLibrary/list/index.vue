@@ -30,7 +30,7 @@
           align="center"
         >
           <template slot-scope="scope">
-            <img :src="scope.row.preview_image" alt="" height="40">
+            <img :key="scope.row.preview_image" :src="scope.row.preview_image" alt="" height="40">
           </template>
         </el-table-column>
         <el-table-column
@@ -39,6 +39,11 @@
           align="center"
         >
           <template slot-scope="scope">
+            <el-button
+              size="mini"
+              type="primary"
+              @click.native="showDialog('edit',scope.row)"
+            >编辑</el-button>
             <el-button
               size="mini"
               @click.native="showDetail(scope.row)"
@@ -66,7 +71,7 @@
       </div> -->
     </div>
     <!-- 新增字体 -->
-    <el-dialog center :title="'新增字体'" :visible.sync="dialogFormVisible">
+    <el-dialog center :title="dialogType=='add'?'新增字体': '修改字体'" :visible.sync="fontDialog">
       <el-form ref="fontForm" :model="fontForm" :rules="rules" label-width="80px" label-position="left" size="small">
         <el-form-item label="字体名称" prop="font_name">
           <el-input v-model="fontForm.font_name " :disabled="dialogType=='detail'" />
@@ -94,15 +99,15 @@
             <i v-else class="el-icon-plus logo-uploader-icon" />
           </el-upload>
         </el-form-item> -->
-        <!-- <el-form-item label="样板展示" prop="preview_img">
+        <el-form-item label="样板展示" prop="preview_image">
           <img-upload
-            :img-data="form.preview_img"
+            :img-data="fontForm.preview_image"
             :pic-max="1"
             :disabled="dialogType=='detail'"
             @chooseImg="imageChoose"
           />
-        </el-form-item> -->
-        <el-form-item label="字体文件" prop="file">
+        </el-form-item>
+        <el-form-item v-if="dialogType=='add'" label="字体文件" prop="file">
           <el-upload
             ref="upload"
             class="upload-demo"
@@ -113,18 +118,20 @@
             :on-remove="handleRemove"
             :on-change="fileChange"
             :file-list="fileList"
+            :limit="1"
+            :on-exceed="uploadExceed"
             :multiple="false"
             :auto-upload="false"
             :with-credentials="true"
           >
-            <el-button v-if="fileList.length==0" slot="trigger" size="small" type="primary">选取文件</el-button>
+            <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
             <!-- <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button> -->
             <div slot="tip" class="el-upload__tip">只能上传压缩文件，且不超过2M</div>
           </el-upload>
         </el-form-item>
         <el-form-item>
           <el-button v-if="dialogType!=='detail'" v-has="701" type="primary" @click="onSubmit('fontForm')">保存</el-button>
-          <el-button @click="dialogFormVisible = false">取消</el-button>
+          <el-button @click="fontDialog = false">取消</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -144,8 +151,11 @@
 <script>
 import fontApi from '@/api/common/font'
 import { getToken } from '../../../utils/auth'
-// import ImgUpload from '@/components/ImgUpload'
+import ImgUpload from '@/components/ImgUpload'
 export default {
+  components: {
+    ImgUpload
+  },
   data() {
     var validateFiles = (rule, value, callback) => {
       if (this.fileList.length === 0) {
@@ -160,13 +170,13 @@ export default {
       keywords: '',
       baseUrl: process.env.VUE_APP_BASE_API,
       fontsList: [],
-      dialogFormVisible: false,
+      fontDialog: false,
       fontDetailDialog: false,
       fontForm: {
         font_name: '',
-        preview_img: '',
-        min_height: '',
-        max_height: ''
+        preview_image: '',
+        min_height: 0,
+        max_height: 0
       },
       pageSize: 5,
       currentPage: 1,
@@ -177,7 +187,7 @@ export default {
         font_name: [
           { required: true, message: '请填写字体名称', trigger: 'blur' }
         ],
-        preview_img: [
+        preview_image: [
           { required: true, message: '请上传样板图', trigger: 'blur' }
         ],
         min_height: [
@@ -194,10 +204,16 @@ export default {
     }
   },
   watch: {
-    dialogFormVisible(val) {
+    fontDialog(val) {
       if (val === false) {
         this.$refs['fontForm'].resetFields()
         this.fileList = []
+        this.fontForm = {
+          font_name: '',
+          preview_image: '',
+          min_height: 0,
+          max_height: 0
+        }
       }
     }
   },
@@ -220,7 +236,10 @@ export default {
     },
     showDialog(type, form) {
       this.dialogType = type
-      this.dialogFormVisible = true
+      if (form && form.font_id) {
+        Object.assign(this.fontForm, form)
+      }
+      this.fontDialog = true
     },
     showDetail(row) {
       this.fontDetail = row
@@ -229,8 +248,20 @@ export default {
     onSubmit(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          const upload = this.$refs.upload
-          upload.submit()
+          if (this.fontForm.font_id) {
+            fontApi.editFont(this.fontForm).then(res => {
+              this.$message({
+                type: 'success',
+                message: res.msg || '编辑成功!'
+              })
+              this.$refs.fontForm.resetFields()
+              this.fetchData()
+              this.fontDialog = false
+            })
+          } else {
+            const upload = this.$refs.upload
+            upload.submit()
+          }
         } else {
           return false
         }
@@ -265,12 +296,19 @@ export default {
         })
       })
     },
+    uploadExceed() {
+      this.$message({
+        type: 'warning',
+        message: '超出文件数量限制，请先删除原文件后重新选择！'
+      })
+    },
     submitUpload(e) {
       const formData = new FormData()
       formData.append('font', e.file)
       formData.append('font_name', this.fontForm.font_name)
-      formData.append('min_height', this.fontForm.min_height)
       formData.append('max_height', this.fontForm.max_height)
+      formData.append('min_height', this.fontForm.min_height)
+      formData.append('preview_image', this.fontForm.preview_image)
       const loading = this.$loading({
         lock: true,
         text: '文件上传中',
@@ -290,7 +328,7 @@ export default {
           })
           loading.close()
           this.fetchData()
-          this.dialogFormVisible = false
+          this.fontDialog = false
         }
       }).catch(() => {
         loading.close()
@@ -324,8 +362,8 @@ export default {
       this.fileList.pop()
     },
     imageChoose(path) {
-      this.form.preview_img = path
-      this.$refs.form.validateField('preview_img')
+      this.fontForm.preview_image = path
+      this.$refs.fontForm.validateField('preview_image')
     }
   }
 }

@@ -107,8 +107,9 @@
           </el-row>
         </div>
       </div>
+      <!--
       <div v-if="orderDetail.status!=-2" class="order-info">
-        <card-tag tag-name="操作信息" />
+        <card-tag tag-name="订单操作" />
         <div class="order-info-content">
           <div class="remark-box">
             <el-input
@@ -119,14 +120,15 @@
             />
           </div>
           <div class="operation-button">
-            <el-button type="primary" size="mini">确认收货</el-button>
             <el-button type="primary" size="mini">确认付款</el-button>
+            <el-button type="primary" size="mini">确认收货</el-button>
+            <el-button type="primary" size="mini">派单</el-button>
             <el-button type="warning" size="mini">取消订单</el-button>
-            <el-button type="info" size="mini">无效订单</el-button>
-            <el-button type="warning" size="mini">售后订单</el-button>
+             <el-button type="warning" size="mini">售后订单</el-button>
           </div>
         </div>
       </div>
+      -->
     </div>
     <!-- 买家信息弹框 -->
     <el-dialog
@@ -275,7 +277,7 @@ export default {
           padding: 20px;
         }
         .operation-button{
-          padding: 0 20px 20px;
+          padding: 20px;
         }
       }
     }

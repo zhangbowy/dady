@@ -339,5 +339,27 @@ export const settingApi = {
       method: 'post',
       data
     })
+  },
+  /**
+   * 获取微信配置
+   * @param {*} params
+   */
+  getWxConfig(params) {
+    return request({
+      url: '/system/getWxConfig',
+      methods: 'get',
+      params
+    })
+  },
+  /**
+   * 保存微信设置设置
+   * @param {*key value} data
+   */
+  saveWxConfig(data) {
+    return request({
+      url: '/system/saveWxConfig',
+      method: 'post',
+      data
+    })
   }
 }

@@ -8,16 +8,14 @@
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <img src="@/assets/images/avator.jpg" class="user-avatar">
-          <span>{{ adminInfo.name }}</span>
-          <!-- <i class="el-icon-caret-bottom" /> -->
+          <!-- <span>{{ adminInfo.name }}</span> -->
+          <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
-          <!-- <router-link to="/">
-            <el-dropdown-item>
-              首页
-            </el-dropdown-item>
-          </router-link> -->
-          <el-dropdown-item divided @click.native="logout">
+          <el-dropdown-item class="dropdown-item">
+            {{ adminInfo.name }}
+          </el-dropdown-item>
+          <el-dropdown-item class="dropdown-item" divided @click.native="logout">
             <span style="display:block;">退出</span>
           </el-dropdown-item>
         </el-dropdown-menu>
@@ -49,7 +47,7 @@ export default {
     },
     async logout() {
       await this.$store.dispatch('user/logout')
-      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+      this.$router.push(`/login`)
     }
   }
 }
@@ -130,11 +128,17 @@ export default {
           cursor: pointer;
           position: absolute;
           right: -20px;
-          top: 25px;
+          top: 20px;
           font-size: 12px;
         }
       }
     }
+
   }
 }
+.user-dropdown{
+        .dropdown-item{
+          text-align: center;
+        }
+      }
 </style>

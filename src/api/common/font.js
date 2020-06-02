@@ -26,6 +26,14 @@ export default {
       method: 'post',
       data
     })
+  },
+  // 编辑字体
+  editFont(data) {
+    return request({
+      url: '/font/editFont',
+      method: 'post',
+      data
+    })
   }
 
 }

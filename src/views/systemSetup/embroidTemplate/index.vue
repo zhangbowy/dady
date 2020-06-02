@@ -106,7 +106,7 @@
       <el-dialog center :title="dialogType=='add'? '新增模板': dialogType=='edit'? '编辑模板': '模板详情'" :visible.sync="dialogFormVisible">
         <el-form :model="form" label-position="top">
           <el-form-item label="模板名称" :label-width="formLabelWidth">
-            <el-input v-model="form.template_name" disabled autocomplete="off" />
+            <el-input v-model="form.template_name" disabled autocomplete="off" style="width: 50%" />
           </el-form-item>
           <el-form-item label="参数定价" :label-width="formLabelWidth">
             <el-row>
@@ -117,7 +117,7 @@
                 <el-input v-model="item.height" size="small" :disabled="!item.disabled" placeholder="高" style="width: 25%">
                   <template slot="append">mm</template>
                 </el-input>
-                <el-input v-model="item.price" size="small" :disabled="!item.disabled" placeholder="定价" style="width: 22%">
+                <el-input v-model="item.price" size="small" :disabled="!item.disabled" placeholder="定价" style="width: 25%">
                   <template slot="append">元</template>
                 </el-input>
                 <el-button
@@ -144,6 +144,7 @@
                   v-has="818"
                   size="small"
                   type="danger"
+                  :disabled="dialogType=='detail'"
                   icon="el-icon-remove-outline"
                   style="vertical-align: top;margin: 0"
                   :loading="delLoading"
@@ -151,13 +152,13 @@
                 >删除</el-button>
               </el-col>
               <el-col :span="24">
-                <el-input v-model="addPriceForm.width" size="small" :disabled="dialogType=='detail'" placeholder="输入宽" style="width: 28%">
+                <el-input v-model="addPriceForm.width" size="small" :disabled="dialogType=='detail'" placeholder="输入宽" style="width: 25%">
                   <template slot="append">mm</template>
                 </el-input>
-                <el-input v-model="addPriceForm.height" size="small" :disabled="dialogType=='detail'" placeholder="输入高" style="width: 28%">
+                <el-input v-model="addPriceForm.height" size="small" :disabled="dialogType=='detail'" placeholder="输入高" style="width: 25%">
                   <template slot="append">mm</template>
                 </el-input>
-                <el-input v-model="addPriceForm.price" size="small" :disabled="dialogType=='detail'" placeholder="输入定价" style="width: 28%">
+                <el-input v-model="addPriceForm.price" size="small" :disabled="dialogType=='detail'" placeholder="输入定价" style="width: 25%">
                   <template slot="append">元</template>
                 </el-input>
                 <!-- <el-button size="small" style="vertical-align: top;" @click="addRules">添加</el-button> -->
@@ -176,8 +177,8 @@
 
           </el-form-item>
           <el-form-item :label-width="formLabelWidth">
-            <el-button v-if="dialogType==='detail'" v-has="816" type="primary" size="small" @click="dialogType = 'edit'">编辑价格</el-button>
-            <el-button v-if="dialogType==='edit'" type="primary" size="small" @click="dialogType = 'detail'">模板详情</el-button>
+            <el-button v-if="dialogType==='detail'" v-has="816" type="primary" size="small" @click="dialogType = 'edit'">编辑定价</el-button>
+            <el-button v-if="dialogType==='edit'" type="primary" size="small" @click="dialogType = 'detail'">编辑完成</el-button>
             <el-button size="small" @click="dialogFormVisible = false">关闭</el-button>
             <!-- <el-button v-if="dialogType==='add' || dialogType==='edit'" size="small" type="primary" @click="dialogFormVisible = false">保存</el-button> -->
           </el-form-item>

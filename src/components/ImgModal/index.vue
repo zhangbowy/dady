@@ -287,7 +287,7 @@ export default {
     getList() {
       GroupApi.getGroupList().then(res => {
         if (res.code === 0) {
-          this.categoryList = res.data
+          this.categoryList = res.data ? res.data : []
           this.chooseCategory(this.categoryList[0])
         } else {
           this.$message({

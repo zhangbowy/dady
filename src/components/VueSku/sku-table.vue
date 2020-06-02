@@ -55,6 +55,7 @@ import ImgUpload from '@/components/ImgUpload'
 
 export default {
   components: {
+    // eslint-disable-next-line vue/no-unused-components
     ImgUpload
   },
   props: {
@@ -120,6 +121,7 @@ export default {
             methods: {
               // 图片上传模块
               imageChoose(imgArray) {
+                // eslint-disable-next-line vue/no-side-effects-in-computed-properties
                 this.row.images = imgArray
                 // if (imgArray.length > 0) {
                 //   const that = this
@@ -137,6 +139,7 @@ export default {
               },
               // 拖拽后触发
               changeImg(val) {
+                // eslint-disable-next-line vue/no-side-effects-in-computed-properties
                 this.row.images = val
               }
             },
@@ -157,6 +160,7 @@ export default {
           label: '价格',
           width: 150,
           component: Vue.extend({
+            // eslint-disable-next-line vue/require-prop-types
             props: ['row'],
             render() {
               return (
@@ -168,6 +172,7 @@ export default {
                   controls={false}
                   precision={2}
                   style={'width:100%'}
+                  // eslint-disable-next-line vue/no-side-effects-in-computed-properties
                   oninput={e => (this.row.current_price = e)}
                 ></ElInputNumber>
               )
@@ -178,6 +183,7 @@ export default {
           label: '重量（公斤）',
           width: 150,
           component: Vue.extend({
+            // eslint-disable-next-line vue/require-prop-types
             props: ['row'],
             render() {
               return (
@@ -189,6 +195,7 @@ export default {
                   controls={false}
                   precision={2}
                   style={'width:100%'}
+                  // eslint-disable-next-line vue/no-side-effects-in-computed-properties
                   oninput={e => (this.row.weight = e)}
                 ></ElInputNumber>
               )
@@ -199,6 +206,7 @@ export default {
           label: '库存（件）',
           width: 150,
           component: Vue.extend({
+            // eslint-disable-next-line vue/require-prop-types
             props: ['row'],
             render() {
               return (
@@ -210,6 +218,7 @@ export default {
                   controls={false}
                   precision={0}
                   style={'width:100%'}
+                  // eslint-disable-next-line vue/no-side-effects-in-computed-properties
                   oninput={e => (this.row.num = e)}
                 ></ElInputNumber>
               )
