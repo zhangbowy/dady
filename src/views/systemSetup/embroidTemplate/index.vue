@@ -111,22 +111,41 @@
           <el-form-item label="参数定价" :label-width="formLabelWidth">
             <el-row>
               <el-col v-for="(item,index) in form.emb_template_price" :key="index" :span="24">
-                <el-input v-model="item.width" size="small" disabled placeholder="宽" style="width: 28%">
+                <el-input v-model="item.width" size="small" :disabled="!item.disabled" placeholder="宽" style="width: 25%">
                   <template slot="append">mm</template>
                 </el-input>
-                <el-input v-model="item.height" size="small" disabled placeholder="高" style="width: 28%">
+                <el-input v-model="item.height" size="small" :disabled="!item.disabled" placeholder="高" style="width: 25%">
                   <template slot="append">mm</template>
                 </el-input>
-                <el-input v-model="item.price" size="small" disabled placeholder="定价" style="width: 28%">
+                <el-input v-model="item.price" size="small" :disabled="!item.disabled" placeholder="定价" style="width: 22%">
                   <template slot="append">元</template>
                 </el-input>
-                <!-- <el-button size="small" style="vertical-align: top;" @click="addRules">添加</el-button> -->
+                <el-button
+                  v-if="item.disabled == true"
+                  v-has="817"
+                  size="small"
+                  type="primary"
+                  :disabled="dialogType=='detail'"
+                  icon="el-icon-finished"
+                  style="vertical-align: top;"
+                  @click="saveEdit(form.emb_template_id,item)"
+                >保存</el-button>
+                <el-button
+                  v-else
+                  v-has="817"
+                  size="small"
+                  type="primary"
+                  :disabled="dialogType=='detail'"
+                  icon="el-icon-edit"
+                  style="vertical-align: top;"
+                  @click="editClick(item)"
+                >编辑</el-button>
                 <el-button
                   v-has="818"
                   size="small"
                   type="danger"
                   icon="el-icon-remove-outline"
-                  style="vertical-align: top;"
+                  style="vertical-align: top;margin: 0"
                   :loading="delLoading"
                   @click="deleteTemplate(item.id, item.emb_template_id)"
                 >删除</el-button>
@@ -147,7 +166,7 @@
                   size="small"
                   type="primary"
                   :disabled="dialogType=='detail'"
-                  icon="el-icon-remove-outline"
+                  icon="el-icon-circle-plus-outline"
                   style="vertical-align: top;"
                   :loading="addBtnLoading"
                   @click="addTemplate(form.emb_template_id)"
@@ -157,9 +176,10 @@
 
           </el-form-item>
           <el-form-item :label-width="formLabelWidth">
+            <el-button v-if="dialogType==='detail'" v-has="816" type="primary" size="small" @click="dialogType = 'edit'">编辑价格</el-button>
+            <el-button v-if="dialogType==='edit'" type="primary" size="small" @click="dialogType = 'detail'">模板详情</el-button>
             <el-button size="small" @click="dialogFormVisible = false">关闭</el-button>
             <!-- <el-button v-if="dialogType==='add' || dialogType==='edit'" size="small" type="primary" @click="dialogFormVisible = false">保存</el-button> -->
-            <el-button v-if="dialogType==='detail'" v-has="816" type="primary" size="small" @click="dialogType = 'edit'">编辑</el-button>
           </el-form-item>
         </el-form>
 
@@ -180,6 +200,7 @@ export default {
       loading: true,
       addBtnLoading: false,
       delLoading: false,
+      btnLoading: '',
       templates: [],
       listIndex: '',
       dialogTableVisible: false,
@@ -337,6 +358,36 @@ export default {
           })
         })
       }
+    },
+    // 编辑价格区间
+    editClick(item) {
+      this.$set(item, 'disabled', true)
+    },
+    // 保存编辑
+    saveEdit(id, item) {
+      embTemplate.editTemplate({
+        emb_template_id: id,
+        id: item.id,
+        name: '1',
+        price: item.price,
+        width: item.width,
+        height: item.height
+      }).then(res => {
+        this.getEmbTemplate()
+        delete item.disabled
+        if (res.code === 0) {
+          this.$message({
+            type: 'success',
+            message: '编辑成功!'
+          })
+        }
+      }).catch(() => {
+        this.addBtnLoading = false
+        this.$message({
+          type: 'info',
+          message: '保存失败!'
+        })
+      })
     }
   }
 }

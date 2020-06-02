@@ -30,7 +30,7 @@
           align="center"
         >
           <template slot-scope="scope">
-            <img :src="scope.row.font_content[0]" alt="" height="40">
+            <img :src="scope.row.preview_image" alt="" height="40">
           </template>
         </el-table-column>
         <el-table-column
@@ -75,7 +75,7 @@
           <el-input-number v-model="fontForm.min_height" :min="8" :max="80" label="字体最小高度" />
         </el-form-item>
         <el-form-item label="最大高度" prop="max_height">
-          <el-input-number v-model="fontForm.max_height" :min="8" :max="80" label="字体最大高度" />
+          <el-input-number v-model="fontForm.max_height" :min="fontForm.min_height" :max="80" label="字体最大高度" />
         </el-form-item>
         <!-- <el-form-item label="预览图" prop="preview_img">
           <el-upload
@@ -93,6 +93,14 @@
             <img v-if="imageUrl" :src="imageUrl" class="logo">
             <i v-else class="el-icon-plus logo-uploader-icon" />
           </el-upload>
+        </el-form-item> -->
+        <!-- <el-form-item label="样板展示" prop="preview_img">
+          <img-upload
+            :img-data="form.preview_img"
+            :pic-max="1"
+            :disabled="dialogType=='detail'"
+            @chooseImg="imageChoose"
+          />
         </el-form-item> -->
         <el-form-item label="字体文件" prop="file">
           <el-upload
@@ -136,6 +144,7 @@
 <script>
 import fontApi from '@/api/common/font'
 import { getToken } from '../../../utils/auth'
+// import ImgUpload from '@/components/ImgUpload'
 export default {
   data() {
     var validateFiles = (rule, value, callback) => {
@@ -155,6 +164,7 @@ export default {
       fontDetailDialog: false,
       fontForm: {
         font_name: '',
+        preview_img: '',
         min_height: '',
         max_height: ''
       },
@@ -166,6 +176,9 @@ export default {
       rules: {
         font_name: [
           { required: true, message: '请填写字体名称', trigger: 'blur' }
+        ],
+        preview_img: [
+          { required: true, message: '请上传样板图', trigger: 'blur' }
         ],
         min_height: [
           { required: true, message: '请输入最小高度', trigger: 'blur' }
@@ -309,6 +322,10 @@ export default {
     },
     handleRemove(file, fileList) {
       this.fileList.pop()
+    },
+    imageChoose(path) {
+      this.form.preview_img = path
+      this.$refs.form.validateField('preview_img')
     }
   }
 }

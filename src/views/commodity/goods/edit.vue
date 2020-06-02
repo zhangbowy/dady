@@ -364,7 +364,7 @@ export default {
                   message: res.msg || '修改成功!'
                 })
                 // 重置表单
-                _this.$router.replace({ path: '/commodity/goodsList' })
+                _this.$router.replace({ path: '/commodity/goods/list' })
               } else {
                 this.$message.success(res.msg || '修改失败!')
               }
@@ -377,7 +377,7 @@ export default {
                   message: res.msg || '添加成功!'
                 })
                 // 重置表单
-                _this.$router.replace({ path: '/commodity/goodsList' })
+                _this.$router.replace({ path: '/commodity/goods/list' })
               } else {
                 this.$message.success(res.msg || '添加失败!')
               }

@@ -25,11 +25,22 @@ export const embTemplate = {
   },
   /**
    * 添加价格参数
-   * @param {* id name price width height}
+   * @param {* emb_template_id name price width height}
    */
   addTemplate(data) {
     return request({
       url: '/system/addEmbPrice',
+      method: 'post',
+      data
+    })
+  },
+  /**
+   * 编辑价格参数
+   * @param {* emb_template_id id name price width height}
+   */
+  editTemplate(data) {
+    return request({
+      url: '/system/editEmbPrice',
       method: 'post',
       data
     })

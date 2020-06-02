@@ -50,7 +50,7 @@
           align="center"
         >
           <template slot-scope="scope">
-            <span>{{ scope.row.admin.name }}/{{ scope.row.admin.phone }}</span>
+            <span>{{ scope.row.admin?scope.row.admin.name:'无' }}/{{ scope.row.admin?scope.row.admin.phone: '无' }}</span>
           </template>
         </el-table-column>
         <!-- <el-table-column

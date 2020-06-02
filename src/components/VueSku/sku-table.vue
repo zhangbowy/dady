@@ -166,7 +166,7 @@ export default {
                   step={1}
                   min={0}
                   controls={false}
-                  precision={0}
+                  precision={2}
                   style={'width:100%'}
                   oninput={e => (this.row.current_price = e)}
                 ></ElInputNumber>
@@ -187,7 +187,7 @@ export default {
                   step={1}
                   min={0}
                   controls={false}
-                  precision={0}
+                  precision={2}
                   style={'width:100%'}
                   oninput={e => (this.row.weight = e)}
                 ></ElInputNumber>

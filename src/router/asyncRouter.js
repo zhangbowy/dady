@@ -230,9 +230,16 @@ export const asyncRouter = [
         pid: 8,
         id: 28,
         path: 'platformSettings',
-        name: 'platformSettings',
+        name: 'PlatformSettings',
         component: () => import('@/views/systemSetup/platformSettings/index'),
         meta: { title: '平台设置' }
+      }, {
+        pid: 8,
+        id: 28,
+        path: 'weChatSetting',
+        name: 'WeChatSetting',
+        component: () => import('@/views/systemSetup/weChatSetting/index'),
+        meta: { title: '微信设置' }
       }]
   },
   {
