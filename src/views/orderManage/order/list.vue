@@ -2,30 +2,81 @@
   <div class="order-list main-content">
     <div class="screen-box">
       <div class="screen-item">
-        <el-input
-          v-model.trim="keywords"
-          size="small"
-          placeholder="请输入订单号"
-          clearable
-          style="width:280px"
-        />
-        <!-- <el-select v-model="status" size="small" clearable placeholder="请选择">
-          <el-option
-            v-for="item in statusOption"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select> -->
-        <el-select v-model="order_type" size="small" clearable placeholder="请选择订单类型">
-          <el-option
-            v-for="item in orderTypeOption"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
-        <el-button size="small" icon="el-icon-search" type="primary" @click="doSearch()">搜索</el-button>
+        <el-form :inline="true" :model="formInline" class="demo-form-inline">
+          <el-form-item label="订单号">
+            <el-input
+              v-model.trim="formInline.keywords"
+              size="small"
+              placeholder="搜索订单号"
+              clearable
+            />
+          </el-form-item>
+          <el-form-item label="收货人手机号">
+            <el-input
+              v-model.trim="formInline.receiver_phone"
+              size="small"
+              placeholder="收货人手机号"
+              clearable
+            />
+          </el-form-item>
+          <el-form-item label="快递单号">
+            <el-input
+              v-model.trim="formInline.express_number"
+              size="small"
+              placeholder="快递单号"
+              clearable
+            />
+          </el-form-item>
+          <el-form-item label="订单类型">
+            <el-select v-model="formInline.order_type" size="small" clearable placeholder="选择订单类型">
+              <el-option
+                v-for="item in orderTypeOption"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+          </el-form-item>
+          <!-- <el-form-item label="订单状态">
+            <el-select v-model="formInline.status" placeholder="请选择">
+              <el-option
+                v-for="item in orderCount"
+                :key="item.status"
+                :label="item._status"
+                :value="item.status"
+              >
+                <span style="float: left">{{ item._status }}</span>
+                <span style="float: right; color: #8492a6; font-size: 13px">{{ item.count }}</span>
+              </el-option>
+            </el-select>
+          </el-form-item> -->
+          <el-form-item label="下单时间">
+            <el-date-picker
+              v-model="formInline.order_time"
+              type="datetimerange"
+              size="small"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              value-format="yyyy-MM-dd HH:mm:ss"
+            />
+          </el-form-item>
+          <el-form-item label="付款时间">
+            <el-date-picker
+              v-model="formInline.pay_time"
+              type="datetimerange"
+              size="small"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              value-format="yyyy-MM-dd HH:mm:ss"
+            />
+          </el-form-item>
+
+          <el-form-item>
+            <el-button size="small" icon="el-icon-search" type="primary" @click="doSearch()">搜索</el-button>
+          </el-form-item>
+        </el-form>
       </div>
     </div>
     <div class="content">
@@ -67,8 +118,15 @@ export default {
   data() {
     return {
       loading: true,
-      keywords: '',
-      order_type: '',
+      formInline: {
+        status: '',
+        keywords: '',
+        receiver_phone: '',
+        express_number: '',
+        order_type: '',
+        order_time: [],
+        pay_time: []
+      },
       pageSize: 5,
       currentPage: 1,
       total: 2,
@@ -111,10 +169,26 @@ export default {
         value: '-2',
         label: '已关闭/取消订单'
       }],
-      status: '',
+
       multipleSelection: [],
       activeName: '0',
       orderCount: {}
+    }
+  },
+  watch: {
+    'formInline.order_time': {
+      handler(newValue, oldValue) {
+        if (newValue === null) {
+          this.formInline.order_time = []
+        }
+      }
+    },
+    'formInline.pay_time': {
+      handler(newValue, oldValue) {
+        if (newValue === null) {
+          this.formInline.pay_time = []
+        }
+      }
     }
   },
   created() {
@@ -132,9 +206,15 @@ export default {
       orderApi.getList({
         currentPage: this.currentPage,
         pageSize: this.pageSize,
-        status: this.status,
-        order_no: this.keywords,
-        order_type: this.order_type
+        status: this.formInline.status,
+        order_no: this.formInline.keywords,
+        order_type: this.formInline.order_type,
+        start_time: this.formInline.order_time[0],
+        end_time: this.formInline.order_time[1],
+        start_pay_time: this.formInline.pay_time[0],
+        end_pay_time: this.formInline.pay_time[1],
+        express_number: this.formInline.express_number,
+        receiver_phone: this.formInline.receiver_phone
       }).then(res => {
         this.loading = false
         this.orderList = res.data.data
@@ -146,8 +226,14 @@ export default {
     // 获取各个状态数量统计
     getOrderCount() {
       orderApi.getOrderCount({
-        order_no: this.keywords,
-        order_type: this.order_type
+        order_no: this.formInline.keywords,
+        order_type: this.formInline.order_type,
+        express_number: this.formInline.express_number,
+        start_time: this.formInline.order_time[0],
+        end_time: this.formInline.order_time[1],
+        start_pay_time: this.formInline.pay_time[0],
+        end_pay_time: this.formInline.pay_time[1],
+        receiver_phone: this.formInline.receiver_phone
       }).then(res => {
         this.orderCount = res.data
       })
@@ -155,7 +241,7 @@ export default {
     // 选项卡点击
     handleClick(tab, event) {
       this.currentPage = 1
-      this.status = tab.name
+      this.formInline.status = tab.name
       this.loading = true
       this.getOrderCount()
       this.fetchData()
@@ -183,6 +269,7 @@ export default {
 <style lang="scss" scoped>
 .order-list{
   .screen-box{
+    padding: 30px 20px 10px;
     .screen-item{
       text-align: left;
     }

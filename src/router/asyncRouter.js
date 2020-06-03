@@ -114,6 +114,46 @@ export const asyncRouter = [
   },
   {
     pid: 0,
+    id: 10,
+    path: '/finance',
+    name: 'Finance',
+    component: Layout,
+    alwaysShow: true,
+    redirect: '/finance/list',
+    meta: { title: '财务管理', icon: 'finance' },
+    children: [
+      {
+        pid: 10,
+        id: 10,
+        path: 'list',
+        name: 'FinanceList',
+        component: () => import('@/views/finance/list'),
+        meta: { title: '财务列表' }
+      }
+    ]
+  },
+  {
+    pid: 0,
+    id: 10,
+    path: '/figure',
+    name: 'Figure',
+    component: Layout,
+    alwaysShow: true,
+    redirect: '/figure/list',
+    meta: { title: '花样管理', icon: 'figure' },
+    children: [
+      {
+        pid: 10,
+        id: 10,
+        path: 'list',
+        name: 'FigureList',
+        component: () => import('@/views/figure/index'),
+        meta: { title: '花样列表' }
+      }
+    ]
+  },
+  {
+    pid: 0,
     id: 5,
     path: '/orderManage',
     component: Layout,
@@ -242,6 +282,7 @@ export const asyncRouter = [
         meta: { title: '微信设置' }
       }]
   },
+
   {
     pid: 0,
     id: 9,
