@@ -83,7 +83,7 @@
       </el-table>
     </div>
     <!-- 新增可定制分类 -->
-    <el-dialog center :title="dialogType=='add'? '新增分类': dialogType=='edit'? '编辑分类': '分类详情'" :visible.sync="dialogFormVisible">
+    <el-dialog v-dialogDrag center :title="dialogType=='add'? '新增分类': dialogType=='edit'? '编辑分类': '分类详情'" :visible.sync="dialogFormVisible">
       <el-form ref="form" :model="form" :rules="rules" label-width="100px" label-position="left" size="small">
         <el-form-item label="分类名称" prop="custom_category_name">
           <el-input v-model="form.custom_category_name " :disabled="dialogType=='detail'" />

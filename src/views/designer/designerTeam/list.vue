@@ -78,7 +78,7 @@
       </div>
     </div>
     <!-- 团队新增，详情，编辑弹框 -->
-    <el-dialog center :title="dialogType=='add'? '新增设计师团队': dialogType=='edit'? '编辑设计师团队': '设计师团队详情'" :visible.sync="dialogFormVisible" width="40%">
+    <el-dialog v-dialogDrag center :title="dialogType=='add'? '新增设计师团队': dialogType=='edit'? '编辑设计师团队': '设计师团队详情'" :visible.sync="dialogFormVisible" width="40%">
       <el-form ref="form" :model="form" :rules="rules" label-width="120px" label-position="left" size="small">
         <el-form-item label="团队名称" prop="designer_team_name">
           <el-input v-model="form.designer_team_name " :disabled="dialogType=='detail'" style="width:100%" />

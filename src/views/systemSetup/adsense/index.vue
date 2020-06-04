@@ -111,7 +111,7 @@
       </div> -->
     </div>
     <!-- 广告位新增，详情，编辑弹框 -->
-    <el-dialog center :title="dialogType=='add'? '新增广告位': dialogType=='edit'? '编辑广告位': '广告位详情'" :visible.sync="dialogFormVisible">
+    <el-dialog v-dialogDrag center :title="dialogType=='add'? '新增广告位': dialogType=='edit'? '编辑广告位': '广告位详情'" :visible.sync="dialogFormVisible">
       <el-form ref="form" :model="form" :rules="rules" label-width="100px" label-position="left" size="small">
         <el-form-item label="广告位名称" prop="slider_name">
           <el-input v-model="form.slider_name " :disabled="dialogType=='detail'" />

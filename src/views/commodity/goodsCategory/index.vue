@@ -70,7 +70,7 @@
       </el-table>
     </div>
     <!-- 新增，详情，编辑弹框 -->
-    <el-dialog center :title="dialogType=='add'? '新增分类': dialogType=='edit'? '编辑分类': '分类详情'" :visible.sync="dialogFormVisible">
+    <el-dialog v-dialogDrag center :title="dialogType=='add'? '新增分类': dialogType=='edit'? '编辑分类': '分类详情'" :visible.sync="dialogFormVisible">
       <el-form ref="form" :model="form" :rules="rules">
         <el-form-item label="分类名称" :label-width="formLabelWidth" prop="category_name">
           <el-input v-model="form.category_name" autocomplete="off" :disabled="dialogType=='detail'" />

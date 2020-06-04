@@ -10,11 +10,11 @@ export const figureApi = {
     })
   },
   // 花样设置状态
-  setStatus(params) {
+  setStatus(data) {
     return request({
       url: '/design/setStatus',
-      method: 'get',
-      params
+      method: 'post',
+      data
     })
   },
   // 统计数量

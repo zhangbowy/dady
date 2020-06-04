@@ -84,7 +84,7 @@
       />
     </div>
     <!-- 机器新增，详情，编辑弹框 -->
-    <el-dialog center :title="dialogType=='add'? '新增机器': dialogType=='edit'? '编辑机器': '机器详情'" :visible.sync="dialogFormVisible">
+    <el-dialog v-dialogDrag center :title="dialogType=='add'? '新增机器': dialogType=='edit'? '编辑机器': '机器详情'" :visible.sync="dialogFormVisible">
       <el-form ref="machineForm" :model="machineForm" :rules="rules" label-width="100px" label-position="left" size="small">
         <el-form-item label="机器名称" prop="machine_name">
           <el-input v-model="machineForm.machine_name " :disabled="dialogType=='detail'" />
@@ -92,7 +92,7 @@
         <el-form-item label="机器码" prop="machine_code">
           <el-input v-model="machineForm.machine_code " :disabled="dialogType=='detail'" />
         </el-form-item>
-        <el-form-item label="机器描述">
+        <el-form-item label="机器描述" prop="desc">
           <el-input
             v-model="machineForm.desc"
             :disabled="dialogType=='detail'"
@@ -128,11 +128,13 @@ export default {
       },
       rules: {
         machine_name: [
-          { required: true, message: '请填写机器名称', trigger: 'blur' },
-          { min: 1, max: 15, message: '长度在 1 到 15 个字符', trigger: 'blur' }
+          { required: true, message: '请填写机器名称', trigger: 'blur' }
         ],
         machine_code: [
           { required: true, message: '请填写机器码', trigger: 'blur' }
+        ],
+        desc: [
+          { required: true, message: '请输入机器描述', trigger: 'blur' }
         ]
       },
       dialogType: 'add'
