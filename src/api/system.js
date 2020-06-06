@@ -352,7 +352,7 @@ export const settingApi = {
     })
   },
   /**
-   * 保存微信设置设置
+   * 保存微信设置
    * @param {*key value} data
    */
   saveWxConfig(data) {
@@ -361,5 +361,28 @@ export const settingApi = {
       method: 'post',
       data
     })
+  },
+  /**
+   * 获取店铺配置
+   * @param {*} params
+   */
+  getShopConfig(params) {
+    return request({
+      url: '/system/getShopConfig',
+      methods: 'get',
+      params
+    })
+  },
+  /**
+   * 保存店铺设置
+   * @param {*key value} data
+   */
+  saveShopConfig(data) {
+    return request({
+      url: '/system/saveShopConfig',
+      method: 'post',
+      data
+    })
   }
+
 }

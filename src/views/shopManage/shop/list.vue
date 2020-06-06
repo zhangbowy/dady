@@ -80,6 +80,7 @@
           <template slot-scope="scope">
             <el-button
               size="mini"
+              style="margin: 0 0 10px"
               @click.native="showDialog('detail', scope.row)"
             >查看</el-button>
             <!-- <el-button
@@ -89,6 +90,7 @@
             <el-button
               size="mini"
               type="danger"
+              style="margin: 0 0 10px"
               @click="handleDelete(scope.row.shop_id)"
             >删除</el-button>
           </template>
@@ -203,40 +205,36 @@ export default {
       imageUrl: '',
       fileList: [],
       rules: {
-        shop_name: [
-          { required: true, message: '请填写店铺名称', trigger: 'blur' },
-          { min: 3, max: 15, message: '长度在 1 到 15 个字符', trigger: 'blur' }
-        ],
-        name: [
-          { required: true, message: '请填写管理员姓名', trigger: 'blur' }
-        ],
-        phone: [
-          { required: true, trigger: 'blur', validator: validatePhone }
-        ],
-        password: [
-          { trigger: 'blur', validator: validatePassword }
-        ],
-        system_end_time: [
-          { required: true, message: '请输入选择店铺到期时间', trigger: 'blur' }
-        ],
-        logo: [
-          { required: true, message: '请上传店铺logo', trigger: 'blur' }
-        ]
+        shop_name: [{ required: true, message: '请填写店铺名称', trigger: 'blur' }],
+        name: [{ required: true, message: '请填写管理员姓名', trigger: 'blur' }],
+        phone: [{ required: true, trigger: 'blur', validator: validatePhone }],
+        password: [{ trigger: 'blur', validator: validatePassword }],
+        system_end_time: [{ required: true, message: '请输入选择店铺到期时间', trigger: 'blur' }],
+        logo: [{ required: true, message: '请上传店铺logo', trigger: 'blur' }]
       },
       dialogType: 'add'
     }
   },
   watch: {
-    dialogFormVisible(val) {
-      if (val === false) {
-        console.log(1)
-        this.$refs['shopForm'].resetFields()
-        this.fileList = []
-        this.imageUrl = ''
+    dialogFormVisible: {
+      deep: true,
+      handler(val) {
+        if (val === false) {
+          this.shopForm = {
+            shop_name: '',
+            name: '',
+            phone: '',
+            password: '',
+            system_end_time: '',
+            logo: ''
+          }
+          this.fileList = []
+          this.imageUrl = ''
+        }
       }
     }
   },
-  mounted() {
+  created() {
     this.fetchData()
   },
   methods: {
@@ -258,11 +256,12 @@ export default {
       this.dialogType = type
       this.dialogFormVisible = true
       if (form && form.shop_id) {
+        console.log(111)
         // 请求分类详情
         this.shopForm.shop_id = form.shop_id
         this.shopForm.shop_name = form.shop_name
-        this.shopForm.name = form.admin.name
-        this.shopForm.phone = form.admin.phone
+        this.shopForm.name = form.admin ? form.admin.name : ''
+        this.shopForm.phone = form.admin ? form.admin.phone : ''
         this.shopForm.system_end_time = form.system_end_time
         this.shopForm.logo = form.logo
         this.imageUrl = this.baseUrl + '/' + form.logo

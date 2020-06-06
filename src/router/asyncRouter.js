@@ -219,7 +219,7 @@ export const asyncRouter = [
     component: Layout,
     alwaysShow: true,
     redirect: '/system/logisticTemplate',
-    meta: { title: '系统设置', icon: 'system' },
+    meta: { title: ' 设置', icon: 'system' },
     children: [
       {
         pid: 8,
@@ -279,7 +279,7 @@ export const asyncRouter = [
         path: 'weChatSetting',
         name: 'WeChatSetting',
         component: () => import('@/views/systemSetup/weChatSetting/index'),
-        meta: { title: '微信设置' }
+        meta: { title: '系统设置' }
       }]
   },
 

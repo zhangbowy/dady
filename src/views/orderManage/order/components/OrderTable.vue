@@ -70,7 +70,7 @@
               <el-col :span="3" class="td-item"><div>{{ item.receiver_name }}/{{ item.receiver_phone }}</div></el-col>
               <el-col :span="3" class="td-item">
                 <div>
-                  <img :src="item.user.headimgurl" alt="" width="30" height="30">
+                  <img :src="item.user.headimgurl?item.user.headimgurl: ''" alt="" width="30" height="30">
                   <p style="font-size:12px; margn: 5px 0">{{ item.user.nickname }}</p>
                 </div>
               </el-col>

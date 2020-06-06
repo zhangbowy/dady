@@ -81,7 +81,8 @@ export default {
       paste_data_images: true, // 允许粘贴图像
       menubar: false, // 隐藏最上方menu
       plugins: 'advlist table lists paste preview fullscreen',
-      toolbar: 'fontselect fontsizeselect forecolor backcolor bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | imageUpload quicklink h2 h3 blockquote table numlist bullist preview fullscreen',
+      toolbar: 'code fontselect fontsizeselect forecolor backcolor bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | imageUpload quicklink h2 h3 blockquote table numlist bullist preview fullscreen',
+      fontsize_formats: '8px 10px 12px 14px 16px 18px 24px 36px', // 第二步
       /**
        * 下面方法是为tinymce添加自定义插入图片按钮
        * 借助iview的Upload组件,将图片先上传到存储云上，再将图片的存储地址放入编辑器内容

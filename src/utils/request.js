@@ -1,9 +1,9 @@
 import axios from 'axios'
 import qs from 'qs'
-import { MessageBox, Message } from 'element-ui'
+import { MessageBox, Message, Notification } from 'element-ui'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
-import router from './../router/index'
+// import router from './../router/index'
 
 // 创建axios相应拦截器
 const service = axios.create({
@@ -64,12 +64,6 @@ service.interceptors.response.use(
 
     // code为1即请求成功.
     if (res.code !== 0) {
-      Message({
-        message: res.msg || `请求异常：${res.code}`,
-        type: 'error',
-        duration: 5 * 1000
-      })
-      // 402: 登录失效或未登录;
       if (res.code === 402) {
         // 去重新登录
         MessageBox.confirm('您未登录或登录失效，请重新登录！', '确认退出', {
@@ -77,10 +71,25 @@ service.interceptors.response.use(
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          store.dispatch('user/resetToken').then(() => {
-            location.reload()
-          })
-          router.push({ path: '/login' })
+          // store.dispatch('user/resetToken').then(() => {
+          //   location.reload()
+          // })
+          // router.push({ path: '/login' })
+        })
+      } else if (res.code === 401) {
+        Notification({
+          title: '系统提示',
+          duration: 5 * 1000,
+          message: res.msg,
+          type: 'warning'
+        }).then(() => {
+          location.reload()
+        })
+      } else {
+        Message({
+          message: res.msg || `请求异常：${res.code}`,
+          type: 'error',
+          duration: 5 * 1000
         })
       }
       return Promise.reject(new Error(res.msg || 'Error'))

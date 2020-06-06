@@ -13,7 +13,8 @@
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
           <el-dropdown-item class="dropdown-item">
-            {{ adminInfo.name }}
+            <p>{{ adminInfo.name }}</p>
+            <p>{{ adminInfo.phone }}</p>
           </el-dropdown-item>
           <el-dropdown-item class="dropdown-item" divided @click.native="logout">
             <span style="display:block;">退出</span>
@@ -137,8 +138,12 @@ export default {
   }
 }
 .user-dropdown{
-        .dropdown-item{
-          text-align: center;
-        }
-      }
+  .dropdown-item{
+    text-align: center;
+    p{
+      height: auto;
+      margin: 0
+    }
+  }
+}
 </style>
