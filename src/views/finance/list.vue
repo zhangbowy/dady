@@ -5,97 +5,33 @@
     </div>
     <div class="screen-box">
       <div class="screen-item">
-        <el-input
-          v-model="keywords"
-          size="small"
-          placeholder="请输入团队名称"
-          clearable
-          style="width:220px"
-          @keyup.enter.native="fetchData"
-        />
+        <el-select v-model="designer_team_id" clearable size="small" placeholder="设计师团队">
+          <el-option
+            v-for="item in designerTeam"
+            :key="item.designer_team_id"
+            :label="item.designer_team_name"
+            :value="item.designer_team_id"
+          />
+        </el-select>
+        <el-select v-model="status" clearable size="small" placeholder="提现状态">
+          <el-option
+            v-for="item in statusOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
         <el-button size="small" icon="el-icon-search" type="primary" @click.native="fetchData">查询</el-button>
       </div>
     </div>
     <div class="content">
-      <el-table
-        v-loading="loading"
+      <!-- 财务列表 -->
+      <Finance-Table
         :data="financeList"
-        style="width: 100%"
-        fit
-        highlight-current-row
-        tooltip-effect="dark"
-      >
-        <el-table-column
-          label="序号"
-          align="center"
-          width="100"
-          type="index"
-        />
-        <el-table-column
-          label="团队"
-          align="center"
-          width="100"
-        >
-          <template slot-scope="scope">
-            <span>{{ scope.row.admin }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column
-          label="管理员"
-          align="center"
-        >
-          <template slot-scope="scope">
-            <span>{{ scope.row.admin?scope.row.admin.name:'无' }}/{{ scope.row.admin?scope.row.admin.phone: '无' }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="shop_name"
-          label="总金额"
-          align="center"
-        />
-        <el-table-column
-          prop="shop_name"
-          label="结算金额"
-          align="center"
-        />
-        <el-table-column
-          prop="shop_name"
-          label="结算周期"
-          align="center"
-        />
-        <el-table-column
-          prop="shop_name"
-          label="结算方式"
-          align="center"
-        />
-        <el-table-column
-          prop="created_at"
-          label="结算日期"
-          align="center"
-        />
-        <el-table-column
-          fixed="right"
-          label="操作"
-          align="center"
-        >
-          <template slot-scope="scope">
-            <el-button
-              size="mini"
-              @click.native="showDialog('detail', scope.row)"
-            >查看</el-button>
-            <!-- <el-button
-              size="mini"
-              @click.native="showDialog('edit', scope.row)"
-            >编辑</el-button> -->
-            <el-button
-              size="mini"
-              type="danger"
-              @click="handleDelete(scope.row.shop_id)"
-            >删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+        :loading="loading"
+        @showDetail="showDialog"
+        @reject="rejectApply"
+      />
       <!-- 分页 -->
       <div class="pagination-box">
         <el-pagination
@@ -109,42 +45,101 @@
         />
       </div>
     </div>
+    <!-- 审核弹框 -->
+    <finance-dialog
+      v-model="itemDialog"
+      :item="rowItem"
+      :withdrawable="panelData.withdrawable_commission"
+      @submit="submitFinance"
+      @close="itemDialog = false"
+    />
+    <!-- 驳回弹框 -->
+    <reject-dialog
+      v-model="showReject"
+      :item="rowItem"
+      @submit="submitReject"
+      @close="showReject = false"
+    />
   </div>
 </template>
 
 <script>
 import { financeApi } from '@/api/finance'
+import { getTeamList } from '@/api/designer'
 import PanelGroup from './components/PanelGroup'
+import FinanceTable from './components/FinanceTable'
+import FinanceDialog from './components/FinanceDialog'
+import RejectDialog from './components/RejectDialog'
 export default {
   components: {
-    PanelGroup
+    PanelGroup,
+    FinanceTable,
+    FinanceDialog,
+    RejectDialog
   },
   data() {
     return {
       keywords: '',
-      panelData: {},
+      statusOptions: [
+        { label: '提现中', value: 1 },
+        { label: '已驳回', value: 2 },
+        { label: '已提现', value: 3 }
+      ],
+      designer_team_id: '',
+      designerTeam: [],
+      status: '',
+      panelData: {
+        withdrawable_commission: 200
+      },
       financeList: [],
       loading: false,
       total: 0,
       currentPage: 1,
-      pageSize: 10
-
+      pageSize: 10,
+      rowItem: {},
+      itemDialog: false, // 是否显示提现申请详情
+      showReject: false // 是否显示驳回提现申请
     }
   },
   created() {
     this.fetchData()
-  },
-  mounted() {
-
+    // 获取团队列表
+    this.getDesignerTeam()
   },
   methods: {
     fetchData() {
-      financeApi.getList({
+      // 获取财务列表
+      financeApi.getCashList({
+        designer_team_id: this.designer_team_id,
+        status: this.status,
         currentPage: this.currentPage,
         pageSize: this.pageSize
       }).then(res => {
-        console.log(res)
+        this.financeList = res.data.data
+        this.total = res.data.count
       })
+
+      // 获取统计数据
+      financeApi.getData().then(res => {
+        this.panelData = res.data
+      })
+    },
+    getDesignerTeam() {
+      getTeamList({
+        pageSize: 1000
+      }).then(res => {
+        this.designerTeam = res.data.data
+      })
+    },
+    // 显示发放弹框
+    showDialog(row) {
+      this.rowItem = row
+      this.itemDialog = true
+    },
+    // 驳回申请
+    rejectApply(row) {
+      this.rowItem = row
+      this.showReject = true
     },
     handleCurrentChange(val) {
       this.currentPage = val
@@ -153,6 +148,35 @@ export default {
     handleSizeChange(val) {
       this.pageSize = val
       this.fetchData()
+    },
+    // 提交发放
+    submitFinance(form) {
+      financeApi.cashVerify({
+        cash_id: form.cash_id,
+        cert: form.cert,
+        remark: form.remark
+      }).then(res => {
+        this.$message({
+          type: 'success',
+          message: res.msg || '操作成功'
+        })
+        this.fetchData()
+        this.itemDialog = false
+      })
+    },
+    // 驳回申请
+    submitReject(form) {
+      financeApi.cashRefused({
+        cash_id: form.cash_id,
+        remark: form.remark
+      }).then(res => {
+        this.$message({
+          type: 'success',
+          message: res.msg || '操作成功'
+        })
+        this.fetchData()
+        this.showReject = false
+      })
     }
   }
 }

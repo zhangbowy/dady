@@ -119,7 +119,7 @@ export default {
     }
   },
   methods: {
-    beforeClosebeforeClose() {
+    beforeClose() {
       this.$emit('close')
     }, downloadCodeImg(imgsrc, name) {
       window.location.href = `${this.baseUrl}/index/downLoad?url=${imgsrc}&fileName=${name}`
