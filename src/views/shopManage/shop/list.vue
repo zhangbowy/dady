@@ -137,6 +137,7 @@
             v-model="shopForm.system_end_time"
             type="date"
             format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd"
             :disabled="dialogType=='detail'"
             placeholder="选择店铺到期时间"
           />
@@ -203,7 +204,6 @@ export default {
       currentPage: 1,
       total: 0,
       imageUrl: '',
-      fileList: [],
       rules: {
         shop_name: [{ required: true, message: '请填写店铺名称', trigger: 'blur' }],
         name: [{ required: true, message: '请填写管理员姓名', trigger: 'blur' }],
@@ -228,7 +228,6 @@ export default {
             system_end_time: '',
             logo: ''
           }
-          this.fileList = []
           this.imageUrl = ''
         }
       }
@@ -256,7 +255,6 @@ export default {
       this.dialogType = type
       this.dialogFormVisible = true
       if (form && form.shop_id) {
-        console.log(111)
         // 请求分类详情
         this.shopForm.shop_id = form.shop_id
         this.shopForm.shop_name = form.shop_name
@@ -264,10 +262,7 @@ export default {
         this.shopForm.phone = form.admin ? form.admin.phone : ''
         this.shopForm.system_end_time = form.system_end_time
         this.shopForm.logo = form.logo
-        this.imageUrl = this.baseUrl + '/' + form.logo
-        this.fileList.push({
-          url: this.baseUrl + '/' + form.logo
-        })
+        this.imageUrl = form.logo
       }
     },
     // 图片上传模块

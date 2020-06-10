@@ -129,6 +129,12 @@
                 <div v-if="item.status==4" class="operate-btn">
                   <p>交易完成</p>
                 </div>
+                <!-- <div v-if="item.logistics_type==2 && item.status==10" class="operate-btn">
+                  <el-button
+                    size="mini"
+                    type="primary"
+                  >已完成</el-button>
+                </div> -->
                 <div v-if="item.status==5" class="operate-btn">
                   <p>询价中</p>
                   <el-button

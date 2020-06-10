@@ -71,9 +71,9 @@ service.interceptors.response.use(
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          // store.dispatch('user/resetToken').then(() => {
-          //   location.reload()
-          // })
+          store.dispatch('user/resetToken').then(() => {
+            location.reload()
+          })
           // router.push({ path: '/login' })
         })
       } else if (res.code === 401) {
@@ -82,8 +82,6 @@ service.interceptors.response.use(
           duration: 5 * 1000,
           message: res.msg,
           type: 'warning'
-        }).then(() => {
-          location.reload()
         })
       } else {
         Message({

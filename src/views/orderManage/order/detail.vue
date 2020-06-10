@@ -59,13 +59,13 @@
             <el-col class="info-th" :span="6">订单状态：</el-col>
             <el-col class="info-th" :span="6">配送方式：</el-col>
             <el-col class="info-th" :span="6">付款时间：</el-col>
-            <el-col class="info-th" :span="6">发货单号：</el-col>
+            <el-col class="info-th" :span="6">发货时间：</el-col>
           </el-row>
           <el-row class="info-tabel">
             <el-col class="info-td" :span="6">{{ orderDetail._status }}</el-col>
-            <el-col class="info-td" :span="6">快递</el-col>
+            <el-col class="info-td" :span="6">{{ orderDetail._logistics_type }}</el-col>
             <el-col class="info-td" :span="6">{{ orderDetail.pay_time?orderDetail.pay_time:'未付款' }}</el-col>
-            <el-col class="info-td" :span="6">未发货</el-col>
+            <el-col class="info-td" :span="6">{{ orderDetail.send_time?orderDetail.send_time:'待发货' }}</el-col>
           </el-row>
         </div>
       </div>
@@ -287,7 +287,8 @@ export default {
 .express-info{
   p{
     border-bottom: 1px solid #f5f5f5;
-    padding: 20px;
+    padding: 10px;
+    margin: 0;
     span{
       padding-right: 10px;
     }

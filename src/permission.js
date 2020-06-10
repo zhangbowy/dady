@@ -44,11 +44,11 @@ router.beforeEach(async(to, from, next) => {
           })
         }).catch((err) => {
           console.log(err)
-          store.dispatch('user/logout').then(() => {
-            store.dispatch('user/resetToken')
-            // Message.error(err || '验证失败，请重新登陆')
-            next({ path: '/' })
-          })
+          // store.dispatch('user/logout').then(() => {
+          //   store.dispatch('user/resetToken')
+          //   // Message.error(err || '验证失败，请重新登陆')
+          //   next({ path: '/' })
+          // })
         })
       }
     }

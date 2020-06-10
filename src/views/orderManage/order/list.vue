@@ -37,6 +37,16 @@
               />
             </el-select>
           </el-form-item>
+          <el-form-item v-if="adminInfo.role_type==1" label="店铺">
+            <el-select v-model="formInline.shop_id" size="small" clearable placeholder="选择店铺">
+              <el-option
+                v-for="item in shopsList"
+                :key="item.shop_id"
+                :label="item.shop_name"
+                :value="item.shop_id"
+              />
+            </el-select>
+          </el-form-item>
           <!-- <el-form-item label="订单状态">
             <el-select v-model="formInline.status" placeholder="请选择">
               <el-option
@@ -110,6 +120,8 @@
 <script>
 import OrderTable from './components/OrderTable'
 import { orderApi } from '@/api/order'
+import { getList } from '@/api/shop'
+import { mapGetters } from 'vuex'
 export default {
   components: {
     OrderTable
@@ -124,6 +136,7 @@ export default {
         receiver_phone: '',
         express_number: '',
         order_type: '',
+        shop_id: '',
         order_time: [],
         pay_time: []
       },
@@ -131,6 +144,7 @@ export default {
       currentPage: 1,
       total: 2,
       orderList: [],
+      shopsList: [],
       orderTypeOption: [{
         value: '1',
         label: '普通订单'
@@ -175,6 +189,11 @@ export default {
       orderCount: {}
     }
   },
+  computed: {
+    ...mapGetters([
+      'adminInfo'
+    ])
+  },
   watch: {
     'formInline.order_time': {
       handler(newValue, oldValue) {
@@ -194,12 +213,24 @@ export default {
   created() {
     this.getOrderCount()
     this.fetchData()
+
+    this.getShopData()
   },
   methods: {
     // 刷新页面
     getListData() {
       this.getOrderCount()
       this.fetchData()
+    },
+    getShopData() {
+      // 获取店铺列表
+      getList({
+        pageSize: 1000,
+        currentPage: 1
+      }).then(res => {
+        this.shopsList = res.data.data
+      }).catch(() => {
+      })
     },
     // 请求列表数据
     fetchData() {
@@ -214,7 +245,8 @@ export default {
         start_pay_time: this.formInline.pay_time[0],
         end_pay_time: this.formInline.pay_time[1],
         express_number: this.formInline.express_number,
-        receiver_phone: this.formInline.receiver_phone
+        receiver_phone: this.formInline.receiver_phone,
+        shop_id: this.formInline.shop_id
       }).then(res => {
         this.loading = false
         this.orderList = res.data.data
@@ -233,7 +265,8 @@ export default {
         end_time: this.formInline.order_time[1],
         start_pay_time: this.formInline.pay_time[0],
         end_pay_time: this.formInline.pay_time[1],
-        receiver_phone: this.formInline.receiver_phone
+        receiver_phone: this.formInline.receiver_phone,
+        shop_id: this.formInline.shop_id
       }).then(res => {
         this.orderCount = res.data
       })

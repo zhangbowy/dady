@@ -50,10 +50,10 @@
       <el-form-item v-if="infoItem.bottom_font_content" label="底部文字" style="display: inline-block;width: 48%">
         <el-input v-model="infoItem.bottom_font_content" disabled />
       </el-form-item>
-      <el-form-item v-if="infoItem.top_font_color" label="顶部文字颜色" style="display: inline-block;width: 48%">
+      <el-form-item v-if="infoItem.top_font_content && infoItem.top_font_color" label="顶部文字颜色" style="display: inline-block;width: 48%">
         <el-input v-model="infoItem.top_font_color" disabled />
       </el-form-item>
-      <el-form-item v-if="infoItem.bottom_font_color" label="底部文字颜色" style="display: inline-block;width: 48%">
+      <el-form-item v-if="infoItem.top_font_content && infoItem.bottom_font_color" label="底部文字颜色" style="display: inline-block;width: 48%">
         <el-input v-model="infoItem.bottom_font_color" disabled />
       </el-form-item>
       <el-form-item v-if="infoItem.top_font_size" label="顶部文字高度" style="display: inline-block;width: 48%">

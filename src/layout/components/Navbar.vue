@@ -7,21 +7,37 @@
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
-          <img src="@/assets/images/avator.jpg" class="user-avatar">
-          <!-- <span>{{ adminInfo.name }}</span> -->
+          <img v-if="adminInfo.logo" :src="adminInfo.logo" class="user-avatar">
+          <img v-else src="@/assets/images/avator.jpg" class="user-avatar">
+          <span>{{ adminInfo.name }}</span>
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
           <el-dropdown-item class="dropdown-item">
-            <p>{{ adminInfo.name }}</p>
-            <p>{{ adminInfo.phone }}</p>
+            <div v-if="adminInfo.role_type!=1" class="shop-info">
+              店铺：<span>{{ adminInfo.shop_name }}</span>
+            </div>
+          </el-dropdown-item>
+          <el-dropdown-item class="dropdown-item">
+            <p>账号：{{ adminInfo.phone }}</p>
+          </el-dropdown-item>
+          <el-dropdown-item v-if="adminInfo.role_type!=1" class="dropdown-item">
+            有效期：<span style="color: #f4516c">[{{ adminInfo.system_end_time }}]</span>
+          </el-dropdown-item>
+          <el-dropdown-item divided style="text-align:center" @click.native="showChange = true">
+            修改密码
           </el-dropdown-item>
           <el-dropdown-item class="dropdown-item" divided @click.native="logout">
-            <span style="display:block;">退出</span>
+            <span style="display:block;">退出登录</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
+
+    <change-password
+      v-model="showChange"
+      @close="showChange = false"
+    />
   </div>
 </template>
 
@@ -29,11 +45,18 @@
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
+import ChangePassword from './ChangePassword'
 
 export default {
   components: {
     Breadcrumb,
-    Hamburger
+    Hamburger,
+    ChangePassword
+  },
+  data() {
+    return {
+      showChange: false
+    }
   },
   computed: {
     ...mapGetters([
@@ -111,9 +134,8 @@ export default {
 
       .avatar-wrapper {
         position: relative;
-
+        cursor: pointer;
         .user-avatar {
-          cursor: pointer;
           width: 40px;
           height: 40px;
           display: inline-block;
@@ -146,4 +168,5 @@ export default {
     }
   }
 }
+
 </style>

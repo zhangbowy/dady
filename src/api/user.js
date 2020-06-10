@@ -38,3 +38,12 @@ export function getCaptcha(params) {
     params
   })
 }
+
+// 修改密码
+export function changePsd(data) {
+  return request({
+    url: '/admin/changePsd',
+    method: 'post',
+    data
+  })
+}
