@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="value" width="30%" title="定制信息" :before-close="beforeClose">
+  <el-dialog v-dialogDrag :visible.sync="value" width="30%" title="定制信息" :before-close="beforeClose">
     <el-form label-position="left" size="small">
       <el-form-item label="预览图">
         <img :src="infoItem.preview_image" width="100" alt="">
@@ -78,9 +78,20 @@
       </el-form-item>
 
       <!-- 特殊定制信息 -->
-      <el-form-item v-if="infoItem.special_template_name" label="定制模板" style="display: inline-block;width: 48%">
-        <el-input v-model="infoItem.special_template_name" disabled />
+      <el-form-item v-if="infoItem.special_template_name" label="定制模板">
+        <el-input v-model="infoItem.special_template_name" type="textarea" disabled />
       </el-form-item>
+      <el-form-item v-if="infoItem.order_type==3" label="包含商品">
+        <div>
+          <el-switch
+            active-text="包含"
+            inactive-text="不包含"
+            :value="infoItem.is_only_design==0? true: false"
+            disabled
+          />
+        </div>
+      </el-form-item>
+
       <el-form-item v-if="infoItem.special_color_num" label="颜色数" style="display: inline-block;width: 48%">
         <el-input v-model="infoItem.special_color_num" disabled />
       </el-form-item>

@@ -93,7 +93,7 @@
       </div>
     </div>
     <!-- 管理员新增，详情，编辑弹框 -->
-    <el-dialog center :title="dialogType=='add'? '新增管理员': dialogType=='edit'? '编辑管理员': '管理员详情'" :visible.sync="dialogFormVisible">
+    <el-dialog v-dialogDrag center :title="dialogType=='add'? '新增管理员': dialogType=='edit'? '编辑管理员': '管理员详情'" :visible.sync="dialogFormVisible">
       <el-form ref="form" :model="form" :rules="rules" label-width="100px" label-position="rigth" size="small">
         <el-form-item label="管理员姓名" prop="name">
           <el-input v-model="form.name " :disabled="dialogType=='detail'" />

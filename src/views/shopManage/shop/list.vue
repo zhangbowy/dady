@@ -110,7 +110,7 @@
       </div>
     </div>
     <!-- 店铺新增，详情，编辑弹框 -->
-    <el-dialog center :title="dialogType=='add'? '新增店铺': dialogType=='edit'? '编辑店铺': '店铺详情'" :visible.sync="dialogFormVisible">
+    <el-dialog v-dialogDrag center :title="dialogType=='add'? '新增店铺': dialogType=='edit'? '编辑店铺': '店铺详情'" :visible.sync="dialogFormVisible">
       <el-form ref="shopForm" :model="shopForm" :rules="rules" label-width="100px" label-position="left" size="small">
         <el-form-item label="店铺名称" prop="shop_name">
           <el-input v-model="shopForm.shop_name " :disabled="dialogType=='detail'" />

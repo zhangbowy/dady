@@ -140,7 +140,7 @@ export default {
           height: 40px;
           display: inline-block;
           vertical-align: middle;
-          border-radius: 10px;
+          border-radius: 40px;
         }
         span{
           display: inline-block;

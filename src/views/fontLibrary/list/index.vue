@@ -71,7 +71,7 @@
       </div> -->
     </div>
     <!-- 新增字体 -->
-    <el-dialog center :title="dialogType=='add'?'新增字体': '修改字体'" :visible.sync="fontDialog">
+    <el-dialog v-dialogDrag center :title="dialogType=='add'?'新增字体': '修改字体'" :visible.sync="fontDialog">
       <el-form ref="fontForm" :model="fontForm" :rules="rules" label-width="80px" label-position="left" size="small">
         <el-form-item label="字体名称" prop="font_name">
           <el-input v-model="fontForm.font_name " :disabled="dialogType=='detail'" />
@@ -136,7 +136,7 @@
       </el-form>
     </el-dialog>
 
-    <el-dialog center :title="fontDetail.font_name" :visible.sync="fontDetailDialog" class="font-dialog">
+    <el-dialog v-dialogDrag center :title="fontDetail.font_name" :visible.sync="fontDetailDialog" class="font-dialog">
       <div style="text-align: center" class="font-box">
         <div v-for="(item,key) in fontDetail.font_content" :key="key" class="font-item">
           <span>{{ key }}：</span>

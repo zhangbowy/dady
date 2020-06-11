@@ -1,6 +1,6 @@
 <template>
   <div class="finance-dialog">
-    <el-dialog title="驳回申请" :visible.sync="value" width="30%" :before-close="beforeClose">
+    <el-dialog v-dialogDrag title="驳回申请" :visible.sync="value" width="30%" :before-close="beforeClose">
       <el-form ref="form" :model="form" :rules="rules" size="small">
         <el-form-item label="驳回理由" prop="remark">
           <el-input v-model="form.remark" type="textarea" />

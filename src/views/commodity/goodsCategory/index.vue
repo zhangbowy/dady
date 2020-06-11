@@ -77,7 +77,7 @@
         </el-form-item>
         <el-form-item v-if="dialogType=='add'" label="上级分类" :label-width="formLabelWidth">
           <el-cascader
-            v-model="form.parent_id"
+            v-model="parent_id"
             :options="categories"
             :props="optionProps"
             clearable
@@ -138,6 +138,7 @@ export default {
       },
       categories: [],
       dialogFormVisible: false,
+      parent_id: [],
       form: {
         category_name: '',
         parent_id: '',
@@ -227,7 +228,7 @@ export default {
               }
             })
           } else {
-            _this.form.parent_id = _this.form.parent_id.length > 0 ? _this.form.parent_id[_this.form.parent_id.length - 1] : 0
+            _this.form.parent_id = _this.parent_id.length > 0 ? _this.parent_id[_this.parent_id.length - 1] : 0
             Category.addCategory(_this.form).then(res => {
               if (res.code === 0) {
                 this.$message({
@@ -236,11 +237,13 @@ export default {
                 })
                 // 重置表单
                 _this.$refs[formName].resetFields()
+                _this.parent_id = []
                 this.dialogFormVisible = false
                 this.fetchData()
               } else {
                 this.$message.success(res.msg || '添加失败!')
               }
+            }).catch(() => {
             })
           }
         } else {

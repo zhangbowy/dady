@@ -158,7 +158,7 @@
       </div>
     </div>
     <!-- 发货/修改发货弹窗 -->
-    <el-dialog :visible.sync="orderDiaLog" :title="dialogTitle">
+    <el-dialog v-dialogDrag :visible.sync="orderDiaLog" :title="dialogTitle">
       <div class="dialog-content">
         <div class="order-item-goods">
           <el-form ref="sendForm" :model="sendForm" :rules="rules" label-width="80px" label-position="left" size="small">
@@ -223,7 +223,7 @@
     </el-dialog>
 
     <!-- 派单 -->
-    <el-dialog :visible.sync="dispatchDialog" title="派单" width="30%">
+    <el-dialog v-dialogDrag :visible.sync="dispatchDialog" title="派单" width="30%">
       <el-form ref="dispatchForm" :model="dispatchForm" :rules="dispatchRules" label-width="100px" label-position="right" size="small">
         <el-form-item label="设计师团队" style="width: 100%" prop="designer_team_id">
           <el-select v-model="dispatchForm.designer_team_id" placeholder="请选择设计师团队">
@@ -246,7 +246,7 @@
     </el-dialog>
 
     <!-- 回复询价 -->
-    <el-dialog :visible.sync="replayDialog" title="回复询价" width="30%">
+    <el-dialog v-dialogDrag :visible.sync="replayDialog" title="回复询价" width="30%">
       <el-form ref="replayForm" :model="replayForm" :rules="replayRules" label-width="80px" label-position="right" size="small">
         <el-form-item label="价格" prop="price">
           <el-input v-model="replayForm.price" type="number" />

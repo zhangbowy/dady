@@ -103,7 +103,7 @@
         </el-tab-pane>
       </el-tabs>
       <!-- 新增，详情，编辑弹框 -->
-      <el-dialog center :title="dialogType=='add'? '新增模板': dialogType=='edit'? '编辑模板': '模板详情'" :visible.sync="dialogFormVisible">
+      <el-dialog v-dialogDrag center :title="dialogType=='add'? '新增模板': dialogType=='edit'? '编辑模板': '模板详情'" :visible.sync="dialogFormVisible">
         <el-form :model="form" label-position="top">
           <el-form-item label="模板名称" :label-width="formLabelWidth">
             <el-input v-model="form.template_name" disabled autocomplete="off" style="width: 50%" />
@@ -183,7 +183,6 @@
             <!-- <el-button v-if="dialogType==='add' || dialogType==='edit'" size="small" type="primary" @click="dialogFormVisible = false">保存</el-button> -->
           </el-form-item>
         </el-form>
-
       </el-dialog>
     </div>
   </div>

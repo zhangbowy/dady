@@ -132,6 +132,7 @@
     </div>
     <!-- 买家信息弹框 -->
     <el-dialog
+      v-dialogDrag
       title="买家信息"
       :visible.sync="useInfoDialog"
       width="30%"
@@ -150,6 +151,7 @@
     <design-dialog v-model="designInfo" :info-item="designInfoItem" @close="designInfo = false" />
     <!-- 物流信息弹框 -->
     <el-dialog
+      v-dialogDrag
       title="物流详情"
       :visible.sync="expressDialog"
       width="40%"

@@ -85,7 +85,7 @@
           @current-change="handleCurrentChange"
         />
       </div>
-      <el-dialog center :title="dialogType=='add'? '新增会员': dialogType=='edit'? '编辑信息': '会员详情'" :visible.sync="dialogFormVisible">
+      <el-dialog v-dialogDrag center :title="dialogType=='add'? '新增会员': dialogType=='edit'? '编辑信息': '会员详情'" :visible.sync="dialogFormVisible">
         <el-form ref="memberForm" :model="memberForm" label-width="100px" label-position="left" size="small">
           <el-form-item label="会员昵称">
             <el-input v-model="memberForm.nickname " :disabled="dialogType=='detail'" />

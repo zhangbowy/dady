@@ -99,13 +99,15 @@
           </div>
           <div v-if="pageInfo.count" class="page-ctn">
             <el-pagination
-              layout="total,  prev, pager, next, jumper"
+              layout="total, sizes, prev, pager, next, jumper"
               :small="true"
               class="pull-left"
+              :page-sizes="[10, 15, 20, 30]"
               :current-page="pageInfo.currentPage"
               :page-size="pageInfo.pageSize"
               :total="pageInfo.count"
               @current-change="changeList"
+              @size-change="handleSizeChange"
             />
           </div>
         </div>
@@ -113,7 +115,7 @@
     </el-row>
 
     <!-- 上传图片的dialog -->
-    <el-dialog title="上传图片" :visible.sync="uploadDialog">
+    <el-dialog v-dialogDrag title="上传图片" :visible.sync="uploadDialog">
       <el-form ref="fileUploadForm" :model="uploadForm" :rules="uploadRules">
         <el-form-item label="图片分组">
           <el-cascader
@@ -153,7 +155,7 @@
       </el-form>
     </el-dialog>
 
-    <el-dialog title="添加分组" :visible.sync="addGroupDialog">
+    <el-dialog v-dialogDrag title="添加分组" :visible.sync="addGroupDialog">
       <el-form ref="groupForm" :model="groupForm" :rules="groupRules">
         <el-form-item label="所属分组">
           <el-cascader
@@ -174,7 +176,7 @@
       </el-form>
     </el-dialog>
 
-    <el-dialog :title="changeFormName=='modifyName'?'修改名称':'修改分组'" :visible.sync="changeGroupDialog" width="30%">
+    <el-dialog v-dialogDrag :title="changeFormName=='modifyName'?'修改名称':'修改分组'" :visible.sync="changeGroupDialog" width="30%">
       <el-form ref="changeFrom" :model="changeFrom" :rules="groupRules">
         <el-form-item v-if="changeFormName=='modifyGroup'" label="选择分组">
           <el-cascader
@@ -196,7 +198,7 @@
     </el-dialog>
 
     <!-- 图片预览 -->
-    <el-dialog title="图片展示" :visible.sync="previewDialog.show">
+    <el-dialog v-dialogDrag title="图片展示" :visible.sync="previewDialog.show">
       <img width="100%" :src="previewDialog.url" alt="">
     </el-dialog>
   </div>
@@ -554,6 +556,10 @@ export default {
       this.pageInfo.currentPage = page
       this.getImgList()
     },
+    handleSizeChange(val) {
+      this.pageInfo.pageSize = val
+      this.getImgList()
+    },
     getAll() {
       this.selectGroupId = -1
       this.pageInfo.currentPage = 1
@@ -611,7 +617,8 @@ export default {
     addCategory(data) {
       GroupApi.addGroup({
         group_name: data.group_name,
-        parent_id: data.parent_id
+        parent_id: data.parent_id,
+        level: data.level
       }).then(res => {
         this.$message({
           message: res.msg,
@@ -632,7 +639,8 @@ export default {
       data.showInput = false
       GroupApi.editGroup({
         group_name: data.group_name,
-        gallery_group_id: data.group_id
+        gallery_group_id: data.group_id,
+        level: data.level
       }).then(res => {
         this.$message({
           message: res.msg,
@@ -676,7 +684,7 @@ export default {
         }
       }
       .writeInput{
-        width: 100%;
+        width:100%;
       }
     }
     .img-list{

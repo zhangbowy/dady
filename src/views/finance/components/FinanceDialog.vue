@@ -1,6 +1,6 @@
 <template>
   <div class="finance-dialog">
-    <el-dialog title="发放提现" :visible.sync="value" width="30%" :before-close="beforeClose">
+    <el-dialog v-dialogDrag title="发放提现" :visible.sync="value" width="30%" :before-close="beforeClose">
       <el-form ref="form" :model="form" :rules="rules" label-position="top" size="small">
         <el-form-item label="申请提现金额">
           <el-input v-model="item.cash_amount" disabled>
