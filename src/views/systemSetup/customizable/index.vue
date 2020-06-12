@@ -42,15 +42,6 @@
             <span v-for="(item,index) in scope.row.machine" :key="item.machine_id">{{ item.machine_name }} {{ scope.row.machine.length-1!==index?'、':'' }} </span>
           </template>
         </el-table-column>
-        <!-- <el-table-column
-          label="广告位状态"
-          align="center"
-          width="250"
-        >
-          <template slot-scope="scope">
-            <el-tag :type="scope.row.del | statusFilter">{{ scope.row.del==0?'已打烊':'营业中' }}</el-tag>
-          </template>
-        </el-table-column> -->
         <el-table-column
           prop="created_at"
           label="创建时间"
@@ -83,7 +74,7 @@
       </el-table>
     </div>
     <!-- 新增可定制分类 -->
-    <el-dialog v-dialogDrag center :title="dialogType=='add'? '新增分类': dialogType=='edit'? '编辑分类': '分类详情'" :visible.sync="dialogFormVisible">
+    <el-dialog center :title="dialogType=='add'? '新增分类': dialogType=='edit'? '编辑分类': '分类详情'" :visible.sync="dialogFormVisible">
       <el-form ref="form" :model="form" :rules="rules" label-width="100px" label-position="left" size="small">
         <el-form-item label="分类名称" prop="custom_category_name">
           <el-input v-model="form.custom_category_name " :disabled="dialogType=='detail'" />
@@ -96,7 +87,7 @@
             @chooseImg="imageChoose"
           />
         </el-form-item>
-        <el-form-item v-if="form.design_bg" label="定制区域">
+        <el-form-item v-if="showBgArea" label="定制区域">
           <div class="text-event" :style="{backgroundImage: `url(${form.design_bg})`,backgroundSize: `${form.design_bg_width}px ${form.design_bg_height}px`, width: `${form.design_bg_width}px`, height: `${form.design_bg_height}px`}">
             <vue-draggable-resizable
               :w="form.design_width"
@@ -192,6 +183,7 @@ export default {
       machineList: [], // 机器列表
       dialogFormVisible: false, // form表单弹框
       relationMachine: false, // 关联设备弹框
+      showBgArea: false,
       form: {
         custom_category_name: '', // 分类名称
         design_bg: '', // 背景图片
@@ -199,8 +191,8 @@ export default {
         design_height: 150, // 设计区域高度
         design_top: 0, // x轴距离
         design_left: 0, // y轴距离
-        design_bg_width: 375, // 背景宽度
-        design_bg_height: 375 // 背景高度
+        design_bg_width: '', // 背景宽度
+        design_bg_height: '' // 背景高度
       },
       showRefLine: false, // 显示竖向的辅助线
       rules: {
@@ -227,9 +219,7 @@ export default {
           design_width: 150, // 设计区域宽度
           design_height: 150, // 设计区域高度
           design_top: 0, // x轴距离
-          design_left: 0, // y轴距离
-          design_bg_width: 375, // 背景宽度
-          design_bg_height: 375 // 背景高度
+          design_left: 0 // y轴距离
         }
       }
     },
@@ -384,15 +374,18 @@ export default {
     },
 
     // 图片上传模块
-    imageChoose(img) {
+    async imageChoose(img) {
       this.form.design_bg = img
       if (img) {
-        getImgMeta({
+        await getImgMeta({
           image_url: img
         }).then(res => {
           this.form.design_bg_width = res.data.width
           this.form.design_bg_height = res.data.height
         })
+        this.showBgArea = true
+      } else {
+        this.showBgArea = false
       }
       this.$refs.form.validateField('design_bg')
     },
@@ -404,7 +397,7 @@ export default {
         type: 'warning',
         confirmButtonClass: 'danger'
       }).then(() => {
-        customCateApi.deleteAdsense({ custom_category_id: id }).then(res => {
+        customCateApi.delCustomCate({ custom_category_id: id }).then(res => {
           this.$message({
             type: 'success',
             message: '删除成功!'
@@ -447,8 +440,7 @@ export default {
     right: 0;
   }
   .text-event {
-    height: 375px;
-    width: 375px;
+
     position: relative;
     background-repeat: no-repeat;
     background-size: 100% 100%;
