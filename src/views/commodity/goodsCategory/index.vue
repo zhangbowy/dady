@@ -101,9 +101,9 @@
             @chooseImg="imageChoose"
           />
         </el-form-item>
-        <el-form-item label="跳转链接" :label-width="formLabelWidth">
-          <el-input v-model="form.link" :disabled="dialogType=='detail'" />
-        </el-form-item>
+<!--        <el-form-item label="跳转链接" :label-width="formLabelWidth">-->
+<!--          <el-input v-model="form.link" :disabled="dialogType=='detail'" />-->
+<!--        </el-form-item>-->
         <!-- <el-form-item label="设备码" :label-width="formLabelWidth">
           <el-select v-model="form.code" placeholder="请选择绑定设备" style="width: 100%">
             <el-option label="帽子刺绣机" value="121312" />
@@ -142,7 +142,7 @@ export default {
       form: {
         category_name: '',
         parent_id: '',
-        link: '',
+        link: 'test',
         logo: '',
         image_path: ''
       },
@@ -169,7 +169,7 @@ export default {
         this.form = {
           category_name: '',
           parent_id: '',
-          link: '',
+          link: 'test',
           logo: '',
           image_path: ''
         }

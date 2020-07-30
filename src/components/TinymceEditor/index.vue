@@ -16,7 +16,7 @@
       ref="imgUpload"
       style="display:none"
       :img-data="images"
-      :pic-max="5"
+      :pic-max="20"
       @chooseImg="imageChoose"
     />
   </div>
