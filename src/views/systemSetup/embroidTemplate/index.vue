@@ -382,7 +382,7 @@ export default {
           })
         }
       }).catch(() => {
-        this.addBtnLoading = false;
+        this.addBtnLoading = false
         this.$message({
           type: 'info',
           message: '保存失败!'

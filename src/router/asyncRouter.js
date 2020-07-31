@@ -268,14 +268,14 @@ export const asyncRouter = [
         meta: { title: '刺绣模板' }
       }, {
         pid: 8,
-        id: 32,
+        id: 28,
         path: 'platformSettings',
         name: 'PlatformSettings',
         component: () => import('@/views/systemSetup/platformSettings/index'),
         meta: { title: '平台设置' }
       }, {
         pid: 8,
-        id: 33,
+        id: 28,
         path: 'weChatSetting',
         name: 'WeChatSetting',
         component: () => import('@/views/systemSetup/weChatSetting/index'),

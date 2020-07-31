@@ -31,17 +31,13 @@
       display: block;
     }
   }
-  .sku-list .el-table__body-wrapper{
-    max-height:100000px!important;
-    overflow: auto;
-  }
 </style>
 
 <template>
-  <div class="container sku-list flex">
+  <div class="container flex">
     <egrid
       border
-      max-height="1000000000"
+      max-height="800"
       v-bind="$attrs"
       :data="data"
       :columns="columns"

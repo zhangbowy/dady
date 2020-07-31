@@ -20,7 +20,7 @@
                 <el-form-item label="商品图片">
                   <img-upload
                     :img-data="form.images"
-                    :pic-max="20"
+                    :pic-max="5"
                     @chooseImg="imageChoose"
                     @changePsit="changeImg"
                   />
@@ -95,7 +95,7 @@
               </el-form-item>
             </div>
           </el-tab-pane>
-          <el-tab-pane style="height:90%;overflow-y:auto;overflow-x:hidden;" label="商品规格" name="2">
+          <el-tab-pane label="商品规格" name="2">
             <!-- sku规格部分 -->
             <div class="sku_container">
               <div v-for="(spec, index) in specification" :key="spec.id" class="sku_group mb10">
@@ -472,7 +472,6 @@ export default {
     }
   }
 }
-
 </style>
 <style lang="sass" scoped>
 .sku_container
@@ -548,6 +547,4 @@ export default {
       overflow: hidden
       text-overflow: ellipsis
       white-space: nowrap
-
-
 </style>
