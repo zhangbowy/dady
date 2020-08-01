@@ -42,7 +42,7 @@ export function editDesigner(data) {
  */
 export function deleteDesigner(data) {
   return request({
-    url: '/design/deleteDesigner',
+    url: '/design/delDesigner',
     method: 'post',
     data
   })

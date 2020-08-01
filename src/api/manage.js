@@ -103,8 +103,8 @@ export const adminApi = {
   delAdmin(params) {
     return request({
       url: '/authority/delAdmin',
-      method: 'get',
-      params
+      method: 'post',
+      data: params
     })
   },
   /**
