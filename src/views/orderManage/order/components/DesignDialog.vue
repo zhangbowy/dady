@@ -6,9 +6,8 @@
         <el-button
           size="mini"
           type="text"
-          id='aaa'
           @click="downloadCodeImg(infoItem.preview_image,`${infoItem.order_id}-预览图`)"
-        >下载aaaaaaaaa</el-button>
+        >下载</el-button>
       </el-form-item>
       <el-form-item v-if="infoItem.design" label="花样图片">
         <img :src="infoItem.design.prev_png_path" width="100" alt="">
@@ -114,9 +113,7 @@
 </template>
 
 <script>
-  import { downLoad } from '@/api/user'
-
-  export default {
+export default {
   props: {
     value: {
       type: Boolean,
@@ -136,11 +133,7 @@
     beforeClose() {
       this.$emit('close')
     }, downloadCodeImg(imgsrc, name) {
-      downLoad({
-        url: imgsrc,
-        fileName: name
-      })
-      // window.location.href = `${this.baseUrl}/index/downLoad?url=${imgsrc}&fileName=${name}`
+      window.location.href = `${this.baseUrl}/index/downLoad?url=${imgsrc}&fileName=${name}`
     }
   }
 }
@@ -153,31 +146,4 @@
     background: #f5f5f5;
   }
 }
-
-
-@font-face {
-  font-family: "GiddyupStd";
-  src:
-  /*  url("http://zhangbo01.oss-cn-hongkong.aliyuncs.com/fontTest/GiddyupStd.woff2") format("woff2"),*/
-  /*url("http://zhangbo01.oss-cn-hongkong.aliyuncs.com/fontTest/GiddyupStd.woff") format("woff"),*/
-  url("http://zhangbo01.oss-cn-hongkong.aliyuncs.com/fontTest/GiddyupStd.ttf") format("truetype");
-  /*url("http://zhangbo01.oss-cn-hongkong.aliyuncs.com/fontTest/GiddyupStd.eot") format("embedded-opentype"),*/
-  /*url("http://zhangbo01.oss-cn-hongkong.aliyuncs.com/fontTest/GiddyupStd.svg") format("svg");*/
-  font-weight: normal;
-  font-style: normal;
-}
-@font-face {
-  font-family: "aaaaaaaa";
-  src: url("http://zhangbo01.oss-cn-hongkong.aliyuncs.com/fontTest/aaaa.woff2") format("woff2"),
-  url("http://zhangbo01.oss-cn-hongkong.aliyuncs.com/fontTest/aaaa.woff") format("woff"),
-  url("http://zhangbo01.oss-cn-hongkong.aliyuncs.com/fontTest/aaaa.ttf") format("truetype"),
-  url("http://zhangbo01.oss-cn-hongkong.aliyuncs.com/fontTest/aaaa.eot") format("embedded-opentype"),
-  url("http://zhangbo01.oss-cn-hongkong.aliyuncs.com/fontTest/aaaa.svg") format("svg");
-  font-weight: normal;
-  font-style: normal;
-}
-#aaa {
-  font-family: 'GiddyupStd';
-}
-
 </style>
