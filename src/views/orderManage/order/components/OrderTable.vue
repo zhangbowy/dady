@@ -37,6 +37,8 @@
               <!-- <span>{{ item.payType==1?'线下支付': '在线支付' }}</span> -->
               <span>{{ item._order_type }}</span>
               <span>{{ item.created_at }}</span>
+              <span v-if="item._logistics_type" style="color: orange;">{{ item._logistics_type }}</span>
+
               <div class="header-btn">
                 <router-link :to="`/orderManage/orderDetail?order_no=${item.order_no}`">
                   <el-button
@@ -125,6 +127,15 @@
                     style="margin: 10px 0 0"
                     @click="conReceived(item.id)"
                   >确认收货</el-button>
+                </div>
+                <div v-if="item.status==10 && item._logistics_type ==='门店自提'" class="operate-btn">
+                  <el-button
+                    v-has="504"
+                    size="mini"
+                    type="primary"
+                    style="margin: 10px 0 0"
+                    @click="conReceived(item.id, item._logistics_type)"
+                  >确认完成</el-button>
                 </div>
                 <div v-if="item.status==4" class="operate-btn">
                   <p>交易完成</p>
@@ -496,8 +507,8 @@ export default {
         }
       })
     },
-    conReceived(id) {
-      this.$confirm('确认收货后将无法恢复,是否继续?', '提示', {
+    conReceived(id, type) {
+      this.$confirm(`确认${type === '门店自提' ? '提货' : '收货'}后将无法恢复,是否继续?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
