@@ -264,7 +264,6 @@ export default {
         } else {
           this.showIssuedBtn = false
         }
-        this.checkedList = []
       }
     }
   },
@@ -410,6 +409,7 @@ export default {
             })
             return
           }
+          console.log(custom_category_id)
           if (is_same) {
             this.current_custom_category_id = custom_category_id
             this.dialogVisible = true
