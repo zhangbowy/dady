@@ -99,7 +99,7 @@
       </div>
     </div>
     <el-dialog
-      title="提示"
+      title="请选择机器"
       :visible.sync="dialogVisible"
       width="30%"
     >
@@ -244,15 +244,14 @@ export default {
     },
     current_custom_category_id: {
       handler(newValue, oldValue) {
-        if (newValue === null) {
-          if (this.current_custom_category_id) {
-            this.customCategoryList.forEach(item => {
-              if (this.current_custom_category_id === item.this.custom_category_id) {
-                this.machineList = item.machine || []
-                this.machineList.length && (this.machine_id = this.machineList[0].machine_code)
-              }
-            })
-          }
+        if (newValue) {
+          this.customCategoryList.forEach(item => {
+            if (newValue === item.custom_category_id) {
+              this.machineList = item.machine || []
+              this.machineList.length && (this.machine_id = this.machineList[0].machine_code)
+              return
+            }
+          })
         }
       }
     }
