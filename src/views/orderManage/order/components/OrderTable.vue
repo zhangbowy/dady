@@ -29,7 +29,7 @@
       </el-row>
 
       <div class="order-item-content">
-        <el-checkbox-group v-model="checkList">
+        <el-checkbox-group v-model="checkList" @change="onCheckboxGroupChange">
           <div v-for="(item, index) in data" :key="`${item.id}-${index}`" class="item-box">
             <div class="item-header">
               <el-checkbox :label="item.id" />
@@ -553,6 +553,9 @@ export default {
       }).catch(() => {
 
       })
+    },
+    onCheckboxGroupChange(value) {
+      this.$emit('checkboxChange', value)
     }
   }
 }

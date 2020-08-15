@@ -113,6 +113,18 @@ export const orderApi = {
       method: 'post',
       data
     })
+  },
+
+  /**
+   * 下发机器
+   * @param { order_id, custom_template_id, machine_id  } data
+   */
+  sendMachine(data) {
+    return request({
+      url: '/order/sendMachine',
+      method: 'post',
+      data
+    })
   }
 
 }

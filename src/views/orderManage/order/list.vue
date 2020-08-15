@@ -28,7 +28,7 @@
             />
           </el-form-item>
           <el-form-item label="订单类型">
-            <el-select v-model="formInline.order_type" size="small" clearable placeholder="选择订单类型">
+            <el-select v-model="formInline.order_type" size="small" clearable placeholder="选择订单类型" @change="customCategoryChange">
               <el-option
                 v-for="item in orderTypeOption"
                 :key="item.value"
@@ -37,8 +37,18 @@
               />
             </el-select>
           </el-form-item>
+          <el-form-item v-show="showCustomCategory" label="定制分类">
+            <el-select v-model="formInline.custom_category_id" size="small" clearable placeholder="选择订单分类" @change="customCategoryChange">
+              <el-option
+                v-for="item in customCategoryList"
+                :key="item.custom_category_id"
+                :label="item.custom_category_name"
+                :value="item.custom_category_id"
+              />
+            </el-select>
+          </el-form-item>
           <el-form-item v-if="adminInfo.role_type==1" label="店铺">
-            <el-select v-model="formInline.shop_id" size="small" clearable placeholder="选择店铺">
+            <el-select v-model="formInline.shop_id" size="small" clearable placeholder="选择店铺" @change="customCategoryChange">
               <el-option
                 v-for="item in shopsList"
                 :key="item.shop_id"
@@ -82,13 +92,28 @@
               value-format="yyyy-MM-dd HH:mm:ss"
             />
           </el-form-item>
-
           <el-form-item>
             <el-button size="small" icon="el-icon-search" type="primary" @click="doSearch()">搜索</el-button>
           </el-form-item>
         </el-form>
       </div>
     </div>
+    <el-dialog
+      title="提示"
+      :visible.sync="dialogVisible"
+      width="30%"
+    >
+      <div>
+        <el-radio-group v-if="machineList.length" v-model="machine_id" size="small">
+          <el-radio v-for="machine in machineList" :key="machine.machine_code" :label="machine.machine_code" border>{{ machine.machine_name }}</el-radio>
+        </el-radio-group>
+        <span v-else>该定制分类没有关联任何机器</span>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="onDialogClick">确 定</el-button>
+      </span>
+    </el-dialog>
     <div class="content">
       <el-tabs v-model="activeName" v-loading="loading" type="card" @tab-click="handleClick">
         <el-tab-pane
@@ -98,17 +123,18 @@
           :name="`${item.status}`"
         />
         <div class="tab-content">
-          <order-table :data="orderList" @getList="getListData" />
+          <order-table :data="orderList" @getList="getListData" @checkboxChange="onCheckboxChange" />
         </div>
       </el-tabs>
       <!-- 分页 -->
       <div class="pagination-box">
+        <el-button type="primary" class="issued-btn" @click="onIssuedBtnClick">下发机器</el-button>
         <el-pagination
           :total="total"
           :current-page="currentPage"
           :page-sizes="[5, 10, 50, 100]"
           :page-size="pageSize"
-          layout="total, sizes, prev, pager, next, jumper"
+          layout="slot, total, sizes, prev, pager, next, jumper"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
         />
@@ -121,12 +147,12 @@
 import OrderTable from './components/OrderTable'
 import { orderApi } from '@/api/order'
 import { getList } from '@/api/shop'
+import { customCateApi } from '@/api/system'
 import { mapGetters } from 'vuex'
 export default {
   components: {
     OrderTable
   },
-
   data() {
     return {
       loading: true,
@@ -138,13 +164,16 @@ export default {
         order_type: '',
         shop_id: '',
         order_time: [],
-        pay_time: []
+        pay_time: [],
+        custom_category_id: ''
       },
       pageSize: 5,
       currentPage: 1,
       total: 2,
       orderList: [],
       shopsList: [],
+      machineList: [],
+      machine_id: 0,
       orderTypeOption: [{
         value: '1',
         label: '普通订单'
@@ -183,10 +212,14 @@ export default {
         value: '-2',
         label: '已关闭/取消订单'
       }],
-
+      customCategoryList: [],
       multipleSelection: [],
+      checkedList: [],
       activeName: '0',
-      orderCount: {}
+      orderCount: {},
+      showCustomCategory: true,
+      dialogVisible: false,
+      current_custom_category_id: 0
     }
   },
   computed: {
@@ -208,12 +241,39 @@ export default {
           this.formInline.pay_time = []
         }
       }
+    },
+    current_custom_category_id: {
+      handler(newValue, oldValue) {
+        if (newValue === null) {
+          if (this.current_custom_category_id) {
+            this.customCategoryList.forEach(item => {
+              if (this.current_custom_category_id === item.this.custom_category_id) {
+                this.machineList = item.machine || []
+                this.machineList.length && (this.machine_id = this.machineList[0].machine_code)
+              }
+            })
+          }
+        }
+      }
     }
+    // activeName: {
+    //   handler(newValue, oldValue) {
+    //     // 如果是下发机器，添加定制分类筛选框
+    //     if (newValue === '10') {
+    //       this.showCustomCategory = true
+    //       if (this.formInline.custom_category_id && this.customCategoryList.length) {
+    //         this.formInline.custom_category_id = this.customCategoryList[0].custom_category_id
+    //       }
+    //     } else {
+    //       this.showCustomCategory = false
+    //     }
+    //   }
+    // }
   },
   created() {
     this.getOrderCount()
     this.fetchData()
-
+    this.getCustomCategory()
     this.getShopData()
   },
   methods: {
@@ -232,6 +292,37 @@ export default {
       }).catch(() => {
       })
     },
+    // 请求定制分类
+    getCustomCategory() {
+      customCateApi.getCategoryList().then(({ data }) => {
+        this.customCategoryList = data || []
+      })
+    },
+    // 定制分类改变
+    customCategoryChange(value) {
+      this.fetchData()
+    },
+    onCheckboxChange(list) {
+      this.checkedList = list
+    },
+    onDialogClick() {
+      if(this.machine_id) {
+        orderApi.sendMachine({
+          order_id: this.checkedList,
+          custom_template_id: this.current_custom_category_id,
+          machine_id: this.machine_id
+        }).then(data => {
+          this.$message({
+            message: '下发机器成功',
+            type: 'success'
+          })
+          this.dialogVisible = false
+        })
+      } else {
+        this.dialogVisible = false
+      }
+      
+    },
     // 请求列表数据
     fetchData() {
       orderApi.getList({
@@ -246,7 +337,8 @@ export default {
         end_pay_time: this.formInline.pay_time[1],
         express_number: this.formInline.express_number,
         receiver_phone: this.formInline.receiver_phone,
-        shop_id: this.formInline.shop_id
+        shop_id: this.formInline.shop_id,
+        custom_category_id: this.formInline.custom_category_id
       }).then(res => {
         this.loading = false
         this.orderList = res.data.data
@@ -279,6 +371,46 @@ export default {
       this.getOrderCount()
       this.fetchData()
     },
+    onIssuedBtnClick() {
+      if (!this.checkedList.length) {
+        this.$message({
+          // title: '警告',
+          message: '没有选择订单',
+          type: 'warning'
+        })
+      } else {
+        const checkedOrderList = this.orderList.filter(item => {
+          return this.checkedList.includes(item.id)
+        })
+        if (checkedOrderList.length) {
+          const custom_category_id = checkedOrderList[0].custom_category_id
+          let is_same = true
+          checkedOrderList.forEach(item => {
+            if (item.custom_category_id !== custom_category_id) {
+              this.$message({
+                // title: '警告',
+                message: '必须选择相同的定制分类',
+                type: 'error'
+              })
+              is_same = false
+              return
+            }
+          })
+          if (!custom_category_id) {
+            this.$message({
+              // title: '警告',
+              message: '定制分类错误',
+              type: 'error'
+            })
+            return
+          }
+          if (is_same) {
+            this.current_custom_category_id = custom_category_id
+            this.dialogVisible = true
+          }
+        }
+      }
+    },
     // 执行搜索
     doSearch() {
       this.currentPage = 1
@@ -310,6 +442,9 @@ export default {
   .content{
     background: #fff;
     padding: 10px;
+  }
+  .issued-btn {
+    float: left;
   }
 }
 
