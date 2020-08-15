@@ -38,7 +38,7 @@
             </el-select>
           </el-form-item>
           <el-form-item v-show="showCustomCategory" label="定制分类">
-            <el-select v-model="formInline.custom_category_id" size="small" clearable placeholder="选择订单分类" @change="customCategoryChange">
+            <el-select v-model="formInline.custom_category_id" size="small" clearable placeholder="选择订制分类" @change="customCategoryChange">
               <el-option
                 v-for="item in customCategoryList"
                 :key="item.custom_category_id"
