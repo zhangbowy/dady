@@ -264,6 +264,7 @@ export default {
         } else {
           this.showIssuedBtn = false
         }
+        this.checkedList = []
       }
     }
   },
@@ -391,7 +392,7 @@ export default {
               is_same = false
               return
             }
-            if (item._logistics_type ==='门店自提') {
+            if (item._logistics_type === '门店自提') {
               this.$message({
                 // title: '警告',
                 message: '门店自提订单无法下发机器',
