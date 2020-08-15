@@ -123,6 +123,9 @@ export const orderApi = {
     return request({
       url: '/order/sendMachine',
       method: 'post',
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8'
+      },
       data
     })
   }

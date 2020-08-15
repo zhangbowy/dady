@@ -128,7 +128,7 @@
       </el-tabs>
       <!-- 分页 -->
       <div class="pagination-box">
-        <el-button type="primary" class="issued-btn" @click="onIssuedBtnClick">下发机器</el-button>
+        <el-button v-if="showIssuedBtn" type="primary" class="issued-btn" @click="onIssuedBtnClick">下发机器</el-button>
         <el-pagination
           :total="total"
           :current-page="currentPage"
@@ -218,6 +218,7 @@ export default {
       activeName: '0',
       orderCount: {},
       showCustomCategory: true,
+      showIssuedBtn: false,
       dialogVisible: false,
       current_custom_category_id: 0
     }
@@ -254,20 +255,17 @@ export default {
           })
         }
       }
+    },
+    activeName: {
+      handler(newValue, oldValue) {
+        // 如果是下发机器，添加定制分类筛选框
+        if (newValue === '10') {
+          this.showIssuedBtn = true
+        } else {
+          this.showIssuedBtn = false
+        }
+      }
     }
-    // activeName: {
-    //   handler(newValue, oldValue) {
-    //     // 如果是下发机器，添加定制分类筛选框
-    //     if (newValue === '10') {
-    //       this.showCustomCategory = true
-    //       if (this.formInline.custom_category_id && this.customCategoryList.length) {
-    //         this.formInline.custom_category_id = this.customCategoryList[0].custom_category_id
-    //       }
-    //     } else {
-    //       this.showCustomCategory = false
-    //     }
-    //   }
-    // }
   },
   created() {
     this.getOrderCount()
@@ -305,7 +303,7 @@ export default {
       this.checkedList = list
     },
     onDialogClick() {
-      if(this.machine_id) {
+      if (this.machine_id) {
         orderApi.sendMachine({
           order_id: this.checkedList,
           custom_template_id: this.current_custom_category_id,
@@ -320,7 +318,6 @@ export default {
       } else {
         this.dialogVisible = false
       }
-      
     },
     // 请求列表数据
     fetchData() {
@@ -389,6 +386,15 @@ export default {
               this.$message({
                 // title: '警告',
                 message: '必须选择相同的定制分类',
+                type: 'error'
+              })
+              is_same = false
+              return
+            }
+            if (item._logistics_type ==='门店自提') {
+              this.$message({
+                // title: '警告',
+                message: '门店自提订单无法下发机器',
                 type: 'error'
               })
               is_same = false
