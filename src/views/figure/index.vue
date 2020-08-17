@@ -17,6 +17,14 @@
             :value="item.designer_team_id"
           />
         </el-select>
+        <el-select v-model="design_category_id" size="small" clearable placeholder="请选择设花样类别">
+          <el-option
+            v-for="item in figureCategoryList"
+            :key="item.design_category_id"
+            :label="item.design_category_name"
+            :value="item.design_category_id"
+          />
+        </el-select>
         <el-button size="small" icon="el-icon-search" type="primary" @click="doSearch()">搜索</el-button>
       </div>
 
@@ -48,6 +56,7 @@
                     <el-button v-if="item.status!=3 && roles===1" type="text" class="button" @click.stop="bindPrice(item)">标价</el-button> -->
                     <el-button v-if="item.status!=1" :style="{color: item.status===3?'#F56C6C':'#67c23a'}" type="text" class="button" @click.stop="changeStatus(item)">{{ item.status==2?'上架':item.status==3?'下架':'' }}</el-button>
                     <!-- <el-button v-if="item.status!=3" type="text" style="color:#F56C6C" class="button" @click.stop="handleDelete(item.design_id)">删除</el-button> -->
+                    <el-button type="text" class="button" @click.stop="setCatetory(item.design_id)">设置分类</el-button>
                   </div>
                 </div>
               </el-card>
@@ -68,6 +77,26 @@
         />
       </div>
     </div>
+    <!-- 修改分类 -->
+    <el-dialog v-dialogDrag auto width="300px" title="修改花样分类" :visible.sync="showCategorySelector">
+      <el-form ref="form" :label-position="labelPosition" :model="form">
+        <el-form-item>
+          <el-select v-model="form.design_category_id" size="small" clearable placeholder="请选择设花样类别">
+          <el-option
+            v-for="item in figureCategoryList"
+            :key="item.design_category_id"
+            :label="item.design_category_name"
+            :value="item.design_category_id"
+          />
+        </el-select>
+        </el-form-item>
+        
+        <el-form-item >
+          <el-button type="primary" @click="onSubmit('form')">确定</el-button>
+          <el-button @click="dialogFormVisible = false">取消</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -85,9 +114,21 @@ export default {
       figureList: [], // 花样列表
       figureCount: [], // tab统计
       teamOptions: [],
+      figureCategoryList: [],
       pageSize: 14,
       currentPage: 1,
-      total: 0
+      total: 0,
+      design_category_id: '',
+      showCategorySelector: false,
+      form: {
+        design_category_id: '',
+        design_id: ''
+      },
+      rules: {
+        design_category_id: [
+          { required: true, message: '请选择花样分类', trigger: 'blur' }
+        ]
+      },
     }
   },
   watch: {
@@ -96,6 +137,7 @@ export default {
   created() {
     this.fetchData()
     this.getTeamList()
+    this.getFigureCategory()
   },
   methods: {
     fetchData() {
@@ -105,6 +147,7 @@ export default {
         pageSize: this.pageSize,
         design_name: this.keywords,
         designer_team_id: this.designer_team_id,
+        design_category_id: this.design_category_id,
         status: this.status
       }).then(res => {
         this.loading = false
@@ -113,10 +156,20 @@ export default {
       })
       this.getdesignCount()
     },
+    // 获取花样类型
+    getFigureCategory() {
+      figureApi.getCategory({
+         pageSize: 1000,
+         currentPage: 1
+      }).then(res => {
+        this.figureCategoryList = res.data.data
+      })
+    },
     // 统计
     getdesignCount() {
       figureApi.designCount({
         design_name: this.keywords,
+        design_category_id: this.design_category_id,
         designer_team_id: this.designer_team_id
       }).then(res => {
         this.figureCount = res.data
@@ -127,6 +180,29 @@ export default {
         pageSize: 100
       }).then(res => {
         this.teamOptions = res.data.data
+      })
+    },
+    onSubmit(formName) {
+      const _this = this
+      _this.$refs[formName].validate((valid) => {
+        if (valid) {
+          figureApi.setCategory(_this.form).then(res => {
+            if (res.code === 0) {
+              this.$message({
+                type: 'success',
+                message: res.msg || '设置成功!'
+              })
+              // 重置表单
+              _this.$refs[formName].resetFields()
+              this.showCategorySelector = false
+              this.fetchData()
+            } else {
+              this.$message.success(res.msg || '设置失败!')
+            }
+          })
+        } else {
+          return false
+        }
       })
     },
     // 点击修改按钮
@@ -154,6 +230,10 @@ export default {
       this.currentPage = 1
       this.loading = true
       this.fetchData()
+    },
+    setCatetory(design_id) {
+      this.showCategorySelector = true
+      this.form.design_id = design_id
     },
     changeStatus(item) {
       this.$confirm(`是否${item.status === 2 ? '上架' : '下架'}该花样?`, '提示', {
@@ -238,6 +318,11 @@ export default {
       margin-bottom: 20px;
     }
   }
+}
+.el-form-item__content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 </style>

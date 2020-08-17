@@ -149,6 +149,14 @@ export const asyncRouter = [
         name: 'FigureList',
         component: () => import('@/views/figure/index'),
         meta: { title: '花样列表' }
+      },
+      {
+        pid: 10,
+        id: 10,
+        path: 'category',
+        name: 'FigureCategoryList',
+        component: () => import('@/views/figure/category'),
+        meta: { title: '花样分类' }
       }
     ]
   },

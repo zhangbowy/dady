@@ -635,7 +635,6 @@ export default {
     },
     // 编辑分类
     editCategoryName(data) {
-      // console.log('editdata', data)
       data.showInput = false
       GroupApi.editGroup({
         group_name: data.group_name,

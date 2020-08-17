@@ -24,5 +24,46 @@ export const figureApi = {
       method: 'get',
       params
     })
+  },
+  // 花样类别
+  getCategory(params) {
+    return request({
+      url: '/design/getCategory',
+      method: 'get',
+      params
+    })
+  },
+  // 添加花样分类
+  addCategory(data) {
+    return request({
+      url:'/design/addCategory',
+      method: 'post',
+      data
+    })
+  },
+  // 编辑花样分类
+  editCategory(data) {
+    return request({
+      url:'/design/editCategory',
+      method: 'post',
+      data
+    })
+  },
+  // 删除分类
+  deleteCategory(data) {
+    return request({
+      url:'/design/delCategory',
+      method: 'post',
+      data
+    })
+  },
+  // 设置分类
+  setCategory(data) {
+    return request({
+      url:'/design/setCategory',
+      method: 'post',
+      data
+    })
   }
+  
 }
