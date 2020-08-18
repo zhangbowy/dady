@@ -265,6 +265,9 @@ export default {
     },
     showDialog(type, form) {
       this.dialogType = type
+      if(this.dialogType == 'detail') {
+        this.showBgArea = true
+      }
       this.dialogFormVisible = true
       if (form && form.custom_category_id) {
         // 请求分类详情
