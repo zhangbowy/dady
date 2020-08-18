@@ -68,19 +68,18 @@
           </template>
         </el-table-column>
       </el-table>
-      
     </div>
     <div class="page-ctn">
       <el-pagination
-            layout="total,  prev, pager, next, jumper"
-            :small="true"
-            class="pull-left"
-            :current-page="currentPage"
-            :page-size="pageSize"
-            :total="total"
-            :showQuickJumper='true'
-            @current-change="changeList"
-        />
+        layout="total,  prev, pager, next, jumper"
+        :small="true"
+        class="pull-left"
+        :current-page="currentPage"
+        :page-size="pageSize"
+        :total="total"
+        :show-quick-jumper="true"
+        @current-change="changeList"
+      />
     </div>
     <!-- 新增，详情，编辑弹框 -->
     <el-dialog v-dialogDrag center :title="dialogType=='add'? '新增分类': dialogType=='edit'? '编辑分类': '分类详情'" :visible.sync="dialogFormVisible">
@@ -163,22 +162,21 @@ export default {
     // 获取所有分类
     fetchData() {
       figureApi.getCategory({
-          currentPage: this.currentPage,
-          pageSize: this.pageSize
+        currentPage: this.currentPage,
+        pageSize: this.pageSize
       }).then(res => {
         this.loading = false
         if (res.code === 0 && res.data) {
-            this.categories = res.data.data
-            this.currentPage = res.data.currentPage
-            this.total = res.data.count
+          this.categories = res.data.data
+          this.currentPage = res.data.currentPage
+          this.total = res.data.count
         } else {
-            this.loading = false
-            this.$message({
+          this.loading = false
+          this.$message({
             type: 'info',
             message: '网络异常！'
-            })
+          })
         }
-        
       }).catch(() => {
         this.loading = false
         this.$message({
@@ -264,13 +262,12 @@ export default {
     imageChoose(path) {
       this.form.image_path = path
       this.$refs.form.validateField('image_path')
-      // this.imageModalConfig.visible = false;
     },
-     // 点击分页
+    // 点击分页
     changeList(page) {
       this.currentPage = page
       this.fetchData()
-    },
+    }
   }
 }
 </script>

@@ -129,7 +129,6 @@
         </el-form-item>
       </el-form>
     </el-dialog>
-
     <!-- 关联设备弹框 -->
     <el-dialog center title="关联机器" :visible.sync="relationMachine">
       <el-select v-model="checkedMachine" size="mini" placeholder="选择机器">
@@ -175,6 +174,7 @@ export default {
     ImgUpload,
     VueDraggableResizable
   },
+  inject: ['reload'],
   data() {
     return {
       loading: true,
@@ -213,7 +213,7 @@ export default {
     dialogFormVisible(val) {
       if (val === false) {
         this.$refs['form'].resetFields()
-        this.form = {
+        const form = {
           custom_category_name: '',
           design_bg: '',
           design_width: 150, // 设计区域宽度
@@ -221,6 +221,7 @@ export default {
           design_top: 0, // x轴距离
           design_left: 0 // y轴距离
         }
+        Object.assign(this.form, form)
       }
     },
     relationMachine(val) {
@@ -265,21 +266,22 @@ export default {
     },
     showDialog(type, form) {
       this.dialogType = type
-      if(this.dialogType == 'detail') {
+      if (this.dialogType === 'detail') {
         this.showBgArea = true
       }
       this.dialogFormVisible = true
       if (form && form.custom_category_id) {
         // 请求分类详情
-        this.form.custom_category_id = form.custom_category_id
-        this.form.custom_category_name = form.custom_category_name
-        this.form.design_width = form.design_width // 设计区域宽度
-        this.form.design_height = form.design_height// 设计区域高度
-        this.form.design_bg_width = form.design_bg_width // 背景高度
-        this.form.design_bg_height = form.design_bg_height // 背景宽度
-        this.form.design_top = form.design_top // x轴距离
-        this.form.design_left = form.design_left // y轴距离
-        this.form.design_bg = form.design_bg
+        // this.form.custom_category_id = form.custom_category_id
+        // this.form.custom_category_name = form.custom_category_name
+        // this.form.design_width = form.design_width // 设计区域宽度
+        // this.form.design_height = form.design_height// 设计区域高度
+        // this.form.design_bg_width = form.design_bg_width // 背景高度
+        // this.form.design_bg_height = form.design_bg_height // 背景宽度
+        // this.form.design_top = form.design_top // x轴距离
+        // this.form.design_left = form.design_left // y轴距离
+        // this.form.design_bg = form.design_bg
+        Object.assign(this.form, form)
       }
     },
     // 显示关联设备弹框
@@ -350,6 +352,8 @@ export default {
                 _this.$refs[formName].resetFields()
                 this.dialogFormVisible = false
                 this.fetchData()
+                // 刷新页面
+                _this.reload()
               } else {
                 this.$message.success(res.msg || '修改失败!')
               }
@@ -460,6 +464,14 @@ export default {
       }
 
   }
+}
+.customizable .text-event {
+  cursor: pointer;
+}
+.customizable .text-event p {
+  background: rgba(0, 0, 0,0.3);
+  padding: 10px;
+  min-width: 120px;
 }
 </style>
 

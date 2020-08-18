@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <router-view />
+    <router-view v-if="isRouteActive" />
   </div>
 </template>
 
@@ -12,6 +12,13 @@ export default {
   name: 'App',
   data() {
     return {
+      isRouteActive: true
+    }
+  },
+  provide() {
+    return {
+      // 注入reload 方法
+      reload: this.reload
     }
   },
   mounted() {
@@ -34,6 +41,15 @@ export default {
   },
   created() {
 
+  },
+  methods: {
+    // 页面刷新
+    reload() {
+      this.isRouteActive = false
+      this.$nextTick(() => {
+        this.isRouteActive = true
+      })
+    }
   }
 }
 </script>
