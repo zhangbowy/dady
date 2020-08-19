@@ -9,7 +9,7 @@
           clearable
           style="width:220px"
         />
-        <el-select v-model="status" size="small" clearable placeholder="请选择">
+        <el-select v-model="status" size="small" clearable placeholder="请选择商品状态">
           <el-option
             v-for="item in statusOption"
             :key="item.value"
@@ -85,7 +85,7 @@
           align="center"
         >
           <template slot-scope="scope">
-            <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status==1?'待审核':scope.row.status==2? '待上架':'已上架' }}</el-tag>
+            <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status==1?'待审核':scope.row.status==3? '已上架':'待上架' }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column
@@ -102,7 +102,7 @@
           fixed="right"
           label="操作"
           align="center"
-          width="150"
+          width="180"
         >
           <template slot-scope="scope">
             <div class="operate-btn">
@@ -112,6 +112,13 @@
                   size="mini"
                 >查看</el-button>
               </router-link>
+              <router-link :to="`/commodity/goods/edit?id=${scope.row.id}`">
+                <el-button
+                  v-has="404"
+                  size="mini"
+                  type="primary"
+                >编辑</el-button>
+              </router-link>
               <el-button
                 v-if="scope.row.status==1"
                 v-has="400"
@@ -120,12 +127,19 @@
                 @click.stop="changeStates(scope.row.id, 2)"
               >审核</el-button>
               <el-button
-                v-if="scope.row.status==2"
+                v-if="scope.row.status==2 || scope.row.status==4"
                 v-has="400"
                 size="mini"
                 type="success"
                 @click.stop="changeStates(scope.row.id, 3)"
               >上架</el-button>
+              <!-- <el-button
+                v-if="scope.row.status==2"
+                v-has="400"
+                size="mini"
+                type="success"
+                @click.stop="changeStates(scope.row.id, 4)"
+              >预售</el-button> -->
               <el-button
                 v-if="scope.row.status==3"
                 v-has="400"
@@ -133,13 +147,6 @@
                 type="danger"
                 @click.stop="changeStates(scope.row.id, 2,scope.row.status)"
               >下架</el-button>
-              <router-link :to="`/commodity/goods/edit?id=${scope.row.id}`">
-                <el-button
-                  v-has="404"
-                  size="mini"
-                  type="primary"
-                >编辑</el-button>
-              </router-link>
               <el-button
                 size="mini"
                 type="danger"
@@ -152,6 +159,13 @@
                 type="danger"
                 @click.stop="changeStates(scope.row.id, 1)"
               >取消审核</el-button>
+              <!-- <el-button
+                v-if="scope.row.status==4"
+                v-has="400"
+                size="mini"
+                type="danger"
+                @click.stop="changeStates(scope.row.id, 2)"
+              >取消预售</el-button> -->
             </div>
           </template>
         </el-table-column>
@@ -180,7 +194,8 @@ export default {
       const statusMap = {
         1: 'danger',
         2: 'warning',
-        3: 'success'
+        3: 'success',
+        4: 'warning'
       }
       return statusMap[status]
     }
@@ -206,6 +221,9 @@ export default {
       }, {
         value: 3,
         label: '已上架'
+      }, {
+        value: 4,
+        label: '预售中'
       }],
       status: '',
       multipleSelection: []
@@ -320,8 +338,12 @@ export default {
     font-size: 12px;
   }
   .operate-btn{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
     button{
       margin-bottom: 5px;
+      margin: 4px;
     }
   }
   .goods_img{

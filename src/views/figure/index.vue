@@ -51,12 +51,13 @@
                   <div class="bottom clearfix">
                     <time class="time">{{ item.created_at }}</time>
                   </div>
-                  <div class="bottom clearfix">
+                  <div class="bottom clearfix btn-group">
                     <!-- <el-button v-if="item.status!=3 && roles===1" type="text" class="button" @click.stop="editItem(item)">修改</el-button>
                     <el-button v-if="item.status!=3 && roles===1" type="text" class="button" @click.stop="bindPrice(item)">标价</el-button> -->
                     <el-button v-if="item.status!=1" :style="{color: item.status===3?'#F56C6C':'#67c23a'}" type="text" class="button" @click.stop="changeStatus(item)">{{ item.status==2?'上架':item.status==3?'下架':'' }}</el-button>
                     <!-- <el-button v-if="item.status!=3" type="text" style="color:#F56C6C" class="button" @click.stop="handleDelete(item.design_id)">删除</el-button> -->
                     <el-button type="text" class="button" @click.stop="setCatetory(item.design_id)">设置分类</el-button>
+                    <el-button type="text" class="button" @click.stop="setPresell(item)">{{ item.is_presell ? '取消预售' : '预售' }}</el-button>
                   </div>
                 </div>
               </el-card>
@@ -79,19 +80,18 @@
     </div>
     <!-- 修改分类 -->
     <el-dialog v-dialogDrag auto width="300px" title="修改花样分类" :visible.sync="showCategorySelector">
-      <el-form ref="form" :label-position="labelPosition" :model="form">
+      <el-form ref="form" :model="form">
         <el-form-item>
           <el-select v-model="form.design_category_id" size="small" clearable placeholder="请选择设花样类别">
-          <el-option
-            v-for="item in figureCategoryList"
-            :key="item.design_category_id"
-            :label="item.design_category_name"
-            :value="item.design_category_id"
-          />
-        </el-select>
+            <el-option
+              v-for="item in figureCategoryList"
+              :key="item.design_category_id"
+              :label="item.design_category_name"
+              :value="item.design_category_id"
+            />
+          </el-select>
         </el-form-item>
-        
-        <el-form-item >
+        <el-form-item>
           <el-button type="primary" @click="onSubmit('form')">确定</el-button>
           <el-button @click="dialogFormVisible = false">取消</el-button>
         </el-form-item>
@@ -128,7 +128,7 @@ export default {
         design_category_id: [
           { required: true, message: '请选择花样分类', trigger: 'blur' }
         ]
-      },
+      }
     }
   },
   watch: {
@@ -159,8 +159,8 @@ export default {
     // 获取花样类型
     getFigureCategory() {
       figureApi.getCategory({
-         pageSize: 1000,
-         currentPage: 1
+        pageSize: 1000,
+        currentPage: 1
       }).then(res => {
         this.figureCategoryList = res.data.data
       })
@@ -234,6 +234,26 @@ export default {
     setCatetory(design_id) {
       this.showCategorySelector = true
       this.form.design_id = design_id
+    },
+    // 预售
+    setPresell(item) {
+      this.$confirm(`是否${!item.is_presell ? '' : '取消'}预售该花样?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        confirmButtonClass: 'danger'
+      }).then(() => {
+        figureApi.setPresell({
+          design_id: item.design_id,
+          is_presell: !item.is_presell
+        }).then(res => {
+          this.$message({
+            type: 'success',
+            message: res.msg
+          })
+          this.fetchData()
+        })
+      })
     },
     changeStatus(item) {
       this.$confirm(`是否${item.status === 2 ? '上架' : '下架'}该花样?`, '提示', {
@@ -323,6 +343,14 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  .el-button+.el-button {
+    margin-left: 0;
+  }
 }
 
 </style>

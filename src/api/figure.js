@@ -64,5 +64,13 @@ export const figureApi = {
       method: 'post',
       data
     })
+  },
+  // 设置预售
+  setPresell(data) {
+    return request({
+      url: '/design/setPresell',
+      method: 'post',
+      data
+    })
   }
 }

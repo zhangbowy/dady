@@ -59,6 +59,20 @@
               </div>
             </div>
             <div class="form-content-item">
+              <div class="block-title"><card-tag tag-name="开启预售" /></div>
+              <div class="block-content">
+                <el-form-item label="">
+                  <el-switch
+                    v-model="form.is_presell"
+                    active-text="开启"
+                    inactive-text="关闭"
+                    :active-value="1"
+                    :inactive-value="0"
+                  />
+                </el-form-item>
+              </div>
+            </div>
+            <div class="form-content-item">
               <div class="block-title"><card-tag tag-name="物流信息" /></div>
               <div class="block-content">
                 <el-form-item label="物流设置">
@@ -248,7 +262,8 @@ export default {
         express_type: 0, // 物流类型
         freight: '', // 运费
         logisticsTemplate: '', // 物流模板id
-        detail: '' // 描述
+        detail: '', // 描述
+        is_presell: 0
       },
       rules: {
         name: [

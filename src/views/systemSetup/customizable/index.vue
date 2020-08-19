@@ -351,7 +351,7 @@ export default {
                 // 重置表单
                 _this.$refs[formName].resetFields()
                 this.dialogFormVisible = false
-                this.fetchData()
+                // this.fetchData()
                 // 刷新页面
                 _this.reload()
               } else {

@@ -23,10 +23,12 @@
 </template>
 <script>
 import ImgUpload from '@/components/ImgUpload'
-import tinymce from 'tinymce/tinymce'
-import 'tinymce/themes/silver/theme.min.js'
-import 'tinymce/skins/ui/oxide/skin.min.css'
 import Editor from '@tinymce/tinymce-vue'
+import tinymce from 'tinymce/tinymce'
+import 'tinymce/themes/silver'
+import 'tinymce/icons/default/icons'
+import 'tinymce/langs/zh_CN'
+import 'tinymce/skins/ui/oxide/skin.min.css'
 
 import 'tinymce/plugins/textcolor'
 import 'tinymce/plugins/advlist'
@@ -80,8 +82,12 @@ export default {
       statusbar: false, // 隐藏编辑器底部的状态栏
       paste_data_images: true, // 允许粘贴图像
       menubar: false, // 隐藏最上方menu
+      language: 'zh_CN', // 中文
+      language_url: '/tinymce/langs/zh_CN.js',
       plugins: 'advlist table lists paste preview fullscreen',
-      toolbar: 'code fontselect fontsizeselect forecolor backcolor bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | imageUpload quicklink h2 h3 blockquote table numlist bullist preview fullscreen',
+      skin_url: '/tinymce/skins/ui/oxide/skin.min.css', // skin路径
+      content_css: `/tinymce/skins/content/default/content.css`,
+      toolbar: `code fontselect fontsizeselect forecolor backcolor bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | imageUpload quicklink h2 h3 blockquote table numlist bullist preview fullscreen`,
       fontsize_formats: '8px 10px 12px 14px 16px 18px 24px 36px', // 第二步
       /**
        * 下面方法是为tinymce添加自定义插入图片按钮
