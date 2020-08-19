@@ -172,6 +172,12 @@
       </el-table>
       <!-- 分页 -->
       <div class="pagination-box">
+        <div class="batch-edit">
+          <el-button type="primary" icon="el-icon-finished" @click="toggleSelection(goodsList)">全部选择</el-button>
+          <el-button type="danger" icon="el-icon-circle-close" @click="toggleSelection()">取消</el-button>
+          <el-button type="success" icon="el-icon-upload2" @click="batchEdit(2)">上架</el-button>
+          <el-button type="warning" icon="el-icon-download" @click="batchEdit(3)">下架</el-button>
+        </div>
         <el-pagination
           :total="total"
           :current-page="currentPage"
@@ -221,9 +227,6 @@ export default {
       }, {
         value: 3,
         label: '已上架'
-      }, {
-        value: 4,
-        label: '预售中'
       }],
       status: '',
       multipleSelection: []
@@ -316,6 +319,62 @@ export default {
     handleSizeChange(val) {
       this.pageSize = val
       this.fetchData()
+    },
+    // 批量选择
+    toggleSelection(rows) {
+      if (rows) {
+        rows.forEach(row => {
+          this.$refs.multipleTable.toggleRowSelection(row)
+        })
+      } else {
+        this.$refs.multipleTable.clearSelection()
+      }
+    },
+    // 批量修改
+    batchEdit(status) {
+      if (Array.isArray(this.multipleSelection)) {
+        const resultList = this.multipleSelection.filter(item => {
+          return item.status === status
+        })
+        const resultIdList = resultList.map(item => item.id)
+        if (!resultIdList.length) {
+          this.toggleSelection()
+          this.$message({
+            type: 'warning',
+            message: `没有选中任何${status === 2 ? '待上架' : '已上架'}商品`
+          })
+          return
+        }
+        const unSelectList = this.multipleSelection.filter(item => {
+          return item.status !== status
+        })
+        this.toggleSelection(unSelectList)
+        this.$confirm(`是否${status === 2 ? '上架' : '下架'}选中的商品!`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          confirmButtonClass: 'danger',
+          center: true
+        }).then(() => {
+          changeStatus({
+            id: resultIdList,
+            status: status === 2 ? 3 : 2
+          }).then(res => {
+            this.$message({
+              type: 'success',
+              message: '修改成功!'
+            })
+            this.fetchData()
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '修改失败！'
+          })
+        })
+      } else {
+        return
+      }
     }
   }
 }
@@ -349,6 +408,9 @@ export default {
   .goods_img{
     width: 60px;
     height: 60px;
+  }
+  .batch-edit {
+    float: left;
   }
 }
 
