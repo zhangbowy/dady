@@ -74,7 +74,7 @@
       </el-table>
     </div>
     <!-- 新增可定制分类 -->
-    <el-dialog center :title="dialogType=='add'? '新增分类': dialogType=='edit'? '编辑分类': '分类详情'" :visible.sync="dialogFormVisible">
+    <el-dialog center :title="dialogType=='add'? '新增分类': dialogType=='edit'? '编辑分类': '分类详情'" :visible.sync="dialogFormVisible" @open="onDialogOpen">
       <el-form ref="form" :model="form" :rules="rules" label-width="100px" label-position="left" size="small">
         <el-form-item label="分类名称" prop="custom_category_name">
           <el-input v-model="form.custom_category_name " :disabled="dialogType=='detail'" />
@@ -90,6 +90,7 @@
         <el-form-item v-if="showBgArea" label="定制区域">
           <div class="text-event" :style="{backgroundImage: `url(${form.design_bg})`,backgroundSize: `${form.design_bg_width}px ${form.design_bg_height}px`, width: `${form.design_bg_width}px`, height: `${form.design_bg_height}px`}">
             <vue-draggable-resizable
+              :key="form.design_bg"
               :w="form.design_width"
               :h="form.design_height"
               :x="form.design_left"
@@ -429,6 +430,10 @@ export default {
     onDrag(x, y) {
       this.form.design_left = x
       this.form.design_top = y
+    },
+    onDialogOpen() {
+      console.log('open')
+      this.form = Object.assign({}, this.form)
     }
   }
 }

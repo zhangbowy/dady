@@ -61,6 +61,21 @@
               </div>
             </div>
             <div class="form-content-item">
+              <div class="block-title"><card-tag tag-name="开启预售" /></div>
+              <div class="block-content">
+                <el-form-item label="">
+                  <el-switch
+                    v-model="form.is_presell"
+                    disabled
+                    active-text="开启"
+                    inactive-text="关闭"
+                    :active-value="1"
+                    :inactive-value="0"
+                  />
+                </el-form-item>
+              </div>
+            </div>
+            <div class="form-content-item">
               <div class="block-title"><card-tag tag-name="物流信息" /></div>
               <div class="block-content">
                 <el-form-item label="物流设置">
@@ -158,9 +173,29 @@
                 </el-form-item>
               </div>
             </div>
+            <div class="form-content-item">
+              <div class="block-title"><card-tag tag-name="小批量定制" /></div>
+              <div class="block-content">
+                <el-form-item v-for="(rules, index) in batchRules" :key="index" prop="old_price">
+                  <el-col :span="8">
+                    <el-col class="line" :span="4">商品数量</el-col>
+                    <el-form-item prop="date1">
+                      <el-input v-model="rules.number" disabled>
+                        <template slot="append">件</template>
+                      </el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-col class="line" :span="4">商品价格</el-col>
+                    <el-form-item prop="date2">
+                      <el-input v-model="rules.price" disabled />
+                    </el-form-item>
+                  </el-col>
+                </el-form-item>
+              </div>
+            </div>
           </el-tab-pane>
         </el-tabs>
-
         <el-form-item>
           <el-button type="primary" @click="()=>this.$router.push({path: `/commodity/goods/edit?id=${form.id}`})">编辑</el-button>
           <el-button @click="()=>this.$router.go(-1)">返回</el-button>
@@ -192,6 +227,7 @@ export default {
       activeName: '1',
       form: {
       },
+      batchRules: [],
       categories: [],
       expressList: [], // 运费模板
       customCategory: [], // 可定制分类

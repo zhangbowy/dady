@@ -204,9 +204,35 @@
                 </el-form-item>
               </div>
             </div>
+            <div class="form-content-item">
+              <div class="block-title"><card-tag tag-name="小批量定制" /></div>
+              <div class="block-content">
+                <el-form-item v-for="(rules, index) in batchRules" :key="index" prop="old_price">
+                  <el-col :span="8">
+                    <el-col class="line" :span="4">商品数量</el-col>
+                    <el-form-item prop="date1">
+                      <el-input v-model="rules.number">
+                        <template slot="append">件</template>
+                      </el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-col class="line" :span="4">商品价格</el-col>
+                    <el-form-item prop="date2">
+                      <el-input v-model="rules.price" />
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-button class="batch-rules-btn" icon="el-icon-close" size="mini" circle @click="onBatchRulesDelete(index)" />
+                  </el-col>
+                </el-form-item>
+              </div>
+              <div class="spec_title">
+                <el-button type="info" @click="onBatchRulesAdd">添加批量定制规则</el-button>
+              </div>
+            </div>
           </el-tab-pane>
         </el-tabs>
-
         <el-form-item>
           <el-button type="primary" @click="onSubmit('form')">保存</el-button>
           <el-button @click="()=>this.$router.go(-1)">取消</el-button>
@@ -265,6 +291,12 @@ export default {
         detail: '', // 描述
         is_presell: 0
       },
+      batchRules: [
+        {
+          price: 10,
+          number: 100
+        }
+      ],
       rules: {
         name: [
           { required: true, message: '请输入商品名称', trigger: 'blur' },
@@ -326,6 +358,17 @@ export default {
     }
   },
   methods: {
+    // 删除批量规则
+    onBatchRulesDelete(index) {
+      this.batchRules.splice(index, 1)
+    },
+    // 添加批量规则
+    onBatchRulesAdd() {
+      this.batchRules.push({
+        price: '',
+        number: ''
+      })
+    },
     // 获取分类
     getCategory() {
       Category.getList().then(res => {
@@ -562,4 +605,5 @@ export default {
       overflow: hidden
       text-overflow: ellipsis
       white-space: nowrap
+  .batch-rules-btn
 </style>
