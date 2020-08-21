@@ -207,11 +207,11 @@
             <div class="form-content-item">
               <div class="block-title"><card-tag tag-name="小批量定制" /></div>
               <div class="block-content">
-                <el-form-item v-for="(rules, index) in batchRules" :key="index" prop="old_price">
+                <el-form-item v-for="(item, index) in batchRules" :key="index" prop="old_price">
                   <el-col :span="8">
                     <el-col class="line" :span="4">商品数量</el-col>
                     <el-form-item prop="date1">
-                      <el-input v-model="rules.number">
+                      <el-input v-model="item.number">
                         <template slot="append">件</template>
                       </el-input>
                     </el-form-item>
@@ -219,10 +219,11 @@
                   <el-col :span="8">
                     <el-col class="line" :span="4">商品价格</el-col>
                     <el-form-item prop="date2">
-                      <el-input v-model="rules.price" />
+                      <el-input v-model="item.price" />
                     </el-form-item>
                   </el-col>
                   <el-col :span="8">
+                    <el-button v-if="!item.isSave" class="batch-rules-btn" icon="el-icon-check" size="mini" circle @click="onBatchRulesSave(index)" />
                     <el-button class="batch-rules-btn" icon="el-icon-close" size="mini" circle @click="onBatchRulesDelete(index)" />
                   </el-col>
                 </el-form-item>
@@ -289,14 +290,10 @@ export default {
         freight: '', // 运费
         logisticsTemplate: '', // 物流模板id
         detail: '', // 描述
-        is_presell: 0
+        is_presell: 0,
+        item_price_template: ''
       },
-      batchRules: [
-        {
-          price: 10,
-          number: 100
-        }
-      ],
+      batchRules: [],
       rules: {
         name: [
           { required: true, message: '请输入商品名称', trigger: 'blur' },
@@ -358,15 +355,33 @@ export default {
     }
   },
   methods: {
+    onBatchRulesSave(index) {
+      this.batchRules[index].isSave = true
+      const batchRulesList = this.batchRules.filter(item => item.isSave)
+      this.form.item_price_template = JSON.stringify(batchRulesList)
+      this.$message({
+        type: 'success',
+        message: '保存成功!'
+      })
+    },
     // 删除批量规则
     onBatchRulesDelete(index) {
       this.batchRules.splice(index, 1)
+      if (this.batchRules[index].isSave) {
+        const batchRulesList = this.batchRules.filter(item => item.isSave)
+        this.form.item_price_template = JSON.stringify(batchRulesList)
+      }
+      this.$message({
+        type: 'success',
+        message: '删除成功!'
+      })
     },
     // 添加批量规则
     onBatchRulesAdd() {
       this.batchRules.push({
         price: '',
-        number: ''
+        number: '',
+        isSave: false
       })
     },
     // 获取分类
@@ -398,6 +413,8 @@ export default {
         this.specification = res.data.sku_show
         this.form.sku_show = res.data.sku_show
         this.form.sku_list = res.data.sku_list
+        this.item_price_template = res.data.item_price_template
+        this.batchRules = JSON.parse(res.data.item_price_template)
         // console.log(this.form.sku_list)
       })
     },

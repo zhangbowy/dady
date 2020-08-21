@@ -17,7 +17,7 @@
           name="username"
           type="text"
           tabindex="1"
-          auto-complete="on"
+          auto-complete="off"
         />
       </el-form-item>
 
@@ -33,7 +33,7 @@
           placeholder="登录密码"
           name="password"
           tabindex="2"
-          auto-complete="on"
+          auto-complete="off"
           @keyup.enter.native="handleLogin"
         />
         <span class="show-pwd" @click="showPwd">
@@ -84,8 +84,8 @@ export default {
     }
     return {
       loginForm: {
-        username: '19985364321',
-        password: '111111',
+        username: '',
+        password: '',
         code: ''
       },
       baseUrl: process.env.VUE_APP_BASE_API,
