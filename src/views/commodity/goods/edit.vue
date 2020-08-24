@@ -366,11 +366,12 @@ export default {
     },
     // 删除批量规则
     onBatchRulesDelete(index) {
-      this.batchRules.splice(index, 1)
       if (this.batchRules[index].isSave) {
+        this.batchRules[index].isSave = false
         const batchRulesList = this.batchRules.filter(item => item.isSave)
         this.form.item_price_template = JSON.stringify(batchRulesList)
       }
+      this.batchRules.splice(index, 1)
       this.$message({
         type: 'success',
         message: '删除成功!'
