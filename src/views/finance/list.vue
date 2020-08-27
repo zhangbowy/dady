@@ -21,14 +21,14 @@
             :value="item.value"
           />
         </el-select>
-        <el-date-picker
+        <!-- <el-date-picker
           v-model="date"
           align="right"
           type="date"
           size="small"
           placeholder="选择日期"
           :picker-options="pickerOptions"
-        />
+        /> -->
         <el-button size="small" icon="el-icon-search" type="primary" @click.native="fetchData">查询</el-button>
       </div>
     </div>

@@ -37,7 +37,7 @@
           width="100"
         >
           <template slot-scope="scope">
-            <img :src="scope.row.headimgurl" alt="" width="60" height="60">
+            <img :src="scope.row.headimgurl" alt="" width="60" height="60" :style="{objectFit: 'cover'}">
           </template>
         </el-table-column>
         <el-table-column

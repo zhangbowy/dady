@@ -42,7 +42,7 @@
             <el-col v-for="item in figureList" :key="item.design_id" class="list-item">
               <el-card :body-style="{ padding: '0px' }" shadow="hover">
                 <!-- <img v-lazy="item.prev_png_path" :src="item.prev_png_path" class="image"> -->
-                <el-image :key="item.design_id" class="image" :src="item.prev_png_path" lazy />
+                <el-image :key="item.design_id" class="image" :src="item.prev_png_path" lazy fit="contain" />
                 <div style="padding: 14px; font-szie: 12px">
                   <span>{{ item.design_name }}</span>
                   <div class="bottom clearfix">

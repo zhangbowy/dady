@@ -53,7 +53,7 @@
               <el-col :span="6" class="td-item">
                 <el-row v-for="(good,i) in item.order_item" :key="`${i}-${good.sku_id}`" class="goods-item">
                   <el-col :span="16" style="text-align:left" class="goods-info">
-                    <el-image :key="good.image" :src="good.image" lazy />
+                    <el-image :key="good.image" :src="good.image" lazy fit="contain" />
                     <div class="right-info">
                       <span class="goods-name">{{ good.name }}</span>
                       <span class="goods-sku">{{ good.sku_name }}</span>
