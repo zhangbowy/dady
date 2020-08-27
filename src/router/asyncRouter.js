@@ -68,49 +68,49 @@ export const asyncRouter = [
       component: () => import('@/views/commodity/goodsCategory/index'),
       meta: { title: '商品分类' }
     },
-    {
-      pid: 4,
-      id: 14,
-      path: 'goods',
-      name: 'Goods',
-      redirect: '/commodity/goods/list',
-      component: () => import('@/views/commodity/goods/index'),
-      meta: { title: '商品列表' },
-      children: [
-        {
-          pid: 4,
-          id: 14,
-          path: 'list',
-          name: 'GoodsList',
-          hidden: true,
-          component: () => import('@/views/commodity/goods/list'),
-          meta: { activeMenu: '/commodity/goods' }
-        }, {
-          pid: 4,
-          id: 15,
-          path: 'edit:id(\\d+)?',
-          name: 'GoodsEdit',
-          hidden: true,
-          component: () => import('@/views/commodity/goods/edit'),
-          meta: { title: '商品编辑', activeMenu: '/commodity/goods' }
-        }, {
-          pid: 4,
-          id: 16,
-          path: 'detail:id(\\d+)?',
-          name: 'GoodsDetail',
-          hidden: true,
-          component: () => import('@/views/commodity/goods/detail'),
-          meta: { title: '商品详情', activeMenu: '/commodity/goods' }
-        }
-      ]
-    }, {
-      pid: 4,
-      id: 17,
-      path: 'resources',
-      name: 'Resources',
-      component: () => import('@/views/commodity/resources'),
-      meta: { title: '我的资源', activeMenu: '/commodity/resources' }
-    }]
+      {
+        pid: 4,
+        id: 14,
+        path: 'goods',
+        name: 'Goods',
+        redirect: '/commodity/goods/list',
+        component: () => import('@/views/commodity/goods/index'),
+        meta: { title: '商品列表' },
+        children: [
+          {
+            pid: 4,
+            id: 14,
+            path: 'list',
+            name: 'GoodsList',
+            hidden: true,
+            component: () => import('@/views/commodity/goods/list'),
+            meta: { activeMenu: '/commodity/goods' }
+          }, {
+            pid: 4,
+            id: 15,
+            path: 'edit:id(\\d+)?',
+            name: 'GoodsEdit',
+            hidden: true,
+            component: () => import('@/views/commodity/goods/edit'),
+            meta: { title: '商品编辑', activeMenu: '/commodity/goods' }
+          }, {
+            pid: 4,
+            id: 16,
+            path: 'detail:id(\\d+)?',
+            name: 'GoodsDetail',
+            hidden: true,
+            component: () => import('@/views/commodity/goods/detail'),
+            meta: { title: '商品详情', activeMenu: '/commodity/goods' }
+          }
+        ]
+      }, {
+        pid: 4,
+        id: 17,
+        path: 'resources',
+        name: 'Resources',
+        component: () => import('@/views/commodity/resources'),
+        meta: { title: '我的资源', activeMenu: '/commodity/resources' }
+      }]
   },
   {
     pid: 0,
@@ -149,14 +149,6 @@ export const asyncRouter = [
         name: 'FigureList',
         component: () => import('@/views/figure/index'),
         meta: { title: '花样列表' }
-      },
-      {
-        pid: 10,
-        id: 10,
-        path: 'category',
-        name: 'FigureCategoryList',
-        component: () => import('@/views/figure/category'),
-        meta: { title: '花样分类' }
       }
     ]
   },
@@ -176,15 +168,15 @@ export const asyncRouter = [
       component: () => import('@/views/orderManage/order/list'),
       meta: { title: '订单列表' }
     },
-    {
-      pid: 5,
-      id: 19,
-      path: 'orderDetail:order_no(\\d+)?',
-      name: 'OrderDetail',
-      hidden: true,
-      component: () => import('@/views/orderManage/order/detail'),
-      meta: { title: '订单详情', activeMenu: '/orderManage/orderList' }
-    }]
+      {
+        pid: 5,
+        id: 19,
+        path: 'orderDetail:order_no(\\d+)?',
+        name: 'OrderDetail',
+        hidden: true,
+        component: () => import('@/views/orderManage/order/detail'),
+        meta: { title: '订单详情', activeMenu: '/orderManage/orderList' }
+      }]
   },
   {
     pid: 0,
@@ -276,14 +268,14 @@ export const asyncRouter = [
         meta: { title: '刺绣模板' }
       }, {
         pid: 8,
-        id: 28,
+        id: 32,
         path: 'platformSettings',
         name: 'PlatformSettings',
         component: () => import('@/views/systemSetup/platformSettings/index'),
         meta: { title: '平台设置' }
       }, {
         pid: 8,
-        id: 28,
+        id: 33,
         path: 'weChatSetting',
         name: 'WeChatSetting',
         component: () => import('@/views/systemSetup/weChatSetting/index'),

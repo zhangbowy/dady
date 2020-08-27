@@ -1,10 +1,10 @@
 <template>
   <div class="wechat-setting">
     <el-tabs type="border-card">
-      <el-tab-pane label="微信设置">
+      <el-tab-pane label="微信设置"  v-if ='adminInfo.role_type != 1'>
         <wecht-setting />
       </el-tab-pane>
-      <el-tab-pane label="店铺设置">
+      <el-tab-pane label="店铺设置" v-if ='adminInfo.role_type == 1'>
         <store-setting />
       </el-tab-pane>
     </el-tabs>
@@ -19,6 +19,11 @@ export default {
   components: {
     WechtSetting,
     StoreSetting
+  },
+  computed: {
+    adminInfo() {
+      return this.$store.state.user.adminInfo
+    }
   },
   data() {
     return {
