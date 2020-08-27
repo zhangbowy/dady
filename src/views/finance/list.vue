@@ -21,6 +21,14 @@
             :value="item.value"
           />
         </el-select>
+        <el-date-picker
+          v-model="date"
+          align="right"
+          type="date"
+          size="small"
+          placeholder="选择日期"
+          :picker-options="pickerOptions"
+        />
         <el-button size="small" icon="el-icon-search" type="primary" @click.native="fetchData">查询</el-button>
       </div>
     </div>
@@ -85,6 +93,33 @@ export default {
         { label: '已驳回', value: 2 },
         { label: '已提现', value: 3 }
       ],
+      date: '',
+      pickerOptions: {
+        disabledDate(time) {
+          return time.getTime() > Date.now()
+        },
+        shortcuts: [{
+          text: '今天',
+          onClick(picker) {
+            picker.$emit('pick', new Date())
+          }
+        }, {
+          text: '昨天',
+          onClick(picker) {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24)
+            picker.$emit('pick', date)
+          }
+        }, {
+          text: '一周前',
+          onClick(picker) {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', date)
+          }
+        }]
+      },
+      month_id: 1,
       designer_team_id: '',
       designerTeam: [],
       status: '',
@@ -187,6 +222,7 @@ export default {
   .screen-box{
     .screen-item{
       text-align: left;
+      margin-bottom: 10px;
     }
   }
   .finance-statistics{

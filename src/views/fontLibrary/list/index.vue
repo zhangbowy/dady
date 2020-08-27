@@ -2,6 +2,14 @@
   <div class="fonts-list main-content">
     <div class="screen-box">
       <div class="operation">
+        <el-select v-model="fontType" size="small" clearable placeholder="请选择字体类型" class="selector">
+          <el-option
+            v-for="item in fontTypeOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
         <el-button v-has="701" size="small" icon="el-icon-upload" type="primary" @click="showDialog('add')">上传</el-button>
       </div>
     </div>
@@ -107,6 +115,16 @@
             @chooseImg="imageChoose"
           />
         </el-form-item>
+        <el-form-item label="字体类型" prop="font_type">
+          <el-select v-model="fontForm.font_type" size="small" clearable placeholder="请选择字体类型" class="selector">
+            <el-option
+              v-for="item in fontTypeOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </el-form-item>
         <el-form-item v-if="dialogType=='add'" label="字体文件" prop="file">
           <el-upload
             ref="upload"
@@ -126,7 +144,7 @@
           >
             <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
             <!-- <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button> -->
-            <div slot="tip" class="el-upload__tip">只能上传压缩文件，且不超过2M</div>
+            <div slot="tip" class="el-upload__tip">{{ fontForm.font_type === 1 ? `只能上传压缩文件，且不超过2M` : '只能上传ttf文件' }}</div>
           </el-upload>
         </el-form-item>
         <el-form-item>
@@ -175,6 +193,7 @@ export default {
       fontForm: {
         font_name: '',
         preview_image: '',
+        font_type: 2,
         min_height: 0,
         max_height: 0
       },
@@ -183,6 +202,17 @@ export default {
       total: 0,
       fileList: [],
       fontDetail: {},
+      fontType: '',
+      fontTypeOptions: [ // 字体类型
+        {
+          label: '中文',
+          value: 2
+        },
+        {
+          label: '英文',
+          value: 1
+        }
+      ],
       rules: {
         font_name: [
           { required: true, message: '请填写字体名称', trigger: 'blur' }
@@ -196,6 +226,9 @@ export default {
         max_height: [
           { required: true, message: '请输入最大高度', trigger: 'blur' }
         ],
+        font_type: [
+          { required: true, message: '请选择字体类型', trigger: 'blur' }
+        ],
         file: [
           { validator: validateFiles, trigger: 'change' }
         ]
@@ -204,6 +237,11 @@ export default {
     }
   },
   watch: {
+    fontType: {
+      handler(newValue, oldValue) {
+        this.fetchData()
+      }
+    },
     fontDialog(val) {
       if (val === false) {
         this.$refs['fontForm'].resetFields()
@@ -223,7 +261,9 @@ export default {
   methods: {
     fetchData() {
       // 获取字体列表
-      fontApi.fontList().then(res => {
+      fontApi.fontList({
+        font_type: this.fontType
+      }).then(res => {
         this.loading = false
         this.fontsList = res.data
       }).catch(() => {
@@ -260,6 +300,7 @@ export default {
             })
           } else {
             const upload = this.$refs.upload
+            console.log(upload)
             upload.submit()
           }
         } else {
@@ -306,6 +347,7 @@ export default {
       const formData = new FormData()
       formData.append('font', e.file)
       formData.append('font_name', this.fontForm.font_name)
+      formData.append('font_type', this.fontForm.font_type)
       formData.append('max_height', this.fontForm.max_height)
       formData.append('min_height', this.fontForm.min_height)
       formData.append('preview_image', this.fontForm.preview_image)
@@ -339,24 +381,17 @@ export default {
       })
     },
     fileChange(file, fileList) {
-      const isZIP = file.raw.type === 'application/x-zip-compressed'
-      if (!isZIP) {
-        this.$message.error('上传文件只能是 ZIP 格式!')
-        return false
-      }
       this.fileList.push(file)
     },
     beforeUpload(file, fileList) {
-      const isZIP = file.type === 'application/x-zip-compressed'
-      const isLt2M = file.size / 1024 / 1024 < 2
-
-      if (!isZIP) {
-        this.$message.error('上传文件只能是 ZIP 格式!')
+      if (this.fontForm.font_type === 2) {
+        return true
       }
+      const isLt2M = file.size / 1024 / 1024 < 2
       if (!isLt2M) {
         this.$message.error('上传文件大小不能超过 2MB!')
       }
-      return isZIP && isLt2M
+      return isLt2M
     },
     handleRemove(file, fileList) {
       this.fileList.pop()
@@ -374,6 +409,9 @@ export default {
   .screen-box{
     .screen-item{
       text-align: left;
+    }
+    .selector {
+      float: left;
     }
     .operation{
       position: relative;
