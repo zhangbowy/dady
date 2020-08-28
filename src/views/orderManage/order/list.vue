@@ -97,6 +97,15 @@
           </el-form-item>
         </el-form>
       </div>
+      <el-row :gutter="12">
+        <el-col v-if="total_amount" :span="6">
+          <el-card shadow="hover" :body-style="{cursor: 'pointer', textAlign: 'left'}">
+            <div class="total_amount">
+              订单总销售金额￥ {{ total_amount }}
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
     </div>
     <el-dialog
       title="请选择机器"
@@ -172,6 +181,7 @@ export default {
       total: 2,
       orderList: [],
       shopsList: [],
+      total_amount: 0,
       machineList: [],
       machine_id: 0,
       orderTypeOption: [{
@@ -339,6 +349,7 @@ export default {
         this.loading = false
         this.orderList = res.data.data
         this.total = res.data.count
+        this.total_amount = res.data.total_amount
       }).catch(() => {
         this.loading = false
       })
@@ -451,6 +462,10 @@ export default {
   }
   .issued-btn {
     float: left;
+  }
+  .total_amount {
+    font-weight: bold;
+    color: #606266;
   }
 }
 
