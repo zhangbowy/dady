@@ -1,8 +1,14 @@
 <template>
-  <el-dialog v-dialogDrag :visible.sync="value" width="30%" title="定制信息" :before-close="beforeClose">
+  <el-dialog v-dialogDrag :visible.sync="value" width="30%" title="定制信息" :before-close="beforeClose" @open="onDialogClick">
     <el-form label-position="left" size="small">
       <el-form-item label="预览图">
-        <img :src="infoItem.preview_image" width="100" alt="">
+        <!-- <img :src="infoItem.preview_image" width="100" alt=""> -->
+        <el-image
+          style="width: 100px; height: 100px"
+          :src="infoItem.preview_image"
+          :preview-src-list="srcList"
+          fit="contain"
+        />
         <el-button
           size="mini"
           type="text"
@@ -10,16 +16,42 @@
         >下载</el-button>
       </el-form-item>
       <el-form-item v-if="infoItem.design" label="花样图片">
-        <img :src="infoItem.design.prev_png_path" width="100" alt="">
+        <!-- <img :src="infoItem.design.prev_png_path" width="100" alt=""> -->
+        <el-image
+          style="width: 100px; height: 100px"
+          :src="infoItem.design.prev_png_path"
+          :preview-src-list="srcList"
+          fit="contain"
+        />
         <el-button
           size="mini"
           type="text"
           @click="downloadCodeImg(infoItem.design.prev_png_path, `${infoItem.order_id}-花样图片`)"
         >下载</el-button>
       </el-form-item>
+      <el-form-item v-if="infoItem.order_txt_png_path" label="生产作业图">
+        <!-- <img :src="infoItem.design.prev_png_path" width="100" alt=""> -->
+        <el-image
+          style="width: 100px; height: 100px"
+          :src="infoItem.order_txt_png_path"
+          :preview-src-list="srcList"
+          fit="contain"
+        />
+        <el-button
+          size="mini"
+          type="text"
+          @click="downloadCodeImg(infoItem.order_txt_png_path, `${infoItem.order_id}-生产作业图`)"
+        >下载</el-button>
+      </el-form-item>
       <el-form-item v-if="infoItem.design_area_image" label="设计图片">
         <div class="design-img">
-          <img :src="infoItem.design_area_image" width="100" alt="">
+          <!-- <img :src="infoItem.design_area_image" width="100" alt=""> -->
+          <el-image
+            style="width: 100px; height: 100px"
+            :src="infoItem.design_area_image"
+            :preview-src-list="srcList"
+            fit="contain"
+          />
         </div>
         <el-button
           size="mini"
@@ -28,7 +60,13 @@
         >下载</el-button>
       </el-form-item>
       <el-form-item v-if="infoItem.custom_image" label="自定义图片">
-        <img :src="infoItem.custom_image" width="100" alt="">
+        <!-- <img :src="infoItem.custom_image" width="100" alt=""> -->
+        <el-image
+          style="width: 100px; height: 100px"
+          :src="infoItem.custom_image"
+          :preview-src-list="srcList"
+          fit="contain"
+        />
         <el-button
           size="mini"
           type="text"
@@ -129,8 +167,23 @@ export default {
       baseUrl: process.env.VUE_APP_BASE_API
     }
   },
+  computed: {
+    srcList() {
+      const imgList = []
+      this.infoItem.preview_image && imgList.push(this.infoItem.preview_image)
+      this.infoItem.design && this.infoItem.design.prev_png_path && imgList.push(this.infoItem.design.prev_png_path)
+      this.infoItem.design_area_image && imgList.push(this.infoItem.design_area_image)
+      this.infoItem.custom_image && imgList.push(this.infoItem.custom_image)
+      this.infoItem.order_txt_png_path && imgList.push(this.infoItem.order_txt_png_path)
+      return imgList
+    }
+  },
   methods: {
+    onDialogClick() {
+      document.body.style.overflow = 'hidden'
+    },
     beforeClose() {
+      document.body.style.overflow = 'visible'
       this.$emit('close')
     }, downloadCodeImg(imgsrc, name) {
       window.location.href = `${this.baseUrl}/index/downLoad?url=${imgsrc}&fileName=${name}`

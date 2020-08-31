@@ -38,7 +38,15 @@
               <span>{{ item._order_type }}</span>
               <span>{{ item.created_at }}</span>
               <span v-if="item._logistics_type" style="color: orange;">{{ item._logistics_type }}</span>
-
+              <div class="header-btn" :style="{marginLeft: '10px'}">
+                <el-button
+                  v-if="item.order_type==2 || item.order_type==3 || item.order_type==4"
+                  v-has="19"
+                  size="mini"
+                  type="text"
+                  @click="showDesign(item)"
+                >定制信息</el-button>
+              </div>
               <div class="header-btn">
                 <router-link :to="`/orderManage/orderDetail?order_no=${item.order_no}`">
                   <el-button
@@ -268,6 +276,7 @@
         </el-form-item>
       </el-form>
     </el-dialog>
+    <design-dialog v-model="designInfo" :info-item="designInfoItem" @close="designInfo = false" />
   </div>
 </template>
 
@@ -275,7 +284,11 @@
 import { getExpressList } from '@/api/common'
 import { getTeamList } from '@/api/designer'
 import { orderApi } from '@/api/order'
+import DesignDialog from './DesignDialog'
 export default {
+  components: {
+    DesignDialog
+  },
   filters: {
     statusFilter(status) {
       const statusMap = {
@@ -301,6 +314,8 @@ export default {
       orderDiaLog: false,
       dispatchDialog: false,
       replayDialog: false, // 回复询价
+      designInfo: false,
+      designInfoItem: {},
       dialogTitle: '', // 弹框标题
       expressOpthions: [], // 物流公司列表
       checkList: [], // 选中的订单id
@@ -401,6 +416,10 @@ export default {
     this.getTeamList()
   },
   methods: {
+    showDesign(orderDetail) {
+      this.designInfo = true
+      this.designInfoItem = orderDetail.order_item[0]
+    },
     // 获取物流公司列表
     getExpress() {
       getExpressList().then(res => {
