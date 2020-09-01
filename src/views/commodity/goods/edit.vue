@@ -27,7 +27,7 @@
                 </el-form-item>
                 <el-form-item label="商品分类" prop="category_id">
                   <el-cascader
-                    v-model="form.category_id"
+                    v-model="form.category_id_list"
                     :options="categories"
                     :props="optionProps"
                     placeholder="选择商品分类"
@@ -223,7 +223,7 @@
                     </el-form-item>
                   </el-col>
                   <el-col :span="8">
-                    <el-button v-if="!item.isSave" class="batch-rules-btn" icon="el-icon-check" size="mini" circle @click="onBatchRulesSave(index)" />
+                    <!-- <el-button v-if="!item.isSave" class="batch-rules-btn" icon="el-icon-check" size="mini" circle @click="onBatchRulesSave(index)" /> -->
                     <el-button class="batch-rules-btn" icon="el-icon-close" size="mini" circle @click="onBatchRulesDelete(index)" />
                   </el-col>
                 </el-form-item>
@@ -262,7 +262,6 @@ export default {
   },
   data() {
     var validateCPrice = (rule, value, callback) => {
-      console.log(value)
       if (value === '') {
         callback(new Error('请输入商品现价'))
       } else if (parseFloat(value) > parseFloat(this.form.old_price)) {
@@ -286,6 +285,7 @@ export default {
         sku_show: '', // 规则
         sku_list: '', // 规则列表
         category_id: '', // 分类
+        category_id_list: '', // 分类列表
         express_type: 0, // 物流类型
         freight: '', // 运费
         logisticsTemplate: '', // 物流模板id
@@ -355,20 +355,20 @@ export default {
     }
   },
   methods: {
-    onBatchRulesSave(index) {
-      this.batchRules[index].isSave = true
-      const batchRulesList = this.batchRules.filter(item => item.isSave)
-      this.form.item_price_template = JSON.stringify(batchRulesList)
-      this.$message({
-        type: 'success',
-        message: '保存成功!'
-      })
-    },
+    // onBatchRulesSave(index) {
+    //   this.batchRules[index].isSave = true
+    //   const batchRulesList = this.batchRules
+    //   this.form.item_price_template = JSON.stringify(batchRulesList)
+    //   this.$message({
+    //     type: 'success',
+    //     message: '保存成功!'
+    //   })
+    // },
     // 删除批量规则
     onBatchRulesDelete(index) {
       if (this.batchRules[index].isSave) {
-        this.batchRules[index].isSave = false
-        const batchRulesList = this.batchRules.filter(item => item.isSave)
+        this.batchRules = this.batchRules.splice(index - 1, 1)
+        const batchRulesList = this.batchRules
         this.form.item_price_template = JSON.stringify(batchRulesList)
       }
       this.batchRules.splice(index, 1)
@@ -381,9 +381,9 @@ export default {
     onBatchRulesAdd() {
       this.batchRules.push({
         price: '',
-        number: '',
-        isSave: false
+        number: ''
       })
+      this.form.item_price_template = JSON.stringify(this.batchRules)
     },
     // 获取分类
     getCategory() {
@@ -414,6 +414,7 @@ export default {
         this.specification = res.data.sku_show
         this.form.sku_show = res.data.sku_show
         this.form.sku_list = res.data.sku_list
+        this.form.category_id_list = [res.data.category_id]
         this.item_price_template = res.data.item_price_template
         this.batchRules = JSON.parse(res.data.item_price_template)
         // console.log(this.form.sku_list)
@@ -431,33 +432,48 @@ export default {
         if (valid) {
           _this.form.sku_list = this.skuList // 取store里面的skuList
           _this.form.sku_show = _this.specificationFilter
-          _this.form.category_id = _this.form.category_id[_this.form.category_id.length - 1]
-          if (_this.form.id) {
-            editGood(_this.form).then(res => {
-              if (res.code === 0) {
-                this.$message({
-                  type: 'success',
-                  message: res.msg || '修改成功!'
-                })
-                // 重置表单
-                _this.$router.replace({ path: '/commodity/goods/list' })
-              } else {
-                this.$message.success(res.msg || '修改失败!')
-              }
+          _this.form.category_id = _this.form.category_id_list[_this.form.category_id_list.length - 1]
+          let hasEmpty = true
+          this.batchRules.forEach(item => {
+            if (!item.number && !item.price) {
+              hasEmpty = false
+              return
+            }
+          })
+          if (!hasEmpty) {
+            this.$message({
+              message: '请填写正确的小批量定制规则!'
             })
+            // return false
           } else {
-            addGood(_this.form).then(res => {
-              if (res.code === 0) {
-                this.$message({
-                  type: 'success',
-                  message: res.msg || '添加成功!'
-                })
-                // 重置表单
-                _this.$router.replace({ path: '/commodity/goods/list' })
-              } else {
-                this.$message.success(res.msg || '添加失败!')
-              }
-            })
+            this.form.item_price_template = JSON.stringify(this.batchRules)
+            if (_this.form.id) {
+              editGood(_this.form).then(res => {
+                if (res.code === 0) {
+                  this.$message({
+                    type: 'success',
+                    message: res.msg || '修改成功!'
+                  })
+                  // 重置表单
+                  _this.$router.replace({ path: '/commodity/goods/list' })
+                } else {
+                  this.$message.success(res.msg || '修改失败!')
+                }
+              })
+            } else {
+              addGood(_this.form).then(res => {
+                if (res.code === 0) {
+                  this.$message({
+                    type: 'success',
+                    message: res.msg || '添加成功!'
+                  })
+                  // 重置表单
+                  _this.$router.replace({ path: '/commodity/goods/list' })
+                } else {
+                  this.$message.success(res.msg || '添加失败!')
+                }
+              })
+            }
           }
         } else {
           return false
