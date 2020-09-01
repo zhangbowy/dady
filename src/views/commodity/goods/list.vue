@@ -175,8 +175,8 @@
         <div class="batch-edit">
           <el-button type="primary" icon="el-icon-finished" @click="toggleSelection(goodsList)">全部选择</el-button>
           <el-button type="danger" icon="el-icon-circle-close" @click="toggleSelection()">取消</el-button>
-          <el-button type="success" icon="el-icon-upload2" @click="batchEdit(2)">上架</el-button>
-          <el-button type="warning" icon="el-icon-download" @click="batchEdit(3)">下架</el-button>
+          <el-button v-has="400" type="success" icon="el-icon-upload2" @click="batchEdit(2)">上架</el-button>
+          <el-button v-has="400" type="warning" icon="el-icon-download" @click="batchEdit(3)">下架</el-button>
         </div>
         <el-pagination
           :total="total"

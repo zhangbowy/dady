@@ -171,10 +171,10 @@ export default {
     srcList() {
       const imgList = []
       this.infoItem.preview_image && imgList.push(this.infoItem.preview_image)
+      this.infoItem.order_txt_png_path && imgList.push(this.infoItem.order_txt_png_path)
       this.infoItem.design && this.infoItem.design.prev_png_path && imgList.push(this.infoItem.design.prev_png_path)
       this.infoItem.design_area_image && imgList.push(this.infoItem.design_area_image)
       this.infoItem.custom_image && imgList.push(this.infoItem.custom_image)
-      this.infoItem.order_txt_png_path && imgList.push(this.infoItem.order_txt_png_path)
       return imgList
     }
   },

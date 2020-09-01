@@ -1,7 +1,7 @@
 <template>
   <div class="goods-category main-content">
     <div class="screen-box">
-      <el-button v-has="401" size="small" icon="el-icon-plus" type="primary" @click="showDialog('add')">新增</el-button>
+      <el-button v-has="20002" size="small" icon="el-icon-plus" type="primary" @click="showDialog('add')">新增</el-button>
     </div>
     <div class="content">
       <el-table
@@ -60,7 +60,7 @@
               @click="showDialog('detail', scope.row)"
             >查看</el-button>
             <el-button
-              v-has="403"
+              v-has="20004"
               size="mini"
               type="danger"
               @click="handleDelete(scope.row.design_category_id)"
