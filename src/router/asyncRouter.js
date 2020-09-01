@@ -114,7 +114,7 @@ export const asyncRouter = [
   },
   {
     pid: 0,
-    id: 10,
+    id: 10000,
     path: '/finance',
     name: 'Finance',
     component: Layout,
@@ -123,8 +123,8 @@ export const asyncRouter = [
     meta: { title: '财务管理', icon: 'finance' },
     children: [
       {
-        pid: 10,
-        id: 10,
+        pid: 10000,
+        id: 34,
         path: 'list',
         name: 'FinanceList',
         component: () => import('@/views/finance/list'),
@@ -134,7 +134,7 @@ export const asyncRouter = [
   },
   {
     pid: 0,
-    id: 10,
+    id: 20000,
     path: '/figure',
     name: 'Figure',
     component: Layout,
@@ -143,12 +143,20 @@ export const asyncRouter = [
     meta: { title: '花样管理', icon: 'figure' },
     children: [
       {
-        pid: 10,
-        id: 10,
+        pid: 20000,
+        id: 35,
         path: 'list',
         name: 'FigureList',
         component: () => import('@/views/figure/index'),
         meta: { title: '花样列表' }
+      },
+      {
+        pid: 20000,
+        id: 36,
+        path: 'category',
+        name: 'FigureCategoryList',
+        component: () => import('@/views/figure/category'),
+        meta: { title: '花样分类' }
       }
     ]
   },

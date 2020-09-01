@@ -318,9 +318,9 @@ export default {
           order_id: this.checkedList,
           custom_template_id: this.current_custom_category_id,
           machine_id: this.machine_id
-        }).then(data => {
+        }).then($data => {
           this.$message({
-            message: '下发机器成功',
+            message: $data.msg || '操作成功!',
             type: 'success'
           })
           this.dialogVisible = false
