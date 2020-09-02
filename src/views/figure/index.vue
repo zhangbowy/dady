@@ -56,7 +56,7 @@
                     <el-button v-if="item.status!=3 && roles===1" type="text" class="button" @click.stop="bindPrice(item)">标价</el-button> -->
                     <el-button v-if="item.status!=1" :style="{color: item.status===3?'#F56C6C':'#67c23a'}" type="text" class="button" @click.stop="changeStatus(item)">{{ item.status==2?'上架':item.status==3?'下架':'' }}</el-button>
                     <!-- <el-button v-if="item.status!=3" type="text" style="color:#F56C6C" class="button" @click.stop="handleDelete(item.design_id)">删除</el-button> -->
-                    <el-button v-has="20005" type="text" class="button" @click.stop="setCatetory(item.design_id)">设置分类</el-button>
+                    <el-button v-has="20005" type="text" class="button" @click.stop="setCatetory(item)">设置分类</el-button>
                     <el-button v-has="20006" type="text" class="button" @click.stop="setPresell(item)">{{ item.is_presell ? '取消预售' : '预售' }}</el-button>
                   </div>
                 </div>
@@ -231,7 +231,9 @@ export default {
       this.loading = true
       this.fetchData()
     },
-    setCatetory(design_id) {
+    setCatetory(item) {
+      const { design_id, design_category_id } = item
+      this.form.design_category_id = design_category_id
       this.showCategorySelector = true
       this.form.design_id = design_id
     },
