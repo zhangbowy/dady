@@ -1,11 +1,21 @@
 <style lang="sass" scoped>
 .flex
   display: flex
-
   .guide_coefficient
     margin-right: 20px
 </style>
 <style lang="scss">
+  .container{
+    display: flex;
+    flex-direction: column;
+    .btns-group{
+      width: 450px;
+      float: right;
+      display: flex;
+      margin-top: 10px;
+      justify-content: space-around;
+    }
+  }
   .logo-uploader{
     .el-upload {
       border: 1px dashed #d9d9d9;
@@ -32,7 +42,6 @@
     }
   }
 </style>
-
 <template>
   <div class="container flex">
     <egrid
@@ -44,6 +53,33 @@
       :columns-props="columnsProps"
       v-on="$listeners"
     />
+    <slot>
+      <template>
+        <div class="btns-group-wrapper">
+          <div class="btns-group">
+            <el-button type="primary" icon="el-icon-edit" @click="onBatchEdit('current_price')">批量修改价格</el-button>
+            <el-button type="primary" icon="el-icon-edit" @click="onBatchEdit('weight')">批量修改重量</el-button>
+            <el-button type="primary" icon="el-icon-edit" @click="onBatchEdit('num')">批量修改库存</el-button>
+          </div>
+        </div>
+        <el-dialog
+          title="提示"
+          :visible.sync="inputDialogVisible"
+          width="30%"
+          center
+        >
+          <el-input
+            v-model="inputValue"
+            placeholder="请输入内容"
+            :clearable="true"
+          />
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="inputDialogVisible = false">取 消</el-button>
+            <el-button type="primary" @click="onInputConfirm">确 定</el-button>
+          </span>
+        </el-dialog>
+      </template>
+    </slot>
   </div>
 </template>
 
@@ -68,6 +104,9 @@ export default {
   },
 
   data: () => ({
+    inputDialogVisible: false,
+    inputValue: '',
+    currentType: '',
     picMax: 1, // 图片上传
     baseUrl: process.env.VUE_APP_BASE_API,
     data: [],
@@ -287,6 +326,19 @@ export default {
   },
 
   methods: {
+    onInputConfirm() {
+      this.data.forEach((item) => {
+        item[this.currentType] = this.inputValue
+      })
+      this.inputDialogVisible = false
+    },
+    onBatchEdit(type) {
+      if (type !== this.currentType) {
+        this.inputValue = ''
+      }
+      this.inputDialogVisible = true
+      this.currentType = type
+    },
     diffIds(skusList1, skusList2) {
       // 两个数据的 sku_id 进行相差
       skusList1 = skusList1.map(item => item.sku_id)

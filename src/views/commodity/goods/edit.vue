@@ -563,6 +563,9 @@ export default {
       }
     }
   }
+  .group_container .input {
+    margin-top: 10px !important;
+  }
 }
 </style>
 <style lang="sass" scoped>
