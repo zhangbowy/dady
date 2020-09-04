@@ -314,7 +314,7 @@ export default {
         images: [
           { required: true, message: '请上传商品主图', trigger: 'blur' }
         ],
-        category_id: [
+        category_id_list: [
           { required: true, message: '请选择分类', trigger: 'change' }
         ]
       },
