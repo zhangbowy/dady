@@ -255,7 +255,7 @@ export default {
           })
           this.fetchData()
         })
-      })
+      }, () => {})
     },
     changeStatus(item) {
       this.$confirm(`是否${item.status === 2 ? '上架' : '下架'}该花样?`, '提示', {
