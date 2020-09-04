@@ -416,7 +416,7 @@ export default {
         this.form.sku_list = res.data.sku_list
         this.form.category_id_list = [res.data.category_id]
         this.item_price_template = res.data.item_price_template
-        this.batchRules = JSON.parse(res.data.item_price_template)
+        this.batchRules = JSON.parse(res.data.item_price_template) || []
         // console.log(this.form.sku_list)
       })
     },
@@ -434,7 +434,7 @@ export default {
           _this.form.sku_show = _this.specificationFilter
           _this.form.category_id = _this.form.category_id_list[_this.form.category_id_list.length - 1]
           let hasEmpty = true
-          this.batchRules.forEach(item => {
+          Array.isArray(this.batchRules) && this.batchRules.forEach(item => {
             if (!item.number && !item.price) {
               hasEmpty = false
               return
