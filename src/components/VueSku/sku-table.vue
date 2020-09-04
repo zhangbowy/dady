@@ -9,7 +9,7 @@
     display: flex;
     flex-direction: column;
     .btns-group{
-      width: 450px;
+      width: 750px;
       float: right;
       display: flex;
       margin-top: 10px;
@@ -45,18 +45,23 @@
 <template>
   <div class="container flex">
     <egrid
+      ref="multipleTable"
       border
       max-height="800"
+      column-type="selection"
       v-bind="$attrs"
       :data="data"
       :columns="columns"
       :columns-props="columnsProps"
       v-on="$listeners"
+      @selection-change="handleSelectionChange"
     />
     <slot>
       <template>
         <div class="btns-group-wrapper">
           <div class="btns-group">
+            <el-button type="primary" icon="el-icon-finished" @click="toggleSelection(data)">全部选择</el-button>
+            <el-button type="danger" icon="el-icon-circle-close" @click="toggleSelection()">取消</el-button>
             <el-button type="primary" icon="el-icon-edit" @click="onBatchEdit('current_price')">批量修改价格</el-button>
             <el-button type="primary" icon="el-icon-edit" @click="onBatchEdit('weight')">批量修改重量</el-button>
             <el-button type="primary" icon="el-icon-edit" @click="onBatchEdit('num')">批量修改库存</el-button>
@@ -110,6 +115,7 @@ export default {
     picMax: 1, // 图片上传
     baseUrl: process.env.VUE_APP_BASE_API,
     data: [],
+    checkoutList: [],
     coefficient: {
       purchase_coefficient: 0,
       guide_coefficient: 1.2
@@ -326,13 +332,30 @@ export default {
   },
 
   methods: {
+    // 批量选择
+    toggleSelection(rows) {
+      if (rows) {
+        rows.forEach(row => {
+          this.$refs.multipleTable.toggleRowSelection(row)
+        })
+      } else {
+        this.$refs.multipleTable.clearSelection()
+      }
+    },
+    handleSelectionChange(rows) {
+      this.checkoutList = rows
+    },
     onInputConfirm() {
-      this.data.forEach((item) => {
+      this.checkoutList.forEach((item) => {
         item[this.currentType] = this.inputValue
       })
       this.inputDialogVisible = false
     },
     onBatchEdit(type) {
+      if (!this.checkoutList.length) {
+        this.$message('请选择至少一个商品规格')
+        return
+      }
       if (type !== this.currentType) {
         this.inputValue = ''
       }
