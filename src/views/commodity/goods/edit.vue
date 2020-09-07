@@ -314,7 +314,7 @@ export default {
         images: [
           { required: true, message: '请上传商品主图', trigger: 'blur' }
         ],
-        category_id_list: [
+        category_id: [
           { required: true, message: '请选择分类', trigger: 'change' }
         ]
       },
@@ -414,7 +414,7 @@ export default {
         this.specification = res.data.sku_show
         this.form.sku_show = res.data.sku_show
         this.form.sku_list = res.data.sku_list
-        this.form.category_id_list = [res.data.category_id]
+        this.form.category_id_list = res.data.category_id
         this.item_price_template = res.data.item_price_template
         this.batchRules = JSON.parse(res.data.item_price_template) || []
         // console.log(this.form.sku_list)
@@ -428,11 +428,11 @@ export default {
         _this.form.weight = this.priceInfo.minWeight
         _this.form.sum_stock = this.priceInfo.totalNum
       }
+      _this.form.category_id = _this.form.category_id_list[_this.form.category_id_list.length - 1]
       _this.$refs[formName].validate((valid) => {
         if (valid) {
           _this.form.sku_list = this.skuList // 取store里面的skuList
           _this.form.sku_show = _this.specificationFilter
-          _this.form.category_id = _this.form.category_id_list[_this.form.category_id_list.length - 1]
           let hasEmpty = true
           Array.isArray(this.batchRules) && this.batchRules.forEach(item => {
             if (!item.number && !item.price) {
