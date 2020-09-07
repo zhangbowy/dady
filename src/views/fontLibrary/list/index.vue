@@ -205,11 +205,11 @@ export default {
       fontType: '',
       fontTypeOptions: [ // 字体类型
         {
-          label: '中文',
+          label: '普通字体',
           value: 2
         },
         {
-          label: '英文',
+          label: '刺绣字体',
           value: 1
         }
       ],
