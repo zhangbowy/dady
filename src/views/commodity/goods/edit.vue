@@ -32,6 +32,7 @@
                     :props="optionProps"
                     placeholder="选择商品分类"
                     clearable
+                    @change="onCascaderChange"
                   />
                 </el-form-item>
               </div>
@@ -355,6 +356,9 @@ export default {
     }
   },
   methods: {
+    onCascaderChange(val) {
+      this.form.category_id = val[val.length - 1]
+    },
     // onBatchRulesSave(index) {
     //   this.batchRules[index].isSave = true
     //   const batchRulesList = this.batchRules
@@ -428,7 +432,7 @@ export default {
         _this.form.weight = this.priceInfo.minWeight
         _this.form.sum_stock = this.priceInfo.totalNum
       }
-      _this.form.category_id = _this.form.category_id_list[_this.form.category_id_list.length - 1]
+      // _this.form.category_id = _this.form.category_id_list[_this.form.category_id_list.length - 1]
       _this.$refs[formName].validate((valid) => {
         if (valid) {
           _this.form.sku_list = this.skuList // 取store里面的skuList
