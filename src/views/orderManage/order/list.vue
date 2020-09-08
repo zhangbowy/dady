@@ -108,6 +108,7 @@
       </el-row>
     </div>
     <el-dialog
+      v-dialogDrag
       title="请选择机器"
       :visible.sync="dialogVisible"
       width="30%"

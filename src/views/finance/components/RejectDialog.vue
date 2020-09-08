@@ -10,7 +10,6 @@
           <el-button @click="beforeClose">取消</el-button>
         </el-form-item>
       </el-form>
-
     </el-dialog>
   </div>
 </template>

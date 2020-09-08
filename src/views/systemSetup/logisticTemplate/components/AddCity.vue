@@ -1,6 +1,6 @@
 <template>
   <div class="add-city">
-    <el-dialog title="城市选择" :visible.sync="isShow" :before-close="hiddenDialog" @close="hiddenDialog">
+    <el-dialog v-dialogDrag title="城市选择" :visible.sync="isShow" :before-close="hiddenDialog" @close="hiddenDialog">
       <div class="content">
         <el-row :gutter="20">
           <el-col :span="12">

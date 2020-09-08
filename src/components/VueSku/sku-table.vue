@@ -68,6 +68,7 @@
           </div>
         </div>
         <el-dialog
+          v-dialogDrag
           title="提示"
           :visible.sync="inputDialogVisible"
           width="30%"
