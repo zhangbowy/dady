@@ -1,8 +1,10 @@
 <template>
   <div class="embroid-template main-content">
-    <!-- <div class="screen-box">
-      <el-button size="small" icon="el-icon-plus" type="primary" @click="showDialog('add')">新增模板</el-button>
-    </div> -->
+    <div class="screen-box">
+      <!-- <el-button size="small" icon="el-icon-plus" type="primary" @click="showDialog('add')">新增模板</el-button> -->
+      <el-button size="small" icon="el-icon-upload2" type="primary" @click="exportTemplate">导出</el-button>
+      <el-button size="small" icon="el-icon-download" type="primary" @click="showImportDialog">导入</el-button>
+    </div>
     <div class="content">
       <el-tabs v-model="type" type="border-card" @tab-click="handleClick">
         <el-tab-pane label="一般定制" name="1">
@@ -184,6 +186,33 @@
           </el-form-item>
         </el-form>
       </el-dialog>
+
+      <el-dialog v-dialogDrag :visible.sync="importDialogVisible" class="upload-xlsx-dialog">
+        <el-upload
+          ref="upload"
+          class="upload-xlsx"
+          :action="`${ baseUrl }/system/uploadEmbPrice`"
+          :limit="1"
+          :headers="{'adm_sign': token}"
+          :file-list="fileList"
+          :auto-upload="false"
+          :on-success="uploadSuccess"
+          name="excel"
+          accept=".xlsx,.xls"
+          multiple
+        >
+          <el-button size="small" type="primary">导入文件</el-button>
+          <div slot="tip" class="el-upload__tip">只能上传xlsx, xls文件</div>
+        </el-upload>
+        <div class="btns-group">
+          <el-button @click="importDialogVisible = false">
+            取消
+          </el-button>
+          <el-button type="primary" @click="submitUpload">
+            确定
+          </el-button>
+        </div>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -191,10 +220,12 @@
 <script>
 import { embTemplate } from '@/api/system'
 import ImgUpload from '@/components/ImgUpload' // 图片上传
+import { getToken } from '@/utils/auth'
 export default {
   components: {
     ImgUpload
   },
+  inject: ['reload'],
   data() {
     return {
       loading: true,
@@ -202,9 +233,13 @@ export default {
       delLoading: false,
       btnLoading: '',
       templates: [],
+      token: getToken(),
       listIndex: '',
       dialogTableVisible: false,
       dialogFormVisible: false,
+      baseUrl: process.env.VUE_APP_BASE_API,
+      importDialogVisible: false,
+      fileList: [],
       form: {
         emb_template_price: [
           {
@@ -232,6 +267,49 @@ export default {
     // this.getSetting()
   },
   methods: {
+    uploadSuccess(res) {
+      if (res.code === 0) {
+        this.$message({
+          showClose: true,
+          message: res.msg,
+          type: 'success'
+        })
+        this.reload()
+      } else {
+        this.$message({
+          showClose: true,
+          message: res.msg,
+          type: 'error'
+        })
+      }
+    },
+    submitUpload() {
+      this.$refs['upload'].submit()
+    },
+    showImportDialog() {
+      this.importDialogVisible = true
+    },
+    // 导出模板
+    exportTemplate() {
+      window.open(this.baseUrl + '/system/exportEmbPrice')
+    },
+    importTemplate(e) {
+      const formData = new FormData()
+      formData.append('excel', e.file)
+      formData.append('template_id', 2)
+      const loading = this.$loading({
+        lock: true,
+        text: '文件上传中',
+        spinner: 'el-icon-loading',
+        background: 'rgba(255, 255, 255, 0.5)'
+      })
+      embTemplate.importTemplate(formData).then(data => {
+        loading.close()
+        this.reload()
+      }).catch(() => {
+        loading.close()
+      })
+    },
     // 获取所有模板
     getEmbTemplate() {
       embTemplate.getEmbTemplate({
@@ -397,5 +475,22 @@ export default {
 .content{
   margin-top: 0;
   border: none;
+}
+.screen-box {
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  // display: flex;
+}
+.upload-xlsx-dialog {
+  .el-dialog__body {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  .btns-group {
+    margin-top: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+  }
 }
 </style>

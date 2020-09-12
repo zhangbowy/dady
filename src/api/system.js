@@ -55,8 +55,29 @@ export const embTemplate = {
       method: 'post',
       data
     })
+  },
+  /**
+   * 导出价格模板
+   * @param {*} param
+   */
+  exportTemplate(params) {
+    return request({
+      url: '/system/exportEmbPrice',
+      method: 'get',
+      params
+    })
+  },
+  /**
+   * 导出价格模板
+   * @param {*} data
+   */
+  importTemplate(data) {
+    return request({
+      url: '/system/uploadEmbPrice',
+      method: 'post',
+      data
+    })
   }
-
 }
 
 export const adsense = {

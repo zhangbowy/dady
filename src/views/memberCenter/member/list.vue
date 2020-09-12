@@ -65,11 +65,11 @@
               size="mini"
               @click.native="showDialog('detail', scope.row)"
             >查看</el-button>
-            <el-button
+            <!-- <el-button
               size="mini"
               type="danger"
               @click="handleDelete(scope.row.shop_id)"
-            >删除</el-button>
+            >删除</el-button> -->
           </template>
         </el-table-column>
       </el-table>
@@ -93,6 +93,9 @@
           <el-form-item label="真实姓名">
             <el-input v-model="memberForm.name " :disabled="dialogType=='detail'" />
           </el-form-item>
+          <el-form-item label="收货地址">
+            <el-input :value="memberForm | address" :disabled="dialogType=='detail'" />
+          </el-form-item>
           <el-form-item label="手机号">
             <el-input v-model="memberForm.phone " :disabled="dialogType=='detail'" />
           </el-form-item>
@@ -104,7 +107,7 @@
               @chooseImg="imageChoose"
             />
           </el-form-item>
-          <el-form-item label="生日">
+          <!-- <el-form-item label="生日">
             <el-date-picker
               v-model="memberForm.birthday"
               type="date"
@@ -112,11 +115,11 @@
               :disabled="dialogType=='detail'"
               placeholder="选择日期"
             />
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item>
             <el-button v-if="dialogType!=='detail'" type="primary" @click="onSubmit('memberForm')">保存</el-button>
-            <el-button v-else type="primary" @click="dialogType='edit'">编辑</el-button>
-            <el-button @click="dialogFormVisible = false">取消</el-button>
+            <!-- <el-button v-else type="primary" @click="dialogType='edit'">编辑</el-button> -->
+            <!-- <el-button @click="dialogFormVisible = false">取消</el-button> -->
           </el-form-item>
         </el-form>
       </el-dialog>
@@ -131,6 +134,11 @@ export default {
   components: {
     ImgUpload
   },
+  filters: {
+    address(item) {
+      return `${item.country || ''} ${item.province || ''} ${item.city || ''} ${item.address_detail || ''}`
+    }
+  },
   data() {
     return {
       loading: true,
@@ -142,7 +150,7 @@ export default {
         name: '',
         nickname: '',
         phone: '',
-        birthday: '',
+        // birthday: '',
         headimgurl: ''
       },
       rules: {

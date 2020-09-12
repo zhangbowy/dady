@@ -20,9 +20,9 @@
         <el-select v-model="design_category_id" size="small" clearable placeholder="请选择设花样类别">
           <el-option
             v-for="item in figureCategoryList"
-            :key="item.design_category_id"
-            :label="item.design_category_name"
-            :value="item.design_category_id"
+            :key="item.id"
+            :label="item.category_name"
+            :value="item.id"
           />
         </el-select>
         <el-button size="small" icon="el-icon-search" type="primary" @click="doSearch()">搜索</el-button>
@@ -82,12 +82,12 @@
     <el-dialog v-dialogDrag auto width="300px" title="修改花样分类" :visible.sync="showCategorySelector">
       <el-form ref="form" :model="form">
         <el-form-item>
-          <el-select v-model="form.design_category_id" size="small" clearable placeholder="请选择设花样类别">
+          <el-select v-model="form.design_category_id" size="small" clearable placeholder="请选择花样类别">
             <el-option
               v-for="item in figureCategoryList"
-              :key="item.design_category_id"
-              :label="item.design_category_name"
-              :value="item.design_category_id"
+              :key="item.id"
+              :label="item.category_name"
+              :value="item.id"
             />
           </el-select>
         </el-form-item>
@@ -103,6 +103,7 @@
 <script>
 import { figureApi } from '@/api/figure'
 import { getTeamList } from '@/api/designer'
+import { Category } from '@/api/goods'
 export default {
   data() {
     return {
@@ -158,11 +159,9 @@ export default {
     },
     // 获取花样类型
     getFigureCategory() {
-      figureApi.getCategory({
-        pageSize: 1000,
-        currentPage: 1
-      }).then(res => {
-        this.figureCategoryList = res.data.data
+      Category.getList().then(res => {
+        this.figureCategoryList = res.data
+        console.log(this.figureCategoryList)
       })
     },
     // 统计

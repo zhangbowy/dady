@@ -101,7 +101,7 @@
             <el-col class="info-td" :span="6"> <span style="color: #ee0a24">￥{{ item.current_price }}</span>/{{ item.buy_num }}件</el-col>
             <el-col class="info-td" :span="6">{{ item.sku_name }}</el-col>
             <el-col class="info-td" :span="6">
-              {{ orderDetail.status==1?'未付款': item.express_number?item.express_number:'未发货' }}
+              {{ orderDetail.status==1?'未付款': (item.express_number?item.express_number: (orderDetail._logistics_type ==='门店自提' ? '无' : '未发货')) }}
               <el-button v-if=" orderDetail.status===3" v-has="502" type="text" style="padding: 0" @click.stop="getOrderTrace(item.order_item_id)">查看</el-button>
             </el-col>
           </el-row>
