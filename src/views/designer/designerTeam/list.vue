@@ -59,7 +59,7 @@
             <el-button
               size="mini"
               type="danger"
-              @click="handleDelete(scope.row.shop_id)"
+              @click="handleDelete(scope.row.designer_team_id)"
             >删除</el-button>
           </template>
         </el-table-column>
@@ -256,7 +256,7 @@ export default {
         type: 'warning',
         confirmButtonClass: 'danger'
       }).then(() => {
-        deleteDesigner({ designer_id: id }).then(res => {
+        deleteDesigner({ designer_team_id: id }).then(res => {
           this.$message({
             type: 'success',
             message: '删除成功!'
