@@ -111,6 +111,22 @@
             <el-input v-model="form.template_name" disabled autocomplete="off" style="width: 50%" />
           </el-form-item>
           <el-form-item label="参数定价" :label-width="formLabelWidth">
+            <div slot="label" class="from-label">
+              <span>参数定价</span>
+              <div class="from-label_sort">
+                <el-select v-model="sortType" placeholder="请选择活动区域" size="mini">
+                  <el-option v-for="sortItem in sortTypeList" :key="sortItem.value" :label="sortItem.name" :value="sortItem.value" />
+                </el-select>
+                <el-radio-group v-model="sortMode" size="mini">
+                  <el-radio-button :label="true">
+                    <i class="el-icon-top" />
+                  </el-radio-button>
+                  <el-radio-button :label="false">
+                    <i class="el-icon-bottom" />
+                  </el-radio-button>
+                </el-radio-group>
+              </div>
+            </div>
             <el-row>
               <el-col v-for="(item,index) in form.emb_template_price" :key="index" :span="24">
                 <el-input v-model="item.width" size="small" :disabled="!item.disabled" placeholder="宽" style="width: 25%">
@@ -240,6 +256,22 @@ export default {
       baseUrl: process.env.VUE_APP_BASE_API,
       importDialogVisible: false,
       fileList: [],
+      sortType: 'width', // 排序类型
+      sortMode: false, // 排序模式 false 为从小到大
+      sortTypeList: [
+        {
+          value: 'width',
+          name: '宽'
+        },
+        {
+          value: 'height',
+          name: '高'
+        },
+        {
+          value: 'price',
+          name: '价格'
+        }
+      ],
       form: {
         emb_template_price: [
           {
@@ -262,11 +294,30 @@ export default {
       type: '1'
     }
   },
+  watch: {
+    sortType: {
+      handler(newVlaue, oldValue) {
+        this.sort()
+      }
+    },
+    sortMode: {
+      handler(newVlaue, oldValue) {
+        this.sort()
+      }
+    }
+  },
   created() {
     this.getEmbTemplate()
     // this.getSetting()
   },
   methods: {
+    sort() {
+      let list = this.form.emb_template_price || []
+      list = list.sort((a, b) => {
+        return this.sortMode ? (b[this.sortType] - a[this.sortType]) : (a[this.sortType] - b[this.sortType])
+      })
+      this.form = Object.assign({}, this.form, { emb_template_price: list })
+    },
     uploadSuccess(res) {
       if (res.code === 0) {
         this.$message({
@@ -330,6 +381,7 @@ export default {
       this.listIndex = index
       this.form = row
       this.dialogType = type
+      this.sort()
       this.dialogFormVisible = true
     },
     // tabs切换
@@ -492,5 +544,15 @@ export default {
     display: flex;
     justify-content: flex-end;
   }
+}
+::v-deep .el-form--label-top .el-form-item__label {
+  width: 100%;
+  padding-right: 40px;
+}
+.from-label {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 </style>
