@@ -630,7 +630,7 @@ export default {
     position: relative
     border-radius: 2px
     cursor: pointer
-
+    margin-top: 10px
     &:hover
       .remove
         display: block

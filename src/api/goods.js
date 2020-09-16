@@ -19,6 +19,17 @@ export function addGood(data) {
   })
 }
 
+export function importGood(data) {
+  return request({
+    url: '/goods/tbImport',
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    },
+    data
+  })
+}
+
 export function editGood(data) {
   return request({
     url: '/goods/editGoods',

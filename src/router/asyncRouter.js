@@ -110,6 +110,14 @@ export const asyncRouter = [
       name: 'Resources',
       component: () => import('@/views/commodity/resources'),
       meta: { title: '我的资源', activeMenu: '/commodity/resources' }
+    },
+    {
+      pid: 4,
+      id: 17,
+      path: 'import',
+      name: 'Import',
+      component: () => import('@/views/commodity/import/index'),
+      meta: { title: '商品导入', activeMenu: '/commodity/import' }
     }]
   },
   {
