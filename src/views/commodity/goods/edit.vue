@@ -1,23 +1,23 @@
 <template>
   <div class="goods-edit">
     <div class="title-info">
-      <card-tag :tag-name="id!=''? '编辑商品': '新增商品'" />
+      <card-tag :tag-name="id!=''? `${$t('编辑商品')}`: `${$t('新增商品')}`" />
     </div>
     <!-- 表单部分 -->
     <div class="form-info">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px" label-position="top" size="small">
         <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-          <el-tab-pane label="基本信息" name="1">
+          <el-tab-pane :label="$t('基本信息')" name="1">
             <div class="form-content-item">
-              <div class="block-title"><card-tag tag-name="基本信息" /></div>
+              <div class="block-title"><card-tag :tag-name="$t('基本信息')" /></div>
               <div class="block-content">
-                <el-form-item label="商品标题" prop="name">
+                <el-form-item :label="$t('商品标题')" prop="name">
                   <el-input v-model="form.name" />
                 </el-form-item>
-                <el-form-item label="分享描述" prop="desc">
+                <el-form-item :label="$t('分享描述')" prop="desc">
                   <el-input v-model="form.desc" />
                 </el-form-item>
-                <el-form-item label="商品图片">
+                <el-form-item :label="$t('商品图片')">
                   <img-upload
                     :img-data="form.images"
                     :pic-max="5"
@@ -25,12 +25,12 @@
                     @changePsit="changeImg"
                   />
                 </el-form-item>
-                <el-form-item label="商品分类" prop="category_id">
+                <el-form-item :label="$t('商品分类')" prop="category_id">
                   <el-cascader
                     v-model="form.category_id_list"
                     :options="categories"
                     :props="optionProps"
-                    placeholder="选择商品分类"
+                    :placeholder="$t('选择商品分类')"
                     clearable
                     @change="onCascaderChange"
                   />
@@ -38,17 +38,17 @@
               </div>
             </div>
             <div class="form-content-item">
-              <div class="block-title"><card-tag tag-name="开启定制" /></div>
+              <div class="block-title"><card-tag :tag-name="$t('开启定制')" /></div>
               <div class="block-content">
                 <el-form-item label="">
                   <el-switch
                     v-model="form.is_custom"
-                    active-text="开启"
-                    inactive-text="关闭"
+                    :active-text="$t('开启')"
+                    :inactive-text="$t('关闭')"
                     :active-value="1"
                     :inactive-value="0"
                   />
-                  <el-select v-model="form.custom_category_id" placeholder="请选择定制分类" :disabled="form.is_custom==0">
+                  <el-select v-model="form.custom_category_id" :placeholder="$t('请选择定制分类')" :disabled="form.is_custom==0">
                     <el-option
                       v-for="item in customCategory"
                       :key="item.custom_category_id"
@@ -60,13 +60,13 @@
               </div>
             </div>
             <div class="form-content-item">
-              <div class="block-title"><card-tag tag-name="开启预售" /></div>
+              <div class="block-title"><card-tag :tag-name="$t('开启预售')" /></div>
               <div class="block-content">
                 <el-form-item label="">
                   <el-switch
                     v-model="form.is_presell"
-                    active-text="开启"
-                    inactive-text="关闭"
+                    :active-text="$t('开启')"
+                    :inactive-text="$t('关闭')"
                     :active-value="1"
                     :inactive-value="0"
                   />
@@ -74,17 +74,17 @@
               </div>
             </div>
             <div class="form-content-item">
-              <div class="block-title"><card-tag tag-name="物流信息" /></div>
+              <div class="block-title"><card-tag :tag-name="$t('物流信息')" /></div>
               <div class="block-content">
-                <el-form-item label="物流设置">
+                <el-form-item :label="$t('物流设置')">
                   <el-radio-group v-model="form.express_type">
-                    <el-radio :label="0">包邮</el-radio>
-                    <el-radio :label="1" style="margin-right: 0">统一运费： </el-radio>
+                    <el-radio :label="0">{{ $t('包邮') }}</el-radio>
+                    <el-radio :label="1" style="margin-right: 0">{{ `${$t('统一运费')}${$t('：')}` }} </el-radio>
                     <el-input v-model="form.express_fee" type="number" style="width: 25%; margin-right: 30px" :disabled="form.express_type!=1">
-                      <template slot="append">元</template>
+                      <template slot="append">{{ $t('元') }}</template>
                     </el-input>
-                    <el-radio :label="2" style="margin-right: 0">物流模板：  </el-radio>
-                    <el-select v-model="form.express_template_id" placeholder="请选择物流模板" :disabled="form.express_type!=2">
+                    <el-radio :label="2" style="margin-right: 0">{{ `${$t('物流模板')}${$t('：')}` }}  </el-radio>
+                    <el-select v-model="form.express_template_id" :placeholder="$t('请选择物流模板')" :disabled="form.express_type!=2">
                       <el-option
                         v-for="item in expressList"
                         :key="item.express_template_id"
@@ -97,7 +97,7 @@
               </div>
             </div>
             <div class="form-content-item">
-              <div class="block-title"><card-tag tag-name="商品详情" /></div>
+              <div class="block-title"><card-tag :tag-name="$t('商品详情')" /></div>
               <el-form-item style="padding:10px 10px">
                 <tinymce-editor
                   ref="editor"
@@ -110,17 +110,17 @@
               </el-form-item>
             </div>
           </el-tab-pane>
-          <el-tab-pane label="商品规格" name="2">
+          <el-tab-pane :label="$t('商品规格')" name="2">
             <!-- sku规格部分 -->
             <div class="sku_container">
               <div v-for="(spec, index) in specification" :key="spec.id" class="sku_group mb10">
                 <div class="spec_title">
-                  <span class="label">规格名：</span>
-                  <el-input v-model.trim="spec.value" class="input" placeholder="请输入规格名" />
+                  <span class="label">{{ `${$t('规格名')}${$t('：')}` }}</span>
+                  <el-input v-model.trim="spec.value" class="input" :placeholder="$t('请输入规格名')" />
                   <span class="remove" @click="delSepc(index)">x</span>
                 </div>
                 <div class="group_container">
-                  <span class="label">规格值：</span>
+                  <span class="label">{{ `${$t('规格值')}${$t('：')}` }}</span>
                   <el-popover
                     v-for="(option, option_index) in spec.leaf"
                     :key="option_index"
@@ -138,14 +138,14 @@
                     v-model="addValues[index]"
                     class="input"
                     uffix-icon="el-icon-plus"
-                    placeholder="多个产品属性以空格隔开"
+                    :placeholder="$t('多个产品属性以空格隔开')"
                     @keyup.native.enter="addOption(index)"
                     @blur="addOption(index)"
                   />
                 </div>
               </div>
               <div class="spec_title">
-                <el-button type="info" :disabled="disabled" @click="addSpec">添加规格项目</el-button>
+                <el-button type="info" :disabled="disabled" @click="addSpec">{{ $t('添加规格项目') }}</el-button>
               </div>
             </div>
 
@@ -158,67 +158,67 @@
             </div>
             <!-- 价格部分 -->
             <div class="form-content-item">
-              <div class="block-title"><card-tag tag-name="价格库存" /></div>
+              <div class="block-title"><card-tag :tag-name="$t('价格库存')" /></div>
               <div v-if="skuList.length>0" class="block-content">
-                <el-form-item label="商品原价" prop="old_price">
+                <el-form-item :label="$t('商品原价')" prop="old_price">
                   <el-input v-model="form.old_price">
-                    <template slot="append">元</template>
+                    <template slot="append">{{ $t('元') }}</template>
                   </el-input>
                 </el-form-item>
-                <el-form-item label="商品现价" prop="current_price">
+                <el-form-item :label="$t('商品现价')" prop="current_price">
                   <el-input v-model="priceInfo.minPrice" :disabled="skuList.length>0" :max="form.old_price">
-                    <template slot="append">元</template>
+                    <template slot="append">{{ $t('元') }}</template>
                   </el-input>
-                  <p style="margin:0;color:#F56C6C"> 注：含sku的商品，商品现价取sku价格最小值。</p>
+                  <p style="margin:0;color:#F56C6C"> {{ $t('注：含sku的商品，商品现价取sku价格最小值') }}。</p>
                 </el-form-item>
-                <el-form-item label="商品库存">
+                <el-form-item :label="$t('商品库存')">
                   <el-input v-model="priceInfo.totalNum" :disabled="skuList.length>0">
-                    <template slot="append">件</template>
+                    <template slot="append">{{ $t('件') }}</template>
                   </el-input>
                 </el-form-item>
-                <el-form-item label="商品重量">
+                <el-form-item :label="$t('商品重量')">
                   <el-input v-model="priceInfo.minWeight" :disabled="skuList.length>0">
-                    <template slot="append">千克</template>
+                    <template slot="append">{{ $t('千克') }}</template>
                   </el-input>
                 </el-form-item>
               </div>
               <div v-else class="block-content">
-                <el-form-item label="商品原价" prop="old_price">
+                <el-form-item :label="$t('商品原价')" prop="old_price">
                   <el-input v-model="form.old_price">
-                    <template slot="append">元</template>
+                    <template slot="append">{{ $t('元') }}</template>
                   </el-input>
                 </el-form-item>
-                <el-form-item label="商品现价" prop="current_price">
+                <el-form-item :label="$t('商品现价')" prop="current_price">
                   <el-input v-model="form.current_price" :max="form.old_price">
-                    <template slot="append">元</template>
+                    <template slot="append">{{ $t('元') }}</template>
                   </el-input>
                 </el-form-item>
-                <el-form-item label="商品库存" prop="sum_stock">
+                <el-form-item :label="$t('商品库存')" prop="sum_stock">
                   <el-input v-model="form.sum_stock">
-                    <template slot="append">件</template>
+                    <template slot="append">{{ $t('件') }}</template>
                   </el-input>
                 </el-form-item>
-                <el-form-item label="商品重量" prop="weight">
+                <el-form-item :label="$t('商品重量')" prop="weight">
                   <el-input v-model="form.weight">
-                    <template slot="append">千克</template>
+                    <template slot="append">{{ $t('千克') }}</template>
                   </el-input>
                 </el-form-item>
               </div>
             </div>
             <div class="form-content-item">
-              <div class="block-title"><card-tag tag-name="小批量定制" /></div>
+              <div class="block-title"><card-tag :tag-name="$t('小批量定制')" /></div>
               <div class="block-content">
                 <el-form-item v-for="(item, index) in batchRules" :key="index" prop="old_price">
                   <el-col :span="8">
-                    <el-col class="line" :span="4">商品数量</el-col>
+                    <el-col class="line" :span="4">{{ $t('商品数量') }}</el-col>
                     <el-form-item prop="date1">
                       <el-input v-model="item.number">
-                        <template slot="append">件</template>
+                        <template slot="append">{{ $t('件') }}</template>
                       </el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :span="8">
-                    <el-col class="line" :span="4">商品价格</el-col>
+                    <el-col class="line" :span="4">{{ $t('商品价格') }}</el-col>
                     <el-form-item prop="date2">
                       <el-input v-model="item.price" />
                     </el-form-item>
@@ -230,14 +230,14 @@
                 </el-form-item>
               </div>
               <div class="spec_title">
-                <el-button type="info" @click="onBatchRulesAdd">添加批量定制规则</el-button>
+                <el-button type="info" @click="onBatchRulesAdd">{{ $t('添加批量定制规则') }}</el-button>
               </div>
             </div>
           </el-tab-pane>
         </el-tabs>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit('form')">保存</el-button>
-          <el-button @click="()=>this.$router.go(-1)">取消</el-button>
+          <el-button type="primary" @click="onSubmit('form')">{{ $t('保存') }}</el-button>
+          <el-button @click="()=>this.$router.go(-1)">{{ $t('取消') }}</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -264,9 +264,9 @@ export default {
   data() {
     var validateCPrice = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('请输入商品现价'))
+        callback(new Error(`${this.$t('请输入商品现价')}`))
       } else if (parseFloat(value) > parseFloat(this.form.old_price)) {
-        callback(new Error('商品现价不得高于原价'))
+        callback(new Error(`${this.$t('商品现价不得高于原价')}`))
       } else {
         callback()
       }
@@ -297,26 +297,26 @@ export default {
       batchRules: [],
       rules: {
         name: [
-          { required: true, message: '请输入商品名称', trigger: 'blur' },
-          { max: 30, message: '长度不超过30个字符', trigger: 'blur' }
+          { required: true, message: `${this.$t('请输入商品名称')}`, trigger: 'blur' },
+          { max: 30, message: `${this.$t('长度不超过')}30${this.$t('个字符')}`, trigger: 'blur' }
         ],
         old_price: [
-          { required: true, message: '请输入商品原价', trigger: 'blur' }
+          { required: true, message: `${this.$t('请输入商品原价')}`, trigger: 'blur' }
         ],
         sum_stock: [
-          { required: true, message: '请输入商品库存', trigger: 'blur' }
+          { required: true, message: `${this.$t('请输入商品库存')}`, trigger: 'blur' }
         ],
         weight: [
-          { required: true, message: '请输入商品重量', trigger: 'blur' }
+          { required: true, message: `${this.$t('请输入商品重量')}`, trigger: 'blur' }
         ],
         current_price: [
           { validator: validateCPrice, trigger: 'blur' }
         ],
         images: [
-          { required: true, message: '请上传商品主图', trigger: 'blur' }
+          { required: true, message: `${this.$t('请上传商品主图')}`, trigger: 'blur' }
         ],
         category_id: [
-          { required: true, message: '请选择分类', trigger: 'change' }
+          { required: true, message: `${this.$t('请选择分类')}`, trigger: 'change' }
         ]
       },
       categories: [], // 商品分类
@@ -365,7 +365,7 @@ export default {
     //   this.form.item_price_template = JSON.stringify(batchRulesList)
     //   this.$message({
     //     type: 'success',
-    //     message: '保存成功!'
+    //     message: `${this.$t('保存成功')}!`
     //   })
     // },
     // 删除批量规则
@@ -378,7 +378,7 @@ export default {
       this.batchRules.splice(index, 1)
       this.$message({
         type: 'success',
-        message: '删除成功!'
+        message: `${this.$t('删除成功')}!`
       })
     },
     // 添加批量规则
@@ -446,7 +446,7 @@ export default {
           })
           if (!hasEmpty) {
             this.$message({
-              message: '请填写正确的小批量定制规则!'
+              message: `${this.$t('请填写正确的小批量定制规则')}!`
             })
             // return false
           } else {
@@ -456,12 +456,12 @@ export default {
                 if (res.code === 0) {
                   this.$message({
                     type: 'success',
-                    message: res.msg || '修改成功!'
+                    message: this.$t(res.msg) || `${this.$t('修改成功')}!`
                   })
                   // 重置表单
                   _this.$router.replace({ path: '/commodity/goods/list' })
                 } else {
-                  this.$message.success(res.msg || '修改失败!')
+                  this.$message.success(this.$t(res.msg) || `${this.$t('修改失败')}!`)
                 }
               })
             } else {
@@ -469,12 +469,12 @@ export default {
                 if (res.code === 0) {
                   this.$message({
                     type: 'success',
-                    message: res.msg || '添加成功!'
+                    message: this.$t(res.msg) || `${this.$t('添加成功')}!`
                   })
                   // 重置表单
                   _this.$router.replace({ path: '/commodity/goods/list' })
                 } else {
-                  this.$message.success(res.msg || '添加失败!')
+                  this.$message.success(this.$t(res.msg) || `${this.$t('添加失败')}!`)
                 }
               })
             }

@@ -11,14 +11,19 @@ import '@/styles/index.scss' // 公共样式
 import App from './App'
 import store from './store'
 import router from './router'
-
+import VueI18n from 'vue-i18n'
 import './icons' // icon
 import '@/permission' // 路由拦截器-权限控制
 // import VueSocketIO from 'vue-socket.io'
 
 import Directive from '@/directive'
 
-Vue.use(ElementUI)
+import enLocale from 'element-ui/lib/locale/lang/en'
+import zhLocale from 'element-ui/lib/locale/lang/zh-CN'
+
+Vue.use(ElementUI, {
+  i18n: (key, value) => i18n.t(key, value)
+})
 // Vue.use(ElementUI, { size: 'small' })
 Vue.use(Egrid)
 Vue.config.productionTip = false
@@ -36,8 +41,22 @@ Vue.mixin({
   }
 })
 
+// 国际化
+Vue.use(VueI18n)
+const lang = localStorage.getItem('lang') || 'zh'
+store.dispatch('settings/changeSetting', { key: 'lang', value: lang })
+const i18n = new VueI18n({
+  locale: lang,
+  messages: {
+    'zh': Object.assign(require('./lang/zh.json'), zhLocale),
+    'en': Object.assign(require('./lang/en.json'), enLocale)
+  },
+  silentFallbackWarn: true
+})
+
 new Vue({
   el: '#app',
+  i18n,
   router,
   store,
   render: h => h(App)

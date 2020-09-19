@@ -1,13 +1,13 @@
 <template>
   <div class="finance-dialog">
-    <el-dialog v-dialogDrag title="发放提现" :visible.sync="value" width="30%" :before-close="beforeClose">
+    <el-dialog v-dialogDrag :title="$t('发放提现')" :visible.sync="value" width="30%" :before-close="beforeClose">
       <el-form ref="form" :model="form" :rules="rules" label-position="top" size="small">
-        <el-form-item label="申请提现金额">
+        <el-form-item :label="$t('申请提现金额')">
           <el-input v-model="item.cash_amount" disabled>
-            <template slot="append">元</template>
+            <template slot="append">{{ $t('元') }}</template>
           </el-input>
         </el-form-item>
-        <el-form-item label="打款证明" prop="cert">
+        <el-form-item :label="$t('打款证明')" prop="cert">
           <el-upload
             class="cert-uploader"
             :action="`${baseUrl}/file/uploadImg`"
@@ -24,12 +24,12 @@
             <i v-else class="el-icon-plus cert-uploader-icon" />
           </el-upload>
         </el-form-item>
-        <el-form-item label="备注" prop="remark">
+        <el-form-item :label="$t('备注')" prop="remark">
           <el-input v-model="form.remark" type="textarea" />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submit('form')">确定</el-button>
-          <el-button @click="beforeClose">取消</el-button>
+          <el-button type="primary" @click="submit('form')">{{ $t('确定') }}</el-button>
+          <el-button @click="beforeClose">{{ $t('取消') }}</el-button>
         </el-form-item>
       </el-form>
 
@@ -69,10 +69,10 @@ export default {
       },
       rules: {
         cert: [
-          { required: true, message: '请上传打款证明', trigger: 'blur' }
+          { required: true, message: `${this.$t('请上传打款证明')}`, trigger: 'blur' }
         ],
         remark: [
-          { required: true, message: '请填写备注', trigger: 'blur' }
+          { required: true, message: `${this.$t('请填写备注')}`, trigger: 'blur' }
         ]
       }
     }
@@ -134,10 +134,10 @@ export default {
       const isLt2M = file.size / 1024 / 1024 < 2
 
       if (!isJPG) {
-        this.$message.error('上传图片只能是 JPG/PNG 格式!')
+        this.$message.error(`${this.$t('上传图片只能是 JPG/PNG 格式')}!`)
       }
       if (!isLt2M) {
-        this.$message.error('上传图片大小不能超过 2MB!')
+        this.$message.error(`${this.$t('上传图片大小不能超过')} 2MB!`)
       }
       return isJPG && isLt2M
     }

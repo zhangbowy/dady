@@ -19,9 +19,57 @@ export function addGood(data) {
   })
 }
 
+/**
+ * 导入商品
+ * @param {*} data
+ */
 export function importGood(data) {
   return request({
     url: '/goods/tbImport',
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    },
+    data
+  })
+}
+/**
+ * 充值类型
+ * @param {*} data
+ */
+export function importRecharge(data) {
+  return request({
+    url: '/recharge/tbImport',
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    },
+    data
+  })
+}
+
+/**
+ * 微信充值
+ * @param {*} data
+ */
+export function importPay(data) {
+  return request({
+    url: '/recharge/getWxPay',
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    },
+    data
+  })
+}
+
+/**
+ * 支付查询
+ * @param {*} data
+ */
+export function payQuery(data) {
+  return request({
+    url: '/recharge/isPay',
     method: 'post',
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'

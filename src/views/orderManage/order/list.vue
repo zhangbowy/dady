@@ -3,42 +3,42 @@
     <div class="screen-box">
       <div class="screen-item">
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
-          <el-form-item label="订单号">
+          <el-form-item :label="$t('订单号')">
             <el-input
               v-model.trim="formInline.keywords"
               size="small"
-              placeholder="搜索订单号"
+              :placeholder="$t('搜索订单号')"
               clearable
             />
           </el-form-item>
-          <el-form-item label="收货人手机号">
+          <el-form-item :label="$t('收货人手机号')">
             <el-input
               v-model.trim="formInline.receiver_phone"
               size="small"
-              placeholder="收货人手机号"
+              :placeholder="$t('收货人手机号')"
               clearable
             />
           </el-form-item>
-          <el-form-item label="快递单号">
+          <el-form-item :label="$t('快递单号')">
             <el-input
               v-model.trim="formInline.express_number"
               size="small"
-              placeholder="快递单号"
+              :placeholder="$t('快递单号')"
               clearable
             />
           </el-form-item>
-          <el-form-item label="订单类型">
-            <el-select v-model="formInline.order_type" size="small" clearable placeholder="选择订单类型" @change="customCategoryChange">
+          <el-form-item :label="$t('订单类型')">
+            <el-select v-model="formInline.order_type" size="small" clearable :placeholder="$t('选择订单类型')" @change="customCategoryChange">
               <el-option
                 v-for="item in orderTypeOption"
                 :key="item.value"
-                :label="item.label"
+                :label="`${$t(item.label)}`"
                 :value="item.value"
               />
             </el-select>
           </el-form-item>
-          <el-form-item v-show="showCustomCategory" label="定制分类">
-            <el-select v-model="formInline.custom_category_id" size="small" clearable placeholder="选择订制分类" @change="customCategoryChange">
+          <el-form-item v-show="showCustomCategory" :label="$t('定制分类')">
+            <el-select v-model="formInline.custom_category_id" size="small" clearable :placeholder="$t('选择订制分类')" @change="customCategoryChange">
               <el-option
                 v-for="item in customCategoryList"
                 :key="item.custom_category_id"
@@ -47,8 +47,8 @@
               />
             </el-select>
           </el-form-item>
-          <el-form-item v-if="adminInfo.role_type==1" label="店铺">
-            <el-select v-model="formInline.shop_id" size="small" clearable placeholder="选择店铺" @change="customCategoryChange">
+          <el-form-item v-if="adminInfo.role_type==1" :label="$t('店铺')">
+            <el-select v-model="formInline.shop_id" size="small" clearable :placeholder="$t('选择店铺')" @change="customCategoryChange">
               <el-option
                 v-for="item in shopsList"
                 :key="item.shop_id"
@@ -57,8 +57,8 @@
               />
             </el-select>
           </el-form-item>
-          <!-- <el-form-item label="订单状态">
-            <el-select v-model="formInline.status" placeholder="请选择">
+          <!-- <el-form-item :label="$t('订单状态')">
+            <el-select v-model="formInline.status" :placeholder="$t('请选择')">
               <el-option
                 v-for="item in orderCount"
                 :key="item.status"
@@ -70,30 +70,30 @@
               </el-option>
             </el-select>
           </el-form-item> -->
-          <el-form-item label="下单时间">
+          <el-form-item :label="$t('下单时间')">
             <el-date-picker
               v-model="formInline.order_time"
               type="datetimerange"
               size="small"
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
+              :range-separator="$t('至')"
+              :start-placeholder="$t('开始日期')"
+              :end-placeholder="$t('结束日期')"
               value-format="yyyy-MM-dd HH:mm:ss"
             />
           </el-form-item>
-          <el-form-item label="付款时间">
+          <el-form-item :label="$t('付款时间')">
             <el-date-picker
               v-model="formInline.pay_time"
               type="datetimerange"
               size="small"
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
+              :range-separator="$t('至')"
+              :start-placeholder="$t('开始日期')"
+              :end-placeholder="$t('结束日期')"
               value-format="yyyy-MM-dd HH:mm:ss"
             />
           </el-form-item>
           <el-form-item>
-            <el-button size="small" icon="el-icon-search" type="primary" @click="doSearch()">搜索</el-button>
+            <el-button size="small" icon="el-icon-search" type="primary" @click="doSearch()">{{ $t('搜索') }}</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -101,7 +101,7 @@
         <el-col v-if="total_amount" :span="6">
           <el-card shadow="hover" :body-style="{cursor: 'pointer', textAlign: 'left'}">
             <div class="total_amount">
-              订单总销售金额￥ {{ total_amount }}
+              {{ $t('订单总销售金额') }} {{ $t('￥') }}{{ total_amount }}
             </div>
           </el-card>
         </el-col>
@@ -109,7 +109,7 @@
     </div>
     <el-dialog
       v-dialogDrag
-      title="请选择机器"
+      :title="$t('请选择机器')"
       :visible.sync="dialogVisible"
       width="30%"
     >
@@ -117,11 +117,11 @@
         <el-radio-group v-if="machineList.length" v-model="machine_id" size="small">
           <el-radio v-for="machine in machineList" :key="machine.machine_code" :label="machine.machine_code" border>{{ machine.machine_name }}</el-radio>
         </el-radio-group>
-        <span v-else>该定制分类没有关联任何机器</span>
+        <span v-else>{{ $t('该定制分类没有关联任何机器') }}</span>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="onDialogClick">确 定</el-button>
+        <el-button @click="dialogVisible = false">{{ $t('取 消') }}</el-button>
+        <el-button type="primary" @click="onDialogClick">{{ $t('确 定') }}</el-button>
       </span>
     </el-dialog>
     <div class="content">
@@ -129,7 +129,7 @@
         <el-tab-pane
           v-for="(item, index) in orderCount"
           :key="index"
-          :label="`${item._status}(${item.count})`"
+          :label="`${$t(item._status)}(${item.count})`"
           :name="`${item.status}`"
         />
         <div class="tab-content">
@@ -138,7 +138,7 @@
       </el-tabs>
       <!-- 分页 -->
       <div class="pagination-box">
-        <el-button v-if="showIssuedBtn" type="primary" class="issued-btn" @click="onIssuedBtnClick">下发机器</el-button>
+        <el-button v-if="showIssuedBtn" type="primary" class="issued-btn" @click="onIssuedBtnClick">{{ $t('下发机器') }}</el-button>
         <el-pagination
           :total="total"
           :current-page="currentPage"
@@ -321,7 +321,7 @@ export default {
           machine_id: this.machine_id
         }).then($data => {
           this.$message({
-            message: $data.msg || '操作成功!',
+            message: this.$t($data.msg) || `${this.$t('操作成功')}!`,
             type: 'success'
           })
           this.dialogVisible = false
@@ -382,8 +382,8 @@ export default {
     onIssuedBtnClick() {
       if (!this.checkedList.length) {
         this.$message({
-          // title: '警告',
-          message: '没有选择订单',
+          // title: `${this.$t('警告')}`,
+          message: `${this.$t('没有选择订单')}`,
           type: 'warning'
         })
       } else {
@@ -396,17 +396,17 @@ export default {
           checkedOrderList.forEach(item => {
             if (item.custom_category_id !== custom_category_id) {
               this.$message({
-                // title: '警告',
-                message: '必须选择相同的定制分类',
+                // title: `${this.$t('警告')}`,
+                message: `${this.$t('必须选择相同的定制分类')}`,
                 type: 'error'
               })
               is_same = false
               return
             }
-            if (item._logistics_type === '门店自提') {
+            if (item._logistics_type === `${this.$t('门店自提')}`) {
               this.$message({
-                // title: '警告',
-                message: '门店自提订单无法下发机器',
+                // title: `${this.$t('警告')}`,
+                message: `${this.$t('门店自提订单无法下发机器')}`,
                 type: 'error'
               })
               is_same = false
@@ -415,8 +415,8 @@ export default {
           })
           if (!custom_category_id) {
             this.$message({
-              // title: '警告',
-              message: '定制分类错误',
+              // title: `${this.$t('警告')}`,
+              message: `${this.$t('定制分类错误')}`,
               type: 'error'
             })
             return

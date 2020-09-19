@@ -5,15 +5,15 @@
         <el-input
           v-model="keywords"
           size="small"
-          placeholder="请输入管理员名称"
+          :placeholder="$t('请输入管理员名称')"
           clearable
           style="width:220px"
           @keyup.enter.native="fetchData"
         />
-        <el-button size="small" icon="el-icon-search" type="primary" @click.native="fetchData">搜索</el-button>
+        <el-button size="small" icon="el-icon-search" type="primary" @click.native="fetchData">{{ $t('搜索') }}</el-button>
       </div>
       <div class="operation">
-        <el-button size="small" icon="el-icon-plus" type="primary" @click="showDialog('add')">新增</el-button>
+        <el-button size="small" icon="el-icon-plus" type="primary" @click="showDialog('add')">{{ $t('新增') }}</el-button>
       </div>
     </div>
     <div class="content">
@@ -25,13 +25,13 @@
         tooltip-effect="dark"
       >
         <el-table-column
-          label="序号"
+          :label="$t('序号')"
           align="center"
           width="100"
           type="index"
         />
         <el-table-column
-          label="管理员信息"
+          :label="$t('管理员信息')"
           align="center"
         >
           <template slot-scope="scope">
@@ -40,11 +40,11 @@
         </el-table-column>
         <el-table-column
           prop="role_name"
-          label="管理员角色"
+          :label="$t('管理员角色')"
           align="center"
         />
         <!-- <el-table-column
-          label="管理员状态"
+          :label="$t('管理员状态')"
           align="center"
           width="250"
         >
@@ -54,28 +54,28 @@
         </el-table-column> -->
         <el-table-column
           prop="created_at"
-          label="创建时间"
+          :label="$t('创建时间')"
           align="center"
         />
         <el-table-column
           fixed="right"
-          label="操作"
+          :label="$t('操作')"
           align="center"
         >
           <template slot-scope="scope">
             <el-button
               size="mini"
               @click.native="showDialog('detail', scope.row)"
-            >查看</el-button>
+            >{{ $t('查看') }}</el-button>
             <!-- <el-button
               size="mini"
               @click.native="showDialog('edit', scope.row)"
-            >编辑</el-button> -->
+            >{{ $t('编辑') }}</el-button> -->
             <el-button
               size="mini"
               type="danger"
               @click="handleDelete(scope.row.id)"
-            >删除</el-button>
+            >{{ $t('删除') }}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -93,19 +93,19 @@
       </div>
     </div>
     <!-- 管理员新增，详情，编辑弹框 -->
-    <el-dialog v-dialogDrag center :title="dialogType=='add'? '新增管理员': dialogType=='edit'? '编辑管理员': '管理员详情'" :visible.sync="dialogFormVisible">
+    <el-dialog v-dialogDrag center :title="dialogType=='add'? $t('新增管理员'): dialogType=='edit'? `${$t('编辑管理员')}`: `${$t('管理员详情')}`" :visible.sync="dialogFormVisible">
       <el-form ref="form" :model="form" :rules="rules" label-width="100px" label-position="rigth" size="small">
-        <el-form-item label="管理员姓名" prop="name">
+        <el-form-item :label="$t('管理员姓名')" prop="name">
           <el-input v-model="form.name " :disabled="dialogType=='detail'" />
         </el-form-item>
-        <el-form-item label="手机号" prop="phone">
+        <el-form-item :label="$t('手机号')" prop="phone">
           <el-input v-model="form.phone " :disabled="dialogType=='detail'" />
         </el-form-item>
-        <el-form-item v-if="dialogType!=='detail'" label="密码">
+        <el-form-item v-if="dialogType!=='detail'" :label="$t('密码')">
           <el-input v-model="form.password " type="password" :disabled="dialogType=='detail'" />
         </el-form-item>
-        <el-form-item label="管理员角色" prop="role_id">
-          <el-select v-model="form.role_id" placeholder="请选择" style="width: 100%" :disabled="dialogType=='detail'">
+        <el-form-item :label="$t('管理员角色')" prop="role_id">
+          <el-select v-model="form.role_id" :placeholder="$t('请选择')" style="width: 100%" :disabled="dialogType=='detail'">
             <el-option
               v-for="item in rolesList"
               :key="item.admin_role_id"
@@ -115,9 +115,9 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button v-if="dialogType!=='detail'" type="primary" @click="onSubmit('form')">保存</el-button>
-          <el-button v-else type="primary" @click="dialogType='edit'">编辑</el-button>
-          <el-button @click="dialogFormVisible = false">取消</el-button>
+          <el-button v-if="dialogType!=='detail'" type="primary" @click="onSubmit('form')">{{ $t('保存') }}</el-button>
+          <el-button v-else type="primary" @click="dialogType='edit'">{{ $t('编辑') }}</el-button>
+          <el-button @click="dialogFormVisible = false">{{ $t('取消') }}</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -140,7 +140,7 @@ export default {
   data() {
     const validatePhone = (rule, value, callback) => {
       if (!validPhone(value)) {
-        callback(new Error('手机号不正确'))
+        callback(new Error(`${this.$t('手机号不正确')}`))
       } else {
         callback()
       }
@@ -162,13 +162,13 @@ export default {
       rolesList: [],
       rules: {
         name: [
-          { required: true, message: '请填写管理员姓名', trigger: 'blur' }
+          { required: true, message: `${this.$t('请填写管理员姓名')}`, trigger: 'blur' }
         ],
         phone: [
           { required: true, trigger: 'blur', validator: validatePhone }
         ],
         role_id: [
-          { required: true, message: '请选择角色', trigger: 'change' }
+          { required: true, message: `${this.$t('请选择角色')}`, trigger: 'change' }
         ]
       },
       dialogType: 'add'
@@ -232,7 +232,7 @@ export default {
               if (res.code === 0) {
                 this.$message({
                   type: 'success',
-                  message: res.msg || '修改成功!'
+                  message: this.$t(res.msg) || `${this.$t('修改成功')}!`
                 })
                 // 重置表单
                 this.$nextTick(() => {
@@ -241,7 +241,7 @@ export default {
                 this.dialogFormVisible = false
                 this.fetchData()
               } else {
-                this.$message.success(res.msg || '修改失败!')
+                this.$message.success(this.$t(res.msg) || `${this.$t('修改失败')}!`)
               }
             })
           } else {
@@ -249,7 +249,7 @@ export default {
               if (res.code === 0) {
                 this.$message({
                   type: 'success',
-                  message: res.msg || '添加成功!'
+                  message: this.$t(res.msg) || `${this.$t('添加成功')}!`
                 })
                 // 重置表单
                 this.$nextTick(() => {
@@ -258,7 +258,7 @@ export default {
                 this.dialogFormVisible = false
                 this.fetchData()
               } else {
-                this.$message.success(res.msg || '添加失败!')
+                this.$message.success(this.$t(res.msg) || `${this.$t('添加失败')}!`)
               }
             })
           }
@@ -276,23 +276,23 @@ export default {
       this.fetchData()
     },
     handleDelete(id) {
-      this.$confirm('是否删除该管理员?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(`${this.$t('是否删除该管理员')}?`, `${this.$t('提示')}`, {
+        confirmButtonText: `${this.$t('确定')}`,
+        cancelButtonText: `${this.$t('取消')}`,
         type: 'warning',
         confirmButtonClass: 'danger'
       }).then(() => {
         adminApi.delAdmin({ id: id }).then(res => {
           this.$message({
             type: 'success',
-            message: '删除成功!'
+            message: `${this.$t('删除成功')}!`
           })
           this.fetchData()
         })
       }).catch(() => {
         this.$message({
           type: 'info',
-          message: '已取消删除'
+          message: `${this.$t('已取消删除')}`
         })
       })
     }

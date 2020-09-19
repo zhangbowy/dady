@@ -5,15 +5,15 @@
         <el-input
           v-model="keywords"
           size="small"
-          placeholder="请输入机器名称"
+          :placeholder="$t('请输入机器名称')"
           clearable
           style="width:220px"
           @keyup.enter.native="fetchData"
         />
-        <el-button size="small" icon="el-icon-search" type="primary" @click.native="fetchData">搜索</el-button>
+        <el-button size="small" icon="el-icon-search" type="primary" @click.native="fetchData">{{ $t('搜索') }}</el-button>
       </div>
       <div class="operation">
-        <el-button v-has="801" size="small" icon="el-icon-plus" type="primary" @click="showDialog('add')">新增</el-button>
+        <el-button v-has="801" size="small" icon="el-icon-plus" type="primary" @click="showDialog('add')">{{ $t('新增') }}</el-button>
       </div>
     </div>
     <div class="content">
@@ -26,52 +26,52 @@
         tooltip-effect="dark"
       >
         <el-table-column
-          label="序号"
+          :label="$t('序号')"
           align="center"
           width="100"
           type="index"
         />
         <el-table-column
           prop="machine_code"
-          label="机器码"
+          :label="$t('机器码')"
           align="center"
         />
         <el-table-column
           prop="machine_name"
-          label="机器名称"
+          :label="$t('机器名称')"
           align="center"
         />
         <el-table-column
           prop="desc"
-          label="机器描述"
+          :label="$t('机器描述')"
           align="center"
         />
         <el-table-column
           prop="custom_category_name"
-          label="所属定制分类"
+          :label="$t('所属定制分类')"
           align="center"
         />
         <el-table-column
           prop="created_at"
-          label="创建时间"
+          :label="$t('创建时间')"
           align="center"
         />
         <el-table-column
           fixed="right"
-          label="操作"
+          :label="$t('操作')"
           align="center"
         >
           <template slot-scope="scope">
             <el-button
               size="mini"
               @click.native="showDialog('detail', scope.row)"
-            >查看</el-button>
+            >{{ $t('查看') }}</el-button>
             <el-button
               v-has="803"
               size="mini"
               type="danger"
               @click="handleDelete(scope.row.machine_id)"
-            >删除</el-button>
+            >{{ $t('删除') }}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -84,27 +84,27 @@
       />
     </div>
     <!-- 机器新增，详情，编辑弹框 -->
-    <el-dialog v-dialogDrag center :title="dialogType=='add'? '新增机器': dialogType=='edit'? '编辑机器': '机器详情'" :visible.sync="dialogFormVisible">
+    <el-dialog v-dialogDrag center :title="dialogType=='add'? $t('新增机器'): dialogType=='edit'? `${$t('编辑机器')}`: `${$t('机器详情')}`" :visible.sync="dialogFormVisible">
       <el-form ref="machineForm" :model="machineForm" :rules="rules" label-width="100px" label-position="left" size="small">
-        <el-form-item label="机器名称" prop="machine_name">
+        <el-form-item :label="$t('机器名称')" prop="machine_name">
           <el-input v-model="machineForm.machine_name " :disabled="dialogType=='detail'" />
         </el-form-item>
-        <el-form-item label="机器码" prop="machine_code">
+        <el-form-item :label="$t('机器码')" prop="machine_code">
           <el-input v-model="machineForm.machine_code " :disabled="dialogType=='detail'" />
         </el-form-item>
-        <el-form-item label="机器描述" prop="desc">
+        <el-form-item :label="$t('机器描述')" prop="desc">
           <el-input
             v-model="machineForm.desc"
             :disabled="dialogType=='detail'"
             type="textarea"
             :rows="2"
-            placeholder="请输入机器描述"
+            :placeholder="$t('请输入机器描述')"
           />
         </el-form-item>
         <el-form-item>
-          <el-button v-if="dialogType!=='detail'" v-has="801" type="primary" @click="onSubmit('machineForm')">保存</el-button>
-          <el-button v-else v-has="802" type="primary" @click="dialogType='edit'">编辑</el-button>
-          <el-button @click="dialogFormVisible = false">取消</el-button>
+          <el-button v-if="dialogType!=='detail'" v-has="801" type="primary" @click="onSubmit('machineForm')">{{ $t('保存') }}</el-button>
+          <el-button v-else v-has="802" type="primary" @click="dialogType='edit'">{{ $t('编辑') }}</el-button>
+          <el-button @click="dialogFormVisible = false">{{ $t('取消') }}</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -128,13 +128,13 @@ export default {
       },
       rules: {
         machine_name: [
-          { required: true, message: '请填写机器名称', trigger: 'blur' }
+          { required: true, message: `${this.$t('请填写机器名称')}`, trigger: 'blur' }
         ],
         machine_code: [
-          { required: true, message: '请填写机器码', trigger: 'blur' }
+          { required: true, message: `${this.$t('请填写机器码')}`, trigger: 'blur' }
         ],
         desc: [
-          { required: true, message: '请输入机器描述', trigger: 'blur' }
+          { required: true, message: `${this.$t('请输入机器描述')}`, trigger: 'blur' }
         ]
       },
       dialogType: 'add'
@@ -185,14 +185,14 @@ export default {
               if (res.code === 0) {
                 this.$message({
                   type: 'success',
-                  message: res.msg || '修改成功!'
+                  message: this.$t(res.msg) || `${this.$t('修改成功')}!`
                 })
                 // 重置表单
                 _this.$refs[formName].resetFields()
                 this.dialogFormVisible = false
                 this.fetchData()
               } else {
-                this.$message.success(res.msg || '修改失败!')
+                this.$message.success(this.$t(res.msg) || `${this.$t('修改失败')}!`)
               }
             })
           } else {
@@ -200,14 +200,14 @@ export default {
               if (res.code === 0) {
                 this.$message({
                   type: 'success',
-                  message: res.msg || '添加成功!'
+                  message: this.$t(res.msg) || `${this.$t('添加成功')}!`
                 })
                 // 重置表单
                 _this.$refs[formName].resetFields()
                 this.dialogFormVisible = false
                 this.fetchData()
               } else {
-                this.$message.success(res.msg || '添加失败!')
+                this.$message.success(this.$t(res.msg) || `${this.$t('添加失败')}!`)
               }
             })
           }
@@ -217,23 +217,23 @@ export default {
       })
     },
     handleDelete(id) {
-      this.$confirm('是否删除该机器?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(`${this.$t('是否删除该机器')}?`, `${this.$t('提示')}`, {
+        confirmButtonText: `${this.$t('确定')}`,
+        cancelButtonText: `${this.$t('取消')}`,
         type: 'warning',
         confirmButtonClass: 'danger'
       }).then(() => {
         machineApi.delMachine({ machine_id: id }).then(res => {
           this.$message({
             type: 'success',
-            message: '删除成功!'
+            message: `${this.$t('删除成功')}!`
           })
           this.fetchData()
         })
       }).catch(() => {
         this.$message({
           type: 'info',
-          message: '已取消删除'
+          message: `${this.$t('已取消删除')}`
         })
       })
     }

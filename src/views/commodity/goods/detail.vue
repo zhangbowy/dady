@@ -1,35 +1,35 @@
 <template>
   <div class="goods-detail">
     <div class="title-info">
-      <card-tag tag-name="商品详情" />
+      <card-tag :tag-name="$t('商品详情')" />
     </div>
     <!-- 表单部分 -->
     <div class="form-info">
       <el-form ref="form" :model="form" label-width="80px" label-position="top" size="small">
         <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-          <el-tab-pane label="基本信息" name="1">
+          <el-tab-pane :label="$t('基本信息')" name="1">
             <div class="form-content-item">
-              <div class="block-title"><card-tag tag-name="基本信息" /></div>
+              <div class="block-title"><card-tag :tag-name="$t('基本信息')" /></div>
               <div class="block-content">
-                <el-form-item label="商品标题" prop="name">
+                <el-form-item :label="$t('商品标题')" prop="name">
                   <el-input v-model="form.name" disabled />
                 </el-form-item>
-                <el-form-item label="分享描述" prop="name">
+                <el-form-item :label="$t('分享描述')" prop="name">
                   <el-input v-model="form.desc" disabled />
                 </el-form-item>
-                <el-form-item label="商品图片">
+                <el-form-item :label="$t('商品图片')">
                   <img-upload
                     :img-data="form.images"
                     :pic-max="5"
                     disabled
                   />
                 </el-form-item>
-                <el-form-item label="商品分类" prop="category_id">
+                <el-form-item :label="$t('商品分类')" prop="category_id">
                   <el-cascader
                     v-model="form.category_id"
                     :options="categories"
                     :props="optionProps"
-                    placeholder="选择商品分类"
+                    :placeholder="$t('选择商品分类')"
                     clearable
                     disabled
                   />
@@ -37,18 +37,18 @@
               </div>
             </div>
             <div class="form-content-item">
-              <div class="block-title"><card-tag tag-name="开启定制" /></div>
+              <div class="block-title"><card-tag :tag-name="$t('开启定制')" /></div>
               <div class="block-content">
                 <el-form-item label="">
                   <el-switch
                     v-model="form.is_custom"
                     disabled
-                    active-text="开启"
-                    inactive-text="关闭"
+                    :active-text="$t('开启')"
+                    :inactive-text="$t('关闭')"
                     :active-value="1"
                     :inactive-value="0"
                   />
-                  <el-select v-model="form.custom_category_id" placeholder="请选择定制分类" :disabled="form.is_custom==0">
+                  <el-select v-model="form.custom_category_id" :placeholder="$t('请选择定制分类')" :disabled="form.is_custom==0">
                     <el-option
                       v-for="item in customCategory"
                       :key="item.custom_category_id"
@@ -61,14 +61,14 @@
               </div>
             </div>
             <div class="form-content-item">
-              <div class="block-title"><card-tag tag-name="开启预售" /></div>
+              <div class="block-title"><card-tag :tag-name="$t('开启预售')" /></div>
               <div class="block-content">
                 <el-form-item label="">
                   <el-switch
                     v-model="form.is_presell"
                     disabled
-                    active-text="开启"
-                    inactive-text="关闭"
+                    :active-text="$t('开启')"
+                    :inactive-text="$t('关闭')"
                     :active-value="1"
                     :inactive-value="0"
                   />
@@ -76,17 +76,17 @@
               </div>
             </div>
             <div class="form-content-item">
-              <div class="block-title"><card-tag tag-name="物流信息" /></div>
+              <div class="block-title"><card-tag :tag-name="$t('物流信息')" /></div>
               <div class="block-content">
-                <el-form-item label="物流设置">
+                <el-form-item :label="$t('物流设置')">
                   <el-radio-group v-model="form.express_type" disabled>
-                    <el-radio :label="0">包邮</el-radio>
-                    <el-radio :label="1" style="margin-right: 0">统一运费： </el-radio>
+                    <el-radio :label="0">{{ $t('包邮') }}</el-radio>
+                    <el-radio :label="1" style="margin-right: 0">{{ `${$t('统一运费')}${$t('：')}` }} </el-radio>
                     <el-input v-model="form.express_fee" type="number" style="width: 25%; margin-right: 30px" :disabled="form.express_type!=1">
-                      <template slot="append">元</template>
+                      <template slot="append">{{ $t('元') }}</template>
                     </el-input>
-                    <el-radio :label="2" style="margin-right: 0">物流模板：  </el-radio>
-                    <el-select v-model="form.express_template_id" placeholder="请选择物流模板" :disabled="form.express_type!=2">
+                    <el-radio :label="2" style="margin-right: 0">{{ `${$t('物流模板')}${$t('：')}` }}  </el-radio>
+                    <el-select v-model="form.express_template_id" :placeholder="$t('请选择物流模板')" :disabled="form.express_type!=2">
                       <el-option
                         v-for="item in expressList"
                         :key="item.express_template_id"
@@ -100,7 +100,7 @@
               </div>
             </div>
             <div class="form-content-item">
-              <div class="block-title"><card-tag tag-name="商品详情" /></div>
+              <div class="block-title"><card-tag :tag-name="$t('商品详情')" /></div>
               <el-form-item style="padding:10px 10px">
                 <tinymce-editor
                   ref="editor"
@@ -111,15 +111,15 @@
               </el-form-item>
             </div>
           </el-tab-pane>
-          <el-tab-pane label="商品规格" name="2">
+          <el-tab-pane :label="$t('商品规格')" name="2">
             <div class="sku_container">
               <div v-for="(spec, index) in specification" :key="spec.id" class="sku_group mb10">
                 <div class="spec_title">
-                  <span class="label">规格名：</span>
-                  <el-input v-model.trim="spec.value" class="input" placeholder="请输入规格名" disabled />
+                  <span class="label">{{ `${$t('规格名')}${$t('：')}` }}</span>
+                  <el-input v-model.trim="spec.value" class="input" :placeholder="$t('请输入规格名')" disabled />
                 </div>
                 <div class="group_container">
-                  <span class="label">规格值：</span>
+                  <span class="label">{{ `${$t('规格值')}${$t('：')}` }}</span>
                   <el-popover
                     v-for="(option, option_index) in spec.leaf"
                     :key="option_index"
@@ -136,7 +136,7 @@
                     v-model="addValues[index]"
                     class="input"
                     uffix-icon="el-icon-plus"
-                    placeholder="多个产品属性以空格隔开"
+                    :placeholder="$t('多个产品属性以空格隔开')"
                     disabled
                     @keyup.native.enter="addOption(index)"
                     @blur="addOption(index)"
@@ -149,44 +149,44 @@
               <!-- <vue-json-pretty :data="specificationFilter" /> -->
             </div>
             <div class="form-content-item">
-              <div class="block-title"><card-tag tag-name="价格库存" /></div>
+              <div class="block-title"><card-tag :tag-name="$t('价格库存')" /></div>
               <div class="block-content">
-                <el-form-item label="商品原价" prop="old_price">
+                <el-form-item :label="$t('商品原价')" prop="old_price">
                   <el-input v-model="form.old_price" disabled>
-                    <template slot="append">元</template>
+                    <template slot="append">{{ $t('元') }}</template>
                   </el-input>
                 </el-form-item>
-                <el-form-item label="商品现价" prop="current_price">
+                <el-form-item :label="$t('商品现价')" prop="current_price">
                   <el-input v-model="form.current_price" disabled>
-                    <template slot="append">元</template>
+                    <template slot="append">{{ $t('元') }}</template>
                   </el-input>
                 </el-form-item>
-                <el-form-item label="商品库存" prop="sum_stock">
+                <el-form-item :label="$t('商品库存')" prop="sum_stock">
                   <el-input v-model="form.sum_stock" disabled>
-                    <template slot="append">件</template>
+                    <template slot="append">{{ $t('件') }}</template>
                   </el-input>
                 </el-form-item>
-                <el-form-item label="商品重量" prop="weight">
+                <el-form-item :label="$t('商品重量')" prop="weight">
                   <el-input v-model="form.weight" disabled>
-                    <template slot="append">千克</template>
+                    <template slot="append">{{ $t('千克') }}</template>
                   </el-input>
                 </el-form-item>
               </div>
             </div>
             <div class="form-content-item">
-              <div class="block-title"><card-tag tag-name="小批量定制" /></div>
+              <div class="block-title"><card-tag :tag-name="$t('小批量定制')" /></div>
               <div class="block-content">
                 <el-form-item v-for="(rules, index) in batchRules" :key="index" prop="old_price">
                   <el-col :span="8">
-                    <el-col class="line" :span="4">商品数量</el-col>
+                    <el-col class="line" :span="4">{{ $t('商品数量') }}</el-col>
                     <el-form-item prop="date1">
                       <el-input v-model="rules.number" disabled>
-                        <template slot="append">件</template>
+                        <template slot="append">{{ $t('件') }}</template>
                       </el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :span="8">
-                    <el-col class="line" :span="4">商品价格</el-col>
+                    <el-col class="line" :span="4">{{ $t('商品价格') }}</el-col>
                     <el-form-item prop="date2">
                       <el-input v-model="rules.price" disabled />
                     </el-form-item>
@@ -197,8 +197,8 @@
           </el-tab-pane>
         </el-tabs>
         <el-form-item>
-          <el-button type="primary" @click="()=>this.$router.push({path: `/commodity/goods/edit?id=${form.id}`})">编辑</el-button>
-          <el-button @click="()=>this.$router.go(-1)">返回</el-button>
+          <el-button type="primary" @click="()=>this.$router.push({path: `/commodity/goods/edit?id=${form.id}`})">{{ $t('编辑') }}</el-button>
+          <el-button @click="()=>this.$router.go(-1)">{{ $t('返回') }}</el-button>
         </el-form-item>
       </el-form>
     </div>

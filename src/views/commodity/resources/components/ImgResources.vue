@@ -2,10 +2,10 @@
   <div class="img-resources">
     <el-row>
       <el-col :span="12">
-        <el-button v-has="405" type="primary" size="small" @click.native="showUpload">上传图片</el-button>
+        <el-button v-has="405" type="primary" size="small" @click.native="showUpload">{{ $t('上传图片') }}</el-button>
       </el-col>
       <el-col :span="12" style="text-align: right">
-        <el-input v-model="keyword" size="small" placeholder="请输入内容" class="input-with-select" style="width: 40%">
+        <el-input v-model="keyword" size="small" :placeholder="$t('请输入内容')" class="input-with-select" style="width: 40%">
           <el-button slot="append" icon="el-icon-search" @click.stop="getImgList" />
         </el-input>
       </el-col>
@@ -18,12 +18,12 @@
           icon="el-icon-folder-add"
           style="width:100%"
           @click="addGroup"
-        >添加分组
+        >{{ $t('添加分组') }}
         </el-button>
         <div class="group-box">
           <div class="default-node">
-            <span @click="getAll">全部</span>
-            <span @click="getNotGrouped">未分组</span>
+            <span @click="getAll">{{ $t('全部') }}</span>
+            <span @click="getNotGrouped">{{ $t('未分组') }}</span>
           </div>
           <el-tree
             :data="groupData"
@@ -39,7 +39,7 @@
                 v-model="data.group_name"
                 v-focus
                 size="mini"
-                placeholder="请输入内容"
+                :placeholder="$t('请输入内容')"
                 class="writeInput"
                 @blur="addCategory(data)"
                 @keyup.native.enter="$event.target.blur"
@@ -51,7 +51,7 @@
                   v-model="data.group_name"
                   v-focus
                   size="mini"
-                  placeholder="请输入"
+                  :placeholder="$t('请输入')"
                   class="writeInput"
                   @blur="editCategoryName(data)"
                   @keyup.native.enter="$event.target.blur"
@@ -59,13 +59,13 @@
               </span>
               <!-- <span class="group_name">{{ data.group_name }}</span> -->
               <span>
-                <el-tooltip v-if="data.group_id !== 0" class="item" content="添加子分类" placement="top">
+                <el-tooltip v-if="data.group_id !== 0" class="item" :content="$t('添加子分类')" placement="top">
                   <el-button type="text" size="mini" icon="el-icon-plus" @click.stop="() => addCategoryShow(data)" />
                 </el-tooltip>
-                <el-tooltip v-if="data.group_id !== 0" class="item" content="重命名" placement="top">
+                <el-tooltip v-if="data.group_id !== 0" class="item" :content="$t('重命名')" placement="top">
                   <el-button v-has="408" type="text" size="mini" icon="el-icon-edit" @click.stop="() => goInput(node, data)" />
                 </el-tooltip>
-                <el-tooltip v-if="data.group_id !== 0" class="item" content="删除分类" placement="top">
+                <el-tooltip v-if="data.group_id !== 0" class="item" :content="$t('删除分类')" placement="top">
                   <el-button v-has="409" type="text" size="mini" icon="el-icon-delete" @click.stop="() => remove(node, data)" />
                 </el-tooltip>
               </span>
@@ -80,10 +80,10 @@
             <el-image :src="item.oss_path" lazy />
             <el-checkbox v-model="item.checked" :label="limetedStr(item.img_name,16)" :title="item.img_name" />
             <el-col>
-              <el-button v-has="412" type="text" @click.stop="showdialog('modifyName',item)">改名</el-button>
-              <!-- <el-button type="text" @click.stop="showdialog('modifyUrl',item)">链接</el-button> -->
-              <el-button v-has="410" type="text" @click.stop="showdialog('modifyGroup',item)">分组</el-button>
-              <el-button v-has="413" type="text" @click.stop="deleteImg(item.id)">删除</el-button>
+              <el-button v-has="412" type="text" @click.stop="showdialog('modifyName',item)">{{ $t('改名') }}</el-button>
+              <!-- <el-button type="text" @click.stop="showdialog('modifyUrl',item)">{{ $t('链接') }}</el-button> -->
+              <el-button v-has="410" type="text" @click.stop="showdialog('modifyGroup',item)">{{ $t('分组') }}</el-button>
+              <el-button v-has="413" type="text" @click.stop="deleteImg(item.id)">{{ $t('删除') }}</el-button>
             </el-col>
           </div>
           <div v-if="imgList.length==0">
@@ -92,10 +92,10 @@
         </div>
         <div class="paging">
           <div v-if="imgList.length>0" style="padding-top:10px;">
-            <el-button size="mini" @click="checkAll">全选</el-button>
-            <el-button size="mini" @click="unCheckAll">取消全选</el-button>
-            <!-- <el-button size="mini" @click="showdialog('modifyGroup')">修改分组</el-button> -->
-            <el-button v-has="413" size="mini" @click="deleteImg()">删除</el-button>
+            <el-button size="mini" @click="checkAll">{{ $t('全选') }}</el-button>
+            <el-button size="mini" @click="unCheckAll">{{ $t('取消全选') }}</el-button>
+            <!-- <el-button size="mini" @click="showdialog('modifyGroup')">{{ $t('修改分组') }}</el-button> -->
+            <el-button v-has="413" size="mini" @click="deleteImg()">{{ $t('删除') }}</el-button>
           </div>
           <div v-if="pageInfo.count" class="page-ctn">
             <el-pagination
@@ -115,9 +115,9 @@
     </el-row>
 
     <!-- 上传图片的dialog -->
-    <el-dialog v-dialogDrag title="上传图片" :visible.sync="uploadDialog">
+    <el-dialog v-dialogDrag :title="$t('上传图片')" :visible.sync="uploadDialog">
       <el-form ref="fileUploadForm" :model="uploadForm" :rules="uploadRules">
-        <el-form-item label="图片分组">
+        <el-form-item :label="$t('图片分组')">
           <el-cascader
             v-model="checkedGroup"
             :options="groupData"
@@ -126,7 +126,7 @@
             @change="imgGroupChose"
           />
         </el-form-item>
-        <el-form-item label="本地图片" prop="images">
+        <el-form-item :label="$t('本地图片')" prop="images">
           <span v-for="(item,index) in uploadImageList" :key="index" class="show-imgBox">
             <i class="el-icon-circle-close delete" @click="deleteShowImg(index)" />
             <img :src="getUrl(item.raw)" alt="" width="100" height="100" @click="preview(getUrl(item.raw))">
@@ -149,15 +149,15 @@
           </el-upload>
         </el-form-item>
         <el-form-item>
-          <el-button size="small" @click="uploadDialog = false">取 消</el-button>
-          <el-button v-has="405" size="small" type="primary" @click="fileUpload">确 定</el-button>
+          <el-button size="small" @click="uploadDialog = false">{{ $t('取 消') }}</el-button>
+          <el-button v-has="405" size="small" type="primary" @click="fileUpload">{{ $t('确 定') }}</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
 
-    <el-dialog v-dialogDrag title="添加分组" :visible.sync="addGroupDialog">
+    <el-dialog v-dialogDrag :title="$t('添加分组')" :visible.sync="addGroupDialog">
       <el-form ref="groupForm" :model="groupForm" :rules="groupRules">
-        <el-form-item label="所属分组">
+        <el-form-item :label="$t('所属分组')">
           <el-cascader
             v-model="checkedGroup"
             :options="groupData"
@@ -166,19 +166,19 @@
             @change="handleChange"
           />
         </el-form-item>
-        <el-form-item label="分组名称" prop="group_name">
-          <el-input v-model="groupForm.group_name" placeholder="请输入分组名称" />
+        <el-form-item :label="$t('分组名称')" prop="group_name">
+          <el-input v-model="groupForm.group_name" :placeholder="$t('请输入分组名称')" />
         </el-form-item>
         <el-form-item>
-          <el-button @click="addGroupDialog = false">取 消</el-button>
-          <el-button v-has="407" type="primary" @click="addGrops">确 定</el-button>
+          <el-button @click="addGroupDialog = false">{{ $t('取 消') }}</el-button>
+          <el-button v-has="407" type="primary" @click="addGrops">{{ $t('确 定') }}</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
 
-    <el-dialog v-dialogDrag :title="changeFormName=='modifyName'?'修改名称':'修改分组'" :visible.sync="changeGroupDialog" width="30%">
+    <el-dialog v-dialogDrag :title="changeFormName=='modifyName'?`${$t('修改名称')}`:`${$t('修改分组')}`" :visible.sync="changeGroupDialog" width="30%">
       <el-form ref="changeFrom" :model="changeFrom" :rules="groupRules">
-        <el-form-item v-if="changeFormName=='modifyGroup'" label="选择分组">
+        <el-form-item v-if="changeFormName=='modifyGroup'" :label="$t('选择分组')">
           <el-cascader
             v-model="checkedGroup"
             :options="groupData"
@@ -187,18 +187,18 @@
             @change="setImgGroup"
           />
         </el-form-item>
-        <el-form-item v-if="changeFormName=='modifyName'" label="图片名称" prop="img_name">
-          <el-input v-model="changeFrom.img_name" placeholder="请输入图片名称" />
+        <el-form-item v-if="changeFormName=='modifyName'" :label="$t('图片名称')" prop="img_name">
+          <el-input v-model="changeFrom.img_name" :placeholder="$t('请输入图片名称')" />
         </el-form-item>
         <el-form-item>
-          <el-button @click="changeGroupDialog = false">取 消</el-button>
-          <el-button v-has="408" type="primary" @click="ensureChange">确 定</el-button>
+          <el-button @click="changeGroupDialog = false">{{ $t('取 消') }}</el-button>
+          <el-button v-has="408" type="primary" @click="ensureChange">{{ $t('确 定') }}</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
 
     <!-- 图片预览 -->
-    <el-dialog v-dialogDrag title="图片展示" :visible.sync="previewDialog.show">
+    <el-dialog v-dialogDrag :title="$t('图片展示')" :visible.sync="previewDialog.show">
       <img width="100%" :src="previewDialog.url" alt="">
     </el-dialog>
   </div>
@@ -260,13 +260,13 @@ export default {
       },
       uploadRules: {
         // images: [
-        //   { required: true, message: '请上传图片', trigger: 'blur' }
+        //   { required: true, message: `${this.$t('请上传图片')}`, trigger: 'blur' }
         // ]
       },
       // 分组表单规则
       groupRules: {
         group_name: [
-          { required: true, message: '请输入分组名称', trigger: 'blur' }
+          { required: true, message: `${this.$t('请输入分组名称')}`, trigger: 'blur' }
         ]
       },
       uploadCount: 0, // 上传图片数
@@ -326,7 +326,7 @@ export default {
         this.loading = false
         this.$message({
           type: 'info',
-          message: '图库获取失败！'
+          message: `${this.$t('图库获取失败')}!`
         })
       })
     },
@@ -359,7 +359,7 @@ export default {
       }).then(res => {
         this.$message({
           type: 'success',
-          message: '修改成功!'
+          message: `${this.$t('修改成功')}!`
         })
         this.getImgList()
         this.changeGroupDialog = false
@@ -368,7 +368,7 @@ export default {
       }).catch(() => {
         this.$message({
           type: 'info',
-          message: '修改失败'
+          message: `${this.$t('修改失败')}`
         })
       })
     },
@@ -380,7 +380,7 @@ export default {
       }).then(res => {
         this.$message({
           type: 'success',
-          message: '修改成功!'
+          message: `${this.$t('修改成功')}!`
         })
         this.getImgList()
         this.changeGroupDialog = false
@@ -388,7 +388,7 @@ export default {
       }).catch(() => {
         this.$message({
           type: 'info',
-          message: '修改失败'
+          message: `${this.$t('修改失败')}`
         })
       })
     },
@@ -409,12 +409,12 @@ export default {
       const isJPG = file.raw.type === 'image/jpeg' || file.raw.type === 'image/png'
       const isLt2M = file.size / 1024 / 1024 < 2
       if (!isJPG) {
-        this.$message.error('上传头像图片只能是 JPG 格式!')
+        this.$message.error(`${this.$t('上传头像图片只能是')} JPG 格式!`)
         fileList.pop()
         return isJPG
       }
       if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!')
+        this.$message.error(`${this.$t('上传头像图片大小不能超过')} 2MB!`)
         fileList.pop()
         return isLt2M
       }
@@ -432,7 +432,7 @@ export default {
         this.uploadDialog = false
         // this.getImgList()
         this.$message({
-          message: '上传图片成功',
+          message: `${this.$t('上传图片成功')}`,
           type: 'success'
         })
       }
@@ -447,15 +447,15 @@ export default {
     },
     // 删除分组
     remove(node, data) {
-      this.$confirm('此操作将永久删除该分组, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(`${this.$t('此操作将永久删除该分组')}, ${this.$t('是否继续')}?`, `${this.$t('提示')}`, {
+        confirmButtonText: `${this.$t('确定')}`,
+        cancelButtonText: `${this.$t('取消')}`,
         type: 'warning'
       }).then(() => {
         GroupApi.deleteGroup({ gallery_group_id: data.group_id }).then(res => {
           this.$message({
             type: 'success',
-            message: '删除成功!'
+            message: `${this.$t('删除成功')}!`
           })
         })
         setTimeout(() => {
@@ -464,7 +464,7 @@ export default {
       }).catch(() => {
         this.$message({
           type: 'info',
-          message: '已取消删除'
+          message: `${this.$t('已取消删除')}`
         })
       })
     },
@@ -477,7 +477,7 @@ export default {
       }).then(res => {
         this.$message({
           type: 'success',
-          message: '添加成功'
+          message: `${this.$t('添加成功')}`
         })
         this.getGroupList()
         this.checkedGroup = []
@@ -486,7 +486,7 @@ export default {
       }).catch(() => {
         this.$message({
           type: 'info',
-          message: '添加失败'
+          message: `${this.$t('添加失败')}`
         })
       })
     },
@@ -497,14 +497,14 @@ export default {
       formData.append('gallery_group_id', this.uploadForm.group_id)
       const loading = this.$loading({
         lock: true,
-        text: '图片上传中',
+        text: `${this.$t('图片上传中')}`,
         spinner: 'el-icon-loading',
         background: 'rgba(255, 255, 255, 0.5)'
       })
       imgApi.addImage(formData).then(res => {
         if (res.code === 0) {
           this.$message({
-            message: res.msg || '上传成功',
+            message: this.$t(res.msg) || `${this.$t('上传成功')}`,
             type: 'success'
           })
           this.getImgList()
@@ -516,7 +516,7 @@ export default {
         } else {
           loading.close()
           this.$message({
-            message: res.msg || '上传失败',
+            message: this.$t(res.msg) || `${this.$t('上传失败')}`,
             type: 'error'
           })
         }
@@ -572,9 +572,9 @@ export default {
     },
     // 删除图片
     deleteImg(id) {
-      this.$confirm('此操作将永久删除图片, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(`${this.$t('此操作将永久删除图片')}, ${this.$t('是否继续')}?`, `${this.$t('提示')}`, {
+        confirmButtonText: `${this.$t('确定')}`,
+        cancelButtonText: `${this.$t('取消')}`,
         type: 'warning'
       }).then(() => {
         imgApi.deleteImage({
@@ -582,14 +582,14 @@ export default {
         }).then(res => {
           this.$message({
             type: 'success',
-            message: '删除成功!'
+            message: `${this.$t('删除成功')}!`
           })
           this.getImgList()
         })
       }).catch(() => {
         this.$message({
           type: 'info',
-          message: '删除失败！'
+          message: `${this.$t('删除失败')}!`
         })
       })
     },
@@ -603,10 +603,10 @@ export default {
       }
       this.$nextTick(() => {
         if (!data.level) {
-          this.groupData.push({ group_id: '', parent_id: 0, group_name: '新增1级分类', level: 1, children: [], showInput: false })
+          this.groupData.push({ group_id: '', parent_id: 0, group_name: `${this.$t('新增')}1${this.$t('级分类')}`, level: 1, children: [], showInput: false })
           return
         }
-        const newChild = { group_id: '', parent_id: data.group_id, group_name: '新增分类', level: (data.level + 1), showInput: false }
+        const newChild = { group_id: '', parent_id: data.group_id, group_name: `${this.$t('新增分类')}`, level: (data.level + 1), showInput: false }
         if (!data.children) {
           this.$set(data, 'children', [])
         }
@@ -621,7 +621,7 @@ export default {
         level: data.level
       }).then(res => {
         this.$message({
-          message: res.msg,
+          message: this.$t(res.msg),
           type: 'success'
         })
         this.fetchData()
@@ -629,7 +629,7 @@ export default {
       }).catch(() => {
         this.$message({
           type: 'info',
-          message: '添加失败！'
+          message: `${this.$t('添加失败')}!`
         })
       })
     },
@@ -642,14 +642,14 @@ export default {
         level: data.level
       }).then(res => {
         this.$message({
-          message: res.msg,
+          message: this.$t(res.msg),
           type: 'success'
         })
         this.fetchData()
       }).catch(() => {
         this.$message({
           type: 'info',
-          message: '编辑失败！'
+          message: `${this.$t('编辑失败')}!`
         })
       })
     }

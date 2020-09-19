@@ -1,5 +1,6 @@
 /* Layout */
 import Layout from '@/layout'
+
 export const asyncRouter = [
   {
     pid: 0,
@@ -113,7 +114,7 @@ export const asyncRouter = [
     },
     {
       pid: 4,
-      id: 17,
+      id: 36,
       path: 'import',
       name: 'Import',
       component: () => import('@/views/commodity/import/index'),
@@ -235,7 +236,7 @@ export const asyncRouter = [
     component: Layout,
     alwaysShow: true,
     redirect: '/system/logisticTemplate',
-    meta: { title: ' 设置', icon: 'system' },
+    meta: { title: '设置', icon: 'system' },
     children: [
       {
         pid: 8,
@@ -296,6 +297,13 @@ export const asyncRouter = [
         name: 'WeChatSetting',
         component: () => import('@/views/systemSetup/weChatSetting/index'),
         meta: { title: '系统设置' }
+      }, {
+        pid: 8,
+        id: 37,
+        path: 'languageSetting',
+        name: 'LanguageSetting',
+        component: () => import('@/views/systemSetup/languageSetting/index'),
+        meta: { title: '语言设置' }
       }]
   },
 

@@ -1,24 +1,24 @@
 <template>
   <div class="logistic-edit">
     <div class="title-info">
-      <card-tag :tag-name="id!=''? '编辑运费模板': '新增运费模板'" />
+      <card-tag :tag-name="id!=''? `${$t('编辑运费模板')}`: `${$t('新增运费模板')}`" />
     </div>
     <div class="form-info">
       <el-form ref="form" :model="form" :rules="rules" :label-width="labelWidth">
-        <el-form-item label="模板名称：" prop="express_template_name">
+        <el-form-item :label="`${$t('模板名称')}${$t('：')}`" prop="express_template_name">
           <el-input v-model="form.express_template_name" style="width: 50%" />
         </el-form-item>
-        <el-form-item label="计价方式：">
+        <el-form-item :label="`${$t('计价方式')}${$t('：')}`">
           <el-radio-group v-model="form.express_template_type">
-            <el-radio :label="1">按重量</el-radio>
-            <el-radio :label="2">按件数</el-radio>
+            <el-radio :label="1">{{ $t('按重量') }}</el-radio>
+            <el-radio :label="2">{{ $t('按件数') }}</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="运送方式：">
-          <span>除指定区域外，区域地区的运费采用“默认运费</span>
+        <el-form-item :label="`${$t('运送方式')}${$t('：')}`">
+          <span>{{ `${$t('除指定区域外')}${$t('，')}${$t('区域地区的运费采用')}${$t('“')}${$t('默认运费')}` }}</span>
           <div class="rules-panel">
             <div class="rules-defaule">
-              <span>默认运费</span>
+              <span>{{ $t('默认运费') }}</span>
               <el-form-item prop="first_number" style="display:inline-block">
                 <el-input v-model="form.first_number" size="mini" type="number">
                   <template slot="append">{{ form.express_template_type==2? '件':'重' }}内</template>
@@ -26,38 +26,38 @@
               </el-form-item>
               <el-form-item prop="first_amount" style="display:inline-block">
                 <el-input v-model="form.first_amount" size="mini" type="number">
-                  <template slot="append">元</template>
+                  <template slot="append">{{ $t('元') }}</template>
                 </el-input>
               </el-form-item>
-              <span>，每增加</span>
+              <span>{{ `${$t('，')}${$t('每增加')}` }}</span>
               <el-form-item prop="continue_number" style="display:inline-block">
                 <el-input v-model="form.continue_number" size="mini" type="number">
-                  <template slot="append">{{ form.express_template_type==2?'件':'千克' }}</template>
+                  <template slot="append">{{ form.express_template_type==2?$t('件'):$t('千克') }}</template>
                 </el-input>
               </el-form-item>
-              <span>，增加运费</span>
+              <span>{{ `${$t('，')}${$t('增加运费')}` }}</span>
               <el-form-item prop="continue_amount" style="display:inline-block">
                 <el-input v-model="form.continue_amount" size="mini" type="number">
-                  <template slot="append">元</template>
+                  <template slot="append">{{ $t('元') }}</template>
                 </el-input>
               </el-form-item>
             </div>
             <div class="rules-list">
               <div class="rules-list-header">
                 <el-row :gutter="20">
-                  <el-col :span="4">运送到</el-col>
-                  <el-col :span="4">首{{ form.express_template_type==2?'件':'重' }}（{{ form.express_template_type==2?'件':'Kg' }}）</el-col>
-                  <el-col :span="4">首费（元）</el-col>
-                  <el-col :span="4">续{{ form.express_template_type==2?'件':'重' }}（{{ form.express_template_type==2?'件':'Kg' }}）</el-col>
-                  <el-col :span="4">续费（元）</el-col>
-                  <el-col :span="4">操作</el-col>
+                  <el-col :span="4">{{ $t('运送到') }}</el-col>
+                  <el-col :span="4">{{ $t(`首${ form.express_template_type==2?('件'):'重' }`) }}（{{ form.express_template_type==2?$t('件'):'Kg' }}）</el-col>
+                  <el-col :span="4">{{ `${$t('首费')}${$t('（')}${$t('元')}${$t('）')}` }}</el-col>
+                  <el-col :span="4">{{ $t(`续${ form.express_template_type==2?'件':'重' }`) }}（{{ form.express_template_type==2?$t('件'):'Kg' }}）</el-col>
+                  <el-col :span="4">{{ `${$t('续费')}${$t('（')}${$t('元')}${$t('）')}` }}</el-col>
+                  <el-col :span="4">{{ $t('操作') }}</el-col>
                 </el-row>
               </div>
               <div class="item-content">
                 <el-row v-for="(item,index) in form.region_rules" :key="index" :gutter="20" class="rules-list-item">
                   <el-col :span="4">
                     {{ item.city_show }}
-                    <el-button type="text" @click="editCity(item.region, index)">编辑</el-button>
+                    <el-button type="text" @click="editCity(item.region, index)">{{ $t('编辑') }}</el-button>
                   </el-col>
                   <el-col :span="4">
                     <el-input v-model="item.first_number" size="mini" type="number" />
@@ -72,7 +72,7 @@
                     <el-input v-model="item.continue_amount" size="mini" type="number" />
                   </el-col>
                   <el-col :span="4">
-                    <el-button size="mini" type="danger" @click="deleteRules(index)">删除</el-button>
+                    <el-button size="mini" type="danger" @click="deleteRules(index)">{{ $t('删除') }}</el-button>
                   </el-col>
                 </el-row>
               </div>
@@ -82,24 +82,24 @@
                 type="text"
                 icon="el-icon-plus"
                 @click="addRules"
-              >为指定地区城市设置运费</el-button>
+              >{{ $t('为指定地区城市设置运费') }}</el-button>
             </div>
           </div>
         </el-form-item>
-        <el-form-item label="满额包邮：">
+        <el-form-item :label="`${$t('满额包邮')}${$t('：')}`">
           <el-radio-group v-model="form.is_full_amount">
-            <el-radio :label="1">开启</el-radio>
-            <el-radio :label="2">关闭</el-radio>
+            <el-radio :label="1">{{ $t('开启') }}</el-radio>
+            <el-radio :label="2">{{ $t('关闭') }}</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item v-if="form.is_full_amount==1" label="包邮所需金额：" prop="full_amount">
+        <el-form-item v-if="form.is_full_amount==1" :label="`${$t('包邮所需金额')}${$t('：')}`" prop="full_amount">
           <el-input v-model="form.full_amount" type="number" style="width: 200px">
-            <template slot="append">元</template>
+            <template slot="append">{{ $t('元') }}</template>
           </el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" size="small" @click="submitForm('form')">保存</el-button>
-          <el-button size="small" @click="()=> this.$router.go(-1)">取消</el-button>
+          <el-button type="primary" size="small" @click="submitForm('form')">{{ $t('保存') }}</el-button>
+          <el-button size="small" @click="()=> this.$router.go(-1)">{{ $t('取消') }}</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -127,7 +127,7 @@ export default {
   data() {
     const valid_full_amount = (rule, value, callback) => {
       if (value === '' && this.form.is_full_amount === 1) {
-        callback(new Error('请输入满额金额'))
+        callback(new Error(`${this.$t('请输入满额金额')}`))
       } else {
         callback()
       }
@@ -148,12 +148,12 @@ export default {
         region_rules: [] // 地区规则
       },
       rules: {
-        express_template_name: [{ required: true, message: '请输入模板名称', trigger: 'blur' }],
-        type: [{ required: true, message: '请选择计费类型', trigger: 'change' }],
-        first_number: [{ required: true, message: '请输入', trigger: 'blur' }],
-        first_amount: [{ required: true, message: '请输入价格', trigger: 'blur' }],
-        continue_number: [{ required: true, message: '请输入', trigger: 'blur' }],
-        continue_amount: [{ required: true, message: '请输入价格', trigger: 'blur' }],
+        express_template_name: [{ required: true, message: `${this.$t('请输入模板名称')}`, trigger: 'blur' }],
+        type: [{ required: true, message: `${this.$t('请选择计费类型')}`, trigger: 'change' }],
+        first_number: [{ required: true, message: `${this.$t('请输入')}`, trigger: 'blur' }],
+        first_amount: [{ required: true, message: `${this.$t('请输入价格')}`, trigger: 'blur' }],
+        continue_number: [{ required: true, message: `${this.$t('请输入')}`, trigger: 'blur' }],
+        continue_amount: [{ required: true, message: `${this.$t('请输入价格')}`, trigger: 'blur' }],
         full_amount: [{ validator: valid_full_amount, trigger: 'blur' }]
       },
       // 操作对象
@@ -204,7 +204,7 @@ export default {
             ).then(res => {
               this.$message({
                 type: 'success',
-                message: res.msg || '修改成功!'
+                message: this.$t(res.msg) || `${this.$t('修改成功')}!`
               })
               this.$router.go(-1)
             })
@@ -214,7 +214,7 @@ export default {
             ).then(res => {
               this.$message({
                 type: 'success',
-                message: res.msg || '修改成功!'
+                message: this.$t(res.msg) || `${this.$t('修改成功')}!`
               })
               this.$router.go(-1)
             })

@@ -2,12 +2,12 @@
   <div class="">
     <el-form ref="form" :model="form" label-position="top">
       <div class="form-content-item">
-        <!-- <div class="block-title"><card-tag tag-name="微信设置" /></div> -->
+        <!-- <div class="block-title"><card-tag :tag-name="$t('微信设置')" /></div> -->
         <div class="block-content">
-          <el-form-item label="首页通知公告">
+          <el-form-item :label="$t('首页通知公告')">
             <el-input v-model="form.notice" clearable size="small" style="width: 100%" />
           </el-form-item>
-          <el-form-item label="店铺简介">
+          <el-form-item :label="$t('店铺简介')">
             <tinymce-editor
               ref="editor"
               v-model="form.about_us"
@@ -16,7 +16,7 @@
             />
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" size="small" @click="submitForm('form')">保存</el-button>
+            <el-button type="primary" size="small" @click="submitForm('form')">{{ $t('保存') }}</el-button>
           </el-form-item>
         </div>
       </div>
@@ -58,7 +58,7 @@ export default {
           settingApi.saveShopConfig(this.form).then(res => {
             this.$message({
               type: 'success',
-              message: res.msg || '保存成功!'
+              message: this.$t(res.msg) || `${this.$t('保存成功')}!`
             })
           })
         } else {

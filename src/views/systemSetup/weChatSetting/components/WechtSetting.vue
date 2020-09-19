@@ -2,12 +2,12 @@
   <div class="">
     <el-form ref="settingForm" :model="settingForm" :rules="rules" label-position="left" label-width="100px">
       <div class="form-content-item">
-        <!-- <div class="block-title"><card-tag tag-name="微信设置" /></div> -->
+        <!-- <div class="block-title"><card-tag :tag-name="$t('微信设置')" /></div> -->
         <div class="block-content">
-          <el-form-item label="商户号" prop="mch_id">
+          <el-form-item :label="$t('商户号')" prop="mch_id">
             <el-input v-model="settingForm.mch_id" size="small" />
           </el-form-item>
-          <el-form-item label="商户密钥" prop="wxpay_key">
+          <el-form-item :label="$t('商户密钥')" prop="wxpay_key">
             <el-input v-model="settingForm.wxpay_key" size="small" />
           </el-form-item>
           <el-form-item label="AppID" prop="appid">
@@ -16,12 +16,12 @@
           <el-form-item label="AppSecret" prop="appsecret">
             <el-input v-model="settingForm.appsecret" size="small" />
           </el-form-item>
-          <el-form-item label="公众号域名" prop="domain">
+          <el-form-item :label="$t('公众号域名')" prop="domain">
             <el-input v-model="settingForm.domain" size="small">
               <template slot="prepend">http://</template>
             </el-input>
           </el-form-item>
-          <el-form-item label="证书文件" prop="wxpay_cert_p12">
+          <el-form-item :label="$t('证书文件')" prop="wxpay_cert_p12">
             <el-upload
               class="upload-demo"
               name="cert"
@@ -35,12 +35,12 @@
               :limit="1"
               :on-exceed="uploadExceed"
             >
-              <el-button size="small" type="primary">上传证书文件</el-button>
+              <el-button size="small" type="primary">{{ $t('上传证书文件') }}</el-button>
             </el-upload>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" size="small" @click="submitForm('settingForm')">保存</el-button>
-            <el-button size="small" @click="resetForm('settingForm')">重置</el-button>
+            <el-button type="primary" size="small" @click="submitForm('settingForm')">{{ $t('保存') }}</el-button>
+            <el-button size="small" @click="resetForm('settingForm')">{{ $t('重置') }}</el-button>
           </el-form-item>
         </div>
       </div>
@@ -68,23 +68,23 @@ export default {
       },
       rules: {
         mch_id: [
-          { required: true, message: '请输入微信商户号', trigger: 'blur' }
+          { required: true, message: `${this.$t('请输入微信商户号')}`, trigger: 'blur' }
         ],
         wxpay_key: [
-          { required: true, message: '请输入微信支付密钥', trigger: 'blur' },
-          { min: 32, max: 32, message: '长度为32个字符', trigger: 'blur' }
+          { required: true, message: `${this.$t('请输入微信支付密钥')}`, trigger: 'blur' },
+          { min: 32, max: 32, message: `${this.$t('长度为32个字符')}`, trigger: 'blur' }
         ],
         appid: [
-          { required: true, message: '请输入AppID', trigger: 'blur' }
+          { required: true, message: `${this.$t('请输入')}AppID`, trigger: 'blur' }
         ],
         appsecret: [
-          { required: true, message: '请输入AppSecret', trigger: 'blur' }
+          { required: true, message: `${this.$t('请输入')}AppSecret`, trigger: 'blur' }
         ],
         domain: [
-          { required: true, message: '请输入公众号域名', trigger: 'blur' }
+          { required: true, message: `${this.$t('请输入公众号域名')}`, trigger: 'blur' }
         ],
         wxpay_cert_p12: [
-          { required: true, message: '请上传证书文件', trigger: 'change' }
+          { required: true, message: `${this.$t('请上传证书文件')}`, trigger: 'change' }
         ]
       }
     }
@@ -109,7 +109,7 @@ export default {
           settingApi.saveWxConfig(this.settingForm).then(res => {
             this.$message({
               type: 'success',
-              message: res.msg || '保存成功!'
+              message: this.$t(res.msg) || `${this.$t('保存成功')}!`
             })
           })
         } else {
@@ -125,7 +125,7 @@ export default {
     uploadExceed() {
       this.$message({
         type: 'warning',
-        message: '超出文件数量限制，请先删除原文件后重新选择！'
+        message: `${this.$t('超出文件数量限制')},${this.$t('请先删除原文件后重新选择')}!`
       })
     },
     removeFile(file, fileList) {

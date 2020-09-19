@@ -2,7 +2,7 @@
   <div class="fonts-list main-content">
     <div class="screen-box">
       <div class="operation">
-        <el-select v-model="fontType" size="small" clearable placeholder="请选择字体类型" class="selector">
+        <el-select v-model="fontType" size="small" clearable :placeholder="$t('请选择字体类型')" class="selector">
           <el-option
             v-for="item in fontTypeOptions"
             :key="item.value"
@@ -10,7 +10,7 @@
             :value="item.value"
           />
         </el-select>
-        <el-button v-has="701" size="small" icon="el-icon-upload" type="primary" @click="showDialog('add')">上传</el-button>
+        <el-button v-has="701" size="small" icon="el-icon-upload" type="primary" @click="showDialog('add')">{{ $t('上传') }}</el-button>
       </div>
     </div>
     <div class="content">
@@ -23,18 +23,18 @@
         tooltip-effect="dark"
       >
         <el-table-column
-          label="序号"
+          :label="$t('序号')"
           align="center"
           width="100"
           type="index"
         />
         <el-table-column
           prop="font_name"
-          label="字体名称"
+          :label="$t('字体名称')"
           align="center"
         />
         <el-table-column
-          label="样板展示"
+          :label="$t('样板展示')"
           align="center"
         >
           <template slot-scope="scope">
@@ -43,7 +43,7 @@
         </el-table-column>
         <el-table-column
           fixed="right"
-          label="操作"
+          :label="$t('操作')"
           align="center"
         >
           <template slot-scope="scope">
@@ -51,17 +51,17 @@
               size="mini"
               type="primary"
               @click.native="showDialog('edit',scope.row)"
-            >编辑</el-button>
+            >{{ $t('编辑') }}</el-button>
             <el-button
               size="mini"
               @click.native="showDetail(scope.row)"
-            >查看</el-button>
+            >{{ $t('查看') }}</el-button>
             <el-button
               v-has="702"
               size="mini"
               type="danger"
               @click="handleDelete(scope.row.font_id)"
-            >删除</el-button>
+            >{{ $t('删除') }}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -79,18 +79,18 @@
       </div> -->
     </div>
     <!-- 新增字体 -->
-    <el-dialog v-dialogDrag center :title="dialogType=='add'?'新增字体': '修改字体'" :visible.sync="fontDialog">
+    <el-dialog v-dialogDrag center :title="dialogType=='add'?`${$t('新增字体')}`: `${$t('修改字体')}`" :visible.sync="fontDialog">
       <el-form ref="fontForm" :model="fontForm" :rules="rules" label-width="80px" label-position="left" size="small">
-        <el-form-item label="字体名称" prop="font_name">
+        <el-form-item :label="$t('字体名称')" prop="font_name">
           <el-input v-model="fontForm.font_name " :disabled="dialogType=='detail'" />
         </el-form-item>
-        <el-form-item label="最小高度" prop="min_height">
-          <el-input-number v-model="fontForm.min_height" :min="8" :max="80" label="字体最小高度" />
+        <el-form-item :label="$t('最小高度')" prop="min_height">
+          <el-input-number v-model="fontForm.min_height" :min="8" :max="80" :label="$t('字体最小高度')" />
         </el-form-item>
-        <el-form-item label="最大高度" prop="max_height">
-          <el-input-number v-model="fontForm.max_height" :min="fontForm.min_height" :max="80" label="字体最大高度" />
+        <el-form-item :label="$t('最大高度')" prop="max_height">
+          <el-input-number v-model="fontForm.max_height" :min="fontForm.min_height" :max="80" :label="$t('字体最大高度')" />
         </el-form-item>
-        <!-- <el-form-item label="预览图" prop="preview_img">
+        <!-- <el-form-item :label="$t('预览图')" prop="preview_img">
           <el-upload
             class="logo-uploader"
             :action="`${baseUrl}/design/uploadImg`"
@@ -107,7 +107,7 @@
             <i v-else class="el-icon-plus logo-uploader-icon" />
           </el-upload>
         </el-form-item> -->
-        <el-form-item label="样板展示" prop="preview_image">
+        <el-form-item :label="$t('样板展示')" prop="preview_image">
           <img-upload
             :img-data="fontForm.preview_image"
             :pic-max="1"
@@ -115,8 +115,8 @@
             @chooseImg="imageChoose"
           />
         </el-form-item>
-        <el-form-item label="字体类型" prop="font_type">
-          <el-select v-model="fontForm.font_type" size="small" clearable placeholder="请选择字体类型" class="selector">
+        <el-form-item :label="$t('字体类型')" prop="font_type">
+          <el-select v-model="fontForm.font_type" size="small" clearable :placeholder="$t('请选择字体类型')" class="selector">
             <el-option
               v-for="item in fontTypeOptions"
               :key="item.value"
@@ -125,7 +125,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item v-if="dialogType=='add'" label="字体文件" prop="file">
+        <el-form-item v-if="dialogType=='add'" :label="$t('字体文件')" prop="file">
           <el-upload
             ref="upload"
             class="upload-demo"
@@ -142,14 +142,14 @@
             :auto-upload="false"
             :with-credentials="true"
           >
-            <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-            <!-- <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button> -->
-            <div slot="tip" class="el-upload__tip">{{ fontForm.font_type === 1 ? `只能上传压缩文件，且不超过2M` : '只能上传ttf文件' }}</div>
+            <el-button slot="trigger" size="small" type="primary">{{ $t('选取文件') }}</el-button>
+            <!-- <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">{{ $t('上传到服务器') }}</el-button> -->
+            <div slot="tip" class="el-upload__tip">{{ fontForm.font_type === 1 ? $t(`只能上传压缩文件，且不超过2M`) : $t('只能上传ttf文件') }}</div>
           </el-upload>
         </el-form-item>
         <el-form-item>
-          <el-button v-if="dialogType!=='detail'" v-has="701" type="primary" @click="onSubmit('fontForm')">保存</el-button>
-          <el-button @click="fontDialog = false">取消</el-button>
+          <el-button v-if="dialogType!=='detail'" v-has="701" type="primary" @click="onSubmit('fontForm')">{{ $t('保存') }}</el-button>
+          <el-button @click="fontDialog = false">{{ $t('取消') }}</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -177,7 +177,7 @@ export default {
   data() {
     var validateFiles = (rule, value, callback) => {
       if (this.fileList.length === 0) {
-        callback(new Error('请选择字体文件'))
+        callback(new Error(`${this.$t('请选择字体文件')}`))
       } else {
         callback()
       }
@@ -205,29 +205,29 @@ export default {
       fontType: '',
       fontTypeOptions: [ // 字体类型
         {
-          label: '普通字体',
+          label: `${this.$t('普通字体')}`,
           value: 2
         },
         {
-          label: '刺绣字体',
+          label: `${this.$t('刺绣字体')}`,
           value: 1
         }
       ],
       rules: {
         font_name: [
-          { required: true, message: '请填写字体名称', trigger: 'blur' }
+          { required: true, message: `${this.$t('请填写字体名称')}`, trigger: 'blur' }
         ],
         preview_image: [
-          { required: true, message: '请上传样板图', trigger: 'blur' }
+          { required: true, message: `${this.$t('请上传样板图')}`, trigger: 'blur' }
         ],
         min_height: [
-          { required: true, message: '请输入最小高度', trigger: 'blur' }
+          { required: true, message: `${this.$t('请输入最小高度')}`, trigger: 'blur' }
         ],
         max_height: [
-          { required: true, message: '请输入最大高度', trigger: 'blur' }
+          { required: true, message: `${this.$t('请输入最大高度')}`, trigger: 'blur' }
         ],
         font_type: [
-          { required: true, message: '请选择字体类型', trigger: 'blur' }
+          { required: true, message: `${this.$t('请选择字体类型')}`, trigger: 'blur' }
         ],
         file: [
           { validator: validateFiles, trigger: 'change' }
@@ -270,7 +270,7 @@ export default {
         this.loading = false
         this.$message({
           type: 'info',
-          message: '网络异常！'
+          message: `${this.$t('网络异常')}!`
         })
       })
     },
@@ -292,7 +292,7 @@ export default {
             fontApi.editFont(this.fontForm).then(res => {
               this.$message({
                 type: 'success',
-                message: res.msg || '编辑成功!'
+                message: this.$t(res.msg) || `${this.$t('编辑成功')}!`
               })
               this.$refs.fontForm.resetFields()
               this.fetchData()
@@ -317,30 +317,30 @@ export default {
       this.fetchData()
     },
     handleDelete(id) {
-      this.$confirm('是否从字体库删除该字体?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(`${this.$t('是否从字体库删除该字体')}?`, `${this.$t('提示')}`, {
+        confirmButtonText: `${this.$t('确定')}`,
+        cancelButtonText: `${this.$t('取消')}`,
         type: 'warning',
         confirmButtonClass: 'danger'
       }).then(() => {
         fontApi.deleteFont({ font_id: id }).then(res => {
           this.$message({
             type: 'success',
-            message: '删除成功!'
+            message: `${this.$t('删除成功')}!`
           })
           this.fetchData()
         })
       }).catch(() => {
         this.$message({
           type: 'info',
-          message: '已取消删除'
+          message: `${this.$t('已取消删除')}`
         })
       })
     },
     uploadExceed() {
       this.$message({
         type: 'warning',
-        message: '超出文件数量限制，请先删除原文件后重新选择！'
+        message: `${this.$t('超出文件数量限制')}, ${this.$t('请先删除原文件后重新选择')}!`
       })
     },
     submitUpload(e) {
@@ -353,19 +353,19 @@ export default {
       formData.append('preview_image', this.fontForm.preview_image)
       const loading = this.$loading({
         lock: true,
-        text: '文件上传中',
+        text: `${this.$t('文件上传中')}`,
         spinner: 'el-icon-loading',
         background: 'rgba(255, 255, 255, 0.5)'
       })
       fontApi.uploadFont(formData).then(res => {
         if (res.code !== 0) {
           this.$message({
-            message: res.data.msg,
+            message: this.$t(res.data.msg),
             type: 'error'
           })
         } else {
           this.$message({
-            message: '上传成功',
+            message: `${this.$t('上传成功')}`,
             type: 'success'
           })
           loading.close()
@@ -376,7 +376,7 @@ export default {
         loading.close()
         this.$message({
           type: 'info',
-          message: '上传失败'
+          message: `${this.$t('上传失败')}`
         })
       })
     },
@@ -389,7 +389,7 @@ export default {
       }
       const isLt2M = file.size / 1024 / 1024 < 2
       if (!isLt2M) {
-        this.$message.error('上传文件大小不能超过 2MB!')
+        this.$message.error(`${this.$t('上传文件大小不能超过')} 2MB!`)
       }
       return isLt2M
     },

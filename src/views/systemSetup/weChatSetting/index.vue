@@ -1,10 +1,10 @@
 <template>
   <div class="wechat-setting">
     <el-tabs type="border-card">
-      <el-tab-pane v-if="adminInfo.role_type != 1" label="微信设置">
+      <el-tab-pane v-if="adminInfo.role_type != 1" :label="$t('微信设置')">
         <wecht-setting />
       </el-tab-pane>
-      <el-tab-pane v-if="adminInfo.role_type == 1" label="店铺设置">
+      <el-tab-pane v-if="adminInfo.role_type == 1" :label="$t('店铺设置')">
         <store-setting />
       </el-tab-pane>
     </el-tabs>

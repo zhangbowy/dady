@@ -5,15 +5,15 @@
         <!-- <el-input
           v-model="keywords"
           size="small"
-          placeholder="请输入名称"
+          :placeholder="$t('请输入名称')"
           clearable
           style="width:220px"
           @keyup.enter.native="fetchData"
         /> -->
-        <!-- <el-button size="small" icon="el-icon-search" type="primary" @click.native="fetchData">搜索</el-button> -->
+        <!-- <el-button size="small" icon="el-icon-search" type="primary" @click.native="fetchData">{{ $t('搜索') }}</el-button> -->
       </div>
       <div class="operation">
-        <el-button v-has="804" size="small" icon="el-icon-plus" type="primary" @click="showDialog('add')">新增</el-button>
+        <el-button v-has="804" size="small" icon="el-icon-plus" type="primary" @click="showDialog('add')">{{ $t('新增') }}</el-button>
       </div>
     </div>
     <div class="content">
@@ -26,13 +26,13 @@
         tooltip-effect="dark"
       >
         <el-table-column
-          label="序号"
+          :label="$t('序号')"
           align="center"
           width="100"
           type="index"
         />
         <el-table-column
-          label="广告位图片"
+          :label="$t('广告位图片')"
           align="center"
           width="100"
         >
@@ -42,11 +42,11 @@
         </el-table-column>
         <el-table-column
           prop="slider_name"
-          label="名称"
+          :label="$t('名称')"
           align="center"
         />
         <!-- <el-table-column
-          label="广告位状态"
+          :label="$t('广告位状态')"
           align="center"
           width="250"
         >
@@ -56,26 +56,26 @@
         </el-table-column> -->
         <el-table-column
           prop="created_at"
-          label="创建时间"
+          :label="$t('创建时间')"
           align="center"
         />
         <el-table-column
           fixed="right"
-          label="操作"
+          :label="$t('操作')"
           align="center"
         >
           <template slot-scope="scope">
             <el-button
               size="mini"
               @click.native="showDialog('detail', scope.row)"
-            >查看</el-button>
+            >{{ $t('查看') }}</el-button>
             <el-button
               v-has="806"
               size="mini"
               type="danger"
               style="margin-left: 0"
               @click="handleDelete(scope.row.id)"
-            >删除</el-button>
+            >{{ $t('删除') }}</el-button>
             <el-button
               v-if="scope.$index!==0"
               v-has="806"
@@ -84,7 +84,7 @@
               style="margin-left: 0"
               :loading="btnLoading"
               @click="sortBtn(scope.row.id, 'up')"
-            >上移</el-button>
+            >{{ $t('上移') }}</el-button>
             <el-button
               v-if="scope.$index!==adList.length-1"
               v-has="806"
@@ -93,7 +93,7 @@
               style="margin-left: 0"
               :loading="btnLoading"
               @click="sortBtn(scope.row.id, 'down')"
-            >下移</el-button>
+            >{{ $t('下移') }}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -111,12 +111,12 @@
       </div> -->
     </div>
     <!-- 广告位新增，详情，编辑弹框 -->
-    <el-dialog v-dialogDrag center :title="dialogType=='add'? '新增广告位': dialogType=='edit'? '编辑广告位': '广告位详情'" :visible.sync="dialogFormVisible">
+    <el-dialog v-dialogDrag center :title="dialogType=='add'? $t('新增广告位'): dialogType=='edit'? `${$t('编辑广告位')}`: `${$t('广告位详情')}`" :visible.sync="dialogFormVisible">
       <el-form ref="form" :model="form" :rules="rules" label-width="100px" label-position="left" size="small">
-        <el-form-item label="广告位名称" prop="slider_name">
+        <el-form-item :label="$t('广告位名称')" prop="slider_name">
           <el-input v-model="form.slider_name " :disabled="dialogType=='detail'" />
         </el-form-item>
-        <el-form-item label="广告位图片" prop="image_path">
+        <el-form-item :label="$t('广告位图片')" prop="image_path">
           <img-upload
             :img-data="form.image_path"
             :pic-max="1"
@@ -124,16 +124,16 @@
             @chooseImg="imageChoose"
           />
         </el-form-item>
-        <el-form-item label="排序">
+        <el-form-item :label="$t('排序')">
           <el-input v-model="form.sort " :disabled="dialogType=='detail'" />
         </el-form-item>
-        <el-form-item label="链接">
+        <el-form-item :label="$t('链接')">
           <el-input v-model="form.link " :disabled="dialogType=='detail'" />
         </el-form-item>
         <el-form-item>
-          <el-button v-if="dialogType!=='detail'" v-has="804" type="primary" @click="onSubmit('form')">保存</el-button>
-          <el-button v-else v-has="805" type="primary" @click="dialogType='edit'">编辑</el-button>
-          <el-button @click="dialogFormVisible = false">取消</el-button>
+          <el-button v-if="dialogType!=='detail'" v-has="804" type="primary" @click="onSubmit('form')">{{ $t('保存') }}</el-button>
+          <el-button v-else v-has="805" type="primary" @click="dialogType='edit'">{{ $t('编辑') }}</el-button>
+          <el-button @click="dialogFormVisible = false">{{ $t('取消') }}</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -162,10 +162,10 @@ export default {
       btnLoading: false,
       rules: {
         slider_name: [
-          { required: true, message: '请输入广告位名称', trigger: 'blur' }
+          { required: true, message: `${this.$t('请输入广告位名称')}`, trigger: 'blur' }
         ],
         image_path: [
-          { required: true, message: '请上传广告位图片', trigger: 'blur' }
+          { required: true, message: `${this.$t('请上传广告位图片')}`, trigger: 'blur' }
         ]
       },
       dialogType: 'add'
@@ -217,7 +217,7 @@ export default {
       }).then(res => {
         this.$message({
           type: 'success',
-          message: res.msg || '修改成功!'
+          message: this.$t(res.msg) || `${this.$t('修改成功')}!`
         })
         setTimeout(() => {
           this.fetchData()
@@ -227,7 +227,7 @@ export default {
         this.btnLoading = false
         this.$message({
           type: 'info',
-          message: '修改失败!'
+          message: `${this.$t('修改失败')}!`
         })
       })
     },
@@ -240,7 +240,7 @@ export default {
               if (res.code === 0) {
                 this.$message({
                   type: 'success',
-                  message: res.msg || '修改成功!'
+                  message: this.$t(res.msg) || `${this.$t('修改成功')}!`
                 })
                 // 重置表单
                 _this.$refs[formName].resetFields()
@@ -249,7 +249,7 @@ export default {
               } else {
                 this.$message({
                   type: 'info',
-                  message: res.msg || '修改失败!'
+                  message: this.$t(res.msg) || `${this.$t('修改失败')}!`
                 })
               }
             })
@@ -258,14 +258,14 @@ export default {
               if (res.code === 0) {
                 this.$message({
                   type: 'success',
-                  message: res.msg || '添加成功!'
+                  message: this.$t(res.msg) || `${this.$t('添加成功')}!`
                 })
                 // 重置表单
                 _this.$refs[formName].resetFields()
                 this.dialogFormVisible = false
                 this.fetchData()
               } else {
-                this.$message.success(res.msg || '添加失败!')
+                this.$message.success(this.$t(res.msg) || `${this.$t('添加失败')}!`)
               }
             })
           }
@@ -281,23 +281,23 @@ export default {
       // this.imageModalConfig.visible = false;
     },
     handleDelete(id) {
-      this.$confirm('是否删除该广告位?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(`${this.$t('是否删除该广告位')}?`, `${this.$t('提示')}`, {
+        confirmButtonText: `${this.$t('确定')}`,
+        cancelButtonText: `${this.$t('取消')}`,
         type: 'warning',
         confirmButtonClass: 'danger'
       }).then(() => {
         adsense.deleteAdsense({ id: id }).then(res => {
           this.$message({
             type: 'success',
-            message: '删除成功!'
+            message: `${this.$t('删除成功')}!`
           })
           this.fetchData()
         })
       }).catch(() => {
         this.$message({
           type: 'info',
-          message: '已取消删除'
+          message: `${this.$t('已取消删除')}`
         })
       })
     }

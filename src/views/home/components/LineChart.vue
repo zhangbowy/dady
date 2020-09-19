@@ -72,7 +72,7 @@ export default {
           // 默认为10
           // 2.主副标题之间的间距
           itemGap: 40,
-          text: '近7日销售额趋势图',
+          text: `${this.$t('近7日销售额趋势图')}`,
           textStyle: {
             // 文字颜色
             color: '#333',
@@ -132,10 +132,10 @@ export default {
           }
         },
         // legend: {
-        //   data: ['销售额']
+        //   data: [`${this.$t('销售额')}`]
         // },
         series: [{
-          name: '销售额', itemStyle: {
+          name: `${this.$t('销售额')}`, itemStyle: {
             normal: {
               color: '#FF005A',
               lineStyle: {
@@ -154,7 +154,7 @@ export default {
           animationEasing: 'cubicInOut'
         }
         // {
-        //   name: '订单数',
+        //   name: `${this.$t('订单数')}`,
         //   smooth: true,
         //   type: 'line',
         //   itemStyle: {

@@ -1,6 +1,6 @@
 <template>
   <div class="add-city">
-    <el-dialog v-dialogDrag title="城市选择" :visible.sync="isShow" :before-close="hiddenDialog" @close="hiddenDialog">
+    <el-dialog v-dialogDrag :title="$t('城市选择')" :visible.sync="isShow" :before-close="hiddenDialog" @close="hiddenDialog">
       <div class="content">
         <el-row :gutter="20">
           <el-col :span="12">
@@ -8,7 +8,7 @@
               <el-input
                 v-model="filterText"
                 size="small"
-                placeholder="输入关键字进行过滤"
+                :placeholder="$t('输入关键字进行过滤')"
               />
             </div>
             <el-tree
@@ -50,8 +50,8 @@
         </el-row>
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button size="mini" type="primary" @click="chooseCityConfirm">确 定</el-button>
-        <el-button size="mini" @click="hiddenDialog">取 消</el-button>
+        <el-button size="mini" type="primary" @click="chooseCityConfirm">{{ $t('确 定') }}</el-button>
+        <el-button size="mini" @click="hiddenDialog">{{ $t('取 消') }}</el-button>
       </div>
     </el-dialog>
   </div>

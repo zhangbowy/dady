@@ -5,15 +5,15 @@
         <el-input
           v-model="keywords"
           size="small"
-          placeholder="请输入关键词"
+          :placeholder="$t('请输入关键词')"
           clearable
           style="width:220px"
           @keyup.enter.native="fetchData"
         />
-        <el-button size="small" icon="el-icon-search" type="primary" @click.native="fetchData">搜索</el-button>
+        <el-button size="small" icon="el-icon-search" type="primary" @click.native="fetchData">{{ $t('搜索') }}</el-button>
       </div>
       <div class="operation">
-        <el-button v-has="601" size="small" icon="el-icon-plus" type="primary" @click="showDialog('add')">新增</el-button>
+        <el-button v-has="601" size="small" icon="el-icon-plus" type="primary" @click="showDialog('add')">{{ $t('新增') }}</el-button>
       </div>
     </div>
     <div class="content">
@@ -26,41 +26,41 @@
         tooltip-effect="dark"
       >
         <el-table-column
-          label="序号"
+          :label="$t('序号')"
           align="center"
           width="100"
           type="index"
         />
         <el-table-column
           prop="designer_team_name"
-          label="团队名称"
+          :label="$t('团队名称')"
           align="center"
         />
         <el-table-column
           prop="created_at"
-          label="创建时间"
+          :label="$t('创建时间')"
           align="center"
         />
         <el-table-column
           prop="updated_at"
-          label="更新时间"
+          :label="$t('更新时间')"
           align="center"
         />
         <el-table-column
           fixed="right"
-          label="操作"
+          :label="$t('操作')"
           align="center"
         >
           <template slot-scope="scope">
             <el-button
               size="mini"
               @click.native="showDialog('detail', scope.row)"
-            >查看</el-button>
+            >{{ $t('查看') }}</el-button>
             <el-button
               size="mini"
               type="danger"
               @click="handleDelete(scope.row.designer_team_id)"
-            >删除</el-button>
+            >{{ $t('删除') }}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -78,15 +78,15 @@
       </div>
     </div>
     <!-- 团队新增，详情，编辑弹框 -->
-    <el-dialog v-dialogDrag center :title="dialogType=='add'? '新增设计师团队': dialogType=='edit'? '编辑设计师团队': '设计师团队详情'" :visible.sync="dialogFormVisible" width="40%">
+    <el-dialog v-dialogDrag center :title="dialogType=='add'? $t('新增设计师团队'): dialogType=='edit'? `${$t('编辑设计师团队')}`: `${$t('设计师团队详情')}`" :visible.sync="dialogFormVisible" width="40%">
       <el-form ref="form" :model="form" :rules="rules" label-width="120px" label-position="left" size="small">
-        <el-form-item label="团队名称" prop="designer_team_name">
+        <el-form-item :label="$t('团队名称')" prop="designer_team_name">
           <el-input v-model="form.designer_team_name " :disabled="dialogType=='detail'" style="width:100%" />
         </el-form-item>
-        <el-form-item label="管理者名称" prop="designer_name">
+        <el-form-item :label="$t('管理者名称')" prop="designer_name">
           <el-input v-model="form.designer_name " :disabled="dialogType=='detail'" style="width:100%" />
         </el-form-item>
-        <el-form-item label="管理者手机号" prop="designer_phone">
+        <el-form-item :label="$t('管理者手机号')" prop="designer_phone">
           <el-input v-model="form.designer_phone " :disabled="dialogType=='detail'" style="width:100%" />
         </el-form-item>
         <!-- <el-form-item label="管理者logo" prop="logo">
@@ -107,9 +107,9 @@
           </el-upload>
         </el-form-item> -->
         <el-form-item>
-          <el-button v-if="dialogType!=='detail'" type="primary" @click="onSubmit('form')">保存</el-button>
-          <!-- <el-button v-else type="primary" @click="dialogType='edit'">编辑</el-button> -->
-          <el-button @click="dialogFormVisible = false">关闭</el-button>
+          <el-button v-if="dialogType!=='detail'" type="primary" @click="onSubmit('form')">{{ $t('保存') }}</el-button>
+          <!-- <el-button v-else type="primary" @click="dialogType='edit'">{{ $t('编辑') }}</el-button> -->
+          <el-button @click="dialogFormVisible = false">{{ $t('关闭') }}</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -123,7 +123,7 @@ export default {
   data() {
     const validatePhone = (rule, value, callback) => {
       if (!validPhone(value)) {
-        callback(new Error('手机号格式不正确'))
+        callback(new Error(`${this.$t('手机号格式不正确')}`))
       } else {
         callback()
       }
@@ -146,11 +146,11 @@ export default {
       total: 0,
       rules: {
         designer_team_name: [
-          { required: true, message: '请填写团队名称', trigger: 'blur' },
-          { min: 1, max: 15, message: '长度在 1 到 15 个字符', trigger: 'blur' }
+          { required: true, message: `${this.$t('请填写团队名称')}`, trigger: 'blur' },
+          { min: 1, max: 15, message: `${this.$t('长度在 1 到 15 个字符')}`, trigger: 'blur' }
         ],
         designer_name: [
-          { required: true, message: '请填写设计师姓名', trigger: 'blur' }
+          { required: true, message: `${this.$t('请填写设计师姓名')}`, trigger: 'blur' }
         ],
         designer_phone: [
           { required: true, trigger: 'blur', validator: validatePhone }
@@ -210,14 +210,14 @@ export default {
               if (res.code === 0) {
                 this.$message({
                   type: 'success',
-                  message: res.msg || '修改成功!'
+                  message: this.$t(res.msg) || `${this.$t('修改成功')}!`
                 })
                 // 重置表单
                 _this.$refs[formName].resetFields()
                 this.dialogFormVisible = false
                 this.fetchData()
               } else {
-                this.$message.success(res.msg || '修改失败!')
+                this.$message.success(this.$t(res.msg) || `${this.$t('修改失败')}!`)
               }
             })
           } else {
@@ -225,14 +225,14 @@ export default {
               if (res.code === 0) {
                 this.$message({
                   type: 'success',
-                  message: res.msg || '添加成功!'
+                  message: this.$t(res.msg) || `${this.$t('添加成功')}!`
                 })
                 // 重置表单
                 _this.$refs[formName].resetFields()
                 this.dialogFormVisible = false
                 this.fetchData()
               } else {
-                this.$message.success(res.msg || '添加失败!')
+                this.$message.success(this.$t(res.msg) || `${this.$t('添加失败')}!`)
               }
             })
           }
@@ -250,23 +250,23 @@ export default {
       this.fetchData()
     },
     handleDelete(id) {
-      this.$confirm('是否删除该团队?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(`${this.$t('是否删除该团队')}?`, `${this.$t('提示')}`, {
+        confirmButtonText: `${this.$t('确定')}`,
+        cancelButtonText: `${this.$t('取消')}`,
         type: 'warning',
         confirmButtonClass: 'danger'
       }).then(() => {
         deleteDesigner({ designer_team_id: id }).then(res => {
           this.$message({
             type: 'success',
-            message: '删除成功!'
+            message: `${this.$t('删除成功')}!`
           })
           this.fetchData()
         })
       }).catch(() => {
         this.$message({
           type: 'info',
-          message: '已取消删除'
+          message: `${this.$t('已取消删除')}`
         })
       })
     }

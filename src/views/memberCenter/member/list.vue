@@ -5,15 +5,15 @@
         <el-input
           v-model="keywords"
           size="small"
-          placeholder="输入会员名称"
+          :placeholder="$t('输入会员名称')"
           clearable
           style="width:220px"
           @keyup.enter.native="fetchData"
         />
-        <el-button size="small" icon="el-icon-search" type="primary" @click.native="fetchData">搜索</el-button>
+        <el-button size="small" icon="el-icon-search" type="primary" @click.native="fetchData">{{ $t('搜索') }}</el-button>
       </div>
       <!-- <div class="operation">
-        <el-button size="small" icon="el-icon-plus" type="primary" @click="showDialog('add')">新增</el-button>
+        <el-button size="small" icon="el-icon-plus" type="primary" @click="showDialog('add')">{{ $t('新增') }}</el-button>
       </div> -->
     </div>
     <div class="content">
@@ -26,13 +26,13 @@
         tooltip-effect="dark"
       >
         <el-table-column
-          label="序号"
+          :label="$t('序号')"
           align="center"
           width="100"
           type="index"
         />
         <el-table-column
-          label="会员头像"
+          :label="$t('会员头像')"
           align="center"
           width="100"
         >
@@ -42,34 +42,34 @@
         </el-table-column>
         <el-table-column
           prop="nickname"
-          label="会员昵称"
+          :label="$t('会员昵称')"
           align="center"
         />
         <el-table-column
           prop="phone"
-          label="手机号"
+          :label="$t('手机号')"
           align="center"
         />
         <el-table-column
           prop="created_at"
-          label="注册时间"
+          :label="$t('注册时间')"
           align="center"
         />
         <el-table-column
           fixed="right"
-          label="操作"
+          :label="$t('操作')"
           align="center"
         >
           <template slot-scope="scope">
             <el-button
               size="mini"
               @click.native="showDialog('detail', scope.row)"
-            >查看</el-button>
+            >{{ $t('查看') }}</el-button>
             <!-- <el-button
               size="mini"
               type="danger"
               @click="handleDelete(scope.row.shop_id)"
-            >删除</el-button> -->
+            >{{ $t('删除') }}</el-button> -->
           </template>
         </el-table-column>
       </el-table>
@@ -85,21 +85,21 @@
           @current-change="handleCurrentChange"
         />
       </div>
-      <el-dialog v-dialogDrag center :title="dialogType=='add'? '新增会员': dialogType=='edit'? '编辑信息': '会员详情'" :visible.sync="dialogFormVisible">
+      <el-dialog v-dialogDrag center :title="dialogType=='add'? '新增会员': dialogType=='edit'? `${$t('编辑信息')}`: `${$t('会员详情')}`" :visible.sync="dialogFormVisible">
         <el-form ref="memberForm" :model="memberForm" label-width="100px" label-position="left" size="small">
-          <el-form-item label="会员昵称">
+          <el-form-item :label="$t('会员昵称')">
             <el-input v-model="memberForm.nickname " :disabled="dialogType=='detail'" />
           </el-form-item>
-          <el-form-item label="真实姓名">
+          <el-form-item :label="$t('真实姓名')">
             <el-input v-model="memberForm.name " :disabled="dialogType=='detail'" />
           </el-form-item>
-          <el-form-item label="收货地址">
+          <el-form-item :label="$t('收货地址')">
             <el-input :value="memberForm | address" :disabled="dialogType=='detail'" />
           </el-form-item>
-          <el-form-item label="手机号">
+          <el-form-item :label="$t('手机号')">
             <el-input v-model="memberForm.phone " :disabled="dialogType=='detail'" />
           </el-form-item>
-          <el-form-item label="会员头像">
+          <el-form-item :label="$t('会员头像')">
             <img-upload
               :disabled="dialogType=='detail'"
               :img-data="memberForm.headimgurl"
@@ -107,19 +107,19 @@
               @chooseImg="imageChoose"
             />
           </el-form-item>
-          <!-- <el-form-item label="生日">
+          <!-- <el-form-item :label="$t('生日')">
             <el-date-picker
               v-model="memberForm.birthday"
               type="date"
               format="yyyy-MM-dd"
               :disabled="dialogType=='detail'"
-              placeholder="选择日期"
+              :placeholder="$t('选择日期')"
             />
           </el-form-item> -->
           <el-form-item>
-            <el-button v-if="dialogType!=='detail'" type="primary" @click="onSubmit('memberForm')">保存</el-button>
-            <!-- <el-button v-else type="primary" @click="dialogType='edit'">编辑</el-button> -->
-            <!-- <el-button @click="dialogFormVisible = false">取消</el-button> -->
+            <el-button v-if="dialogType!=='detail'" type="primary" @click="onSubmit('memberForm')">{{ $t('保存') }}</el-button>
+            <!-- <el-button v-else type="primary" @click="dialogType='edit'">{{ $t('编辑') }}</el-button> -->
+            <!-- <el-button @click="dialogFormVisible = false">{{ $t('取消') }}</el-button> -->
           </el-form-item>
         </el-form>
       </el-dialog>
@@ -155,7 +155,7 @@ export default {
       },
       rules: {
         nickname: [
-          { required: true, message: '请填写会员昵称', trigger: 'blur' }
+          { required: true, message: `${this.$t('请填写会员昵称')}`, trigger: 'blur' }
         ]
       },
       pageSize: 5,

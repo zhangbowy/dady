@@ -1,6 +1,6 @@
 <template>
   <div class="manage-rules">
-    权限规则
+    {{ $t('权限规则') }}
   </div>
 </template>
 

@@ -5,15 +5,15 @@
         <el-input
           v-model="keywords"
           size="small"
-          placeholder="请输入店铺名称"
+          :placeholder="$t('请输入店铺名称')"
           clearable
           style="width:220px"
           @keyup.enter.native="fetchData"
         />
-        <el-button size="small" icon="el-icon-search" type="primary" @click.native="fetchData">搜索</el-button>
+        <el-button size="small" icon="el-icon-search" type="primary" @click.native="fetchData">{{ $t('搜索') }}</el-button>
       </div>
       <div class="operation">
-        <el-button size="small" icon="el-icon-plus" type="primary" @click="showDialog('add')">新增</el-button>
+        <el-button size="small" icon="el-icon-plus" type="primary" @click="showDialog('add')">{{ $t('新增') }}</el-button>
       </div>
     </div>
     <div class="content">
@@ -26,7 +26,7 @@
         tooltip-effect="dark"
       >
         <el-table-column
-          label="序号"
+          :label="$t('序号')"
           align="center"
           width="100"
           type="index"
@@ -42,11 +42,11 @@
         </el-table-column>
         <el-table-column
           prop="shop_name"
-          label="店铺名称"
+          :label="$t('店铺名称')"
           align="center"
         />
         <el-table-column
-          label="管理员"
+          :label="$t('管理员')"
           align="center"
         >
           <template slot-scope="scope">
@@ -54,7 +54,7 @@
           </template>
         </el-table-column>
         <!-- <el-table-column
-          label="店铺状态"
+          :label="$t('店铺状态')"
           align="center"
           width="250"
         >
@@ -64,17 +64,17 @@
         </el-table-column> -->
         <el-table-column
           prop="created_at"
-          label="创建时间"
+          :label="$t('创建时间')"
           align="center"
         />
         <el-table-column
           prop="system_end_time"
-          label="到期时间"
+          :label="$t('到期时间')"
           align="center"
         />
         <el-table-column
           fixed="right"
-          label="操作"
+          :label="$t('操作')"
           align="center"
         >
           <template slot-scope="scope">
@@ -82,17 +82,17 @@
               size="mini"
               style="margin: 0 0 10px"
               @click.native="showDialog('detail', scope.row)"
-            >查看</el-button>
+            >{{ $t('查看') }}</el-button>
             <!-- <el-button
               size="mini"
               @click.native="showDialog('edit', scope.row)"
-            >编辑</el-button> -->
+            >{{ $t('编辑') }}</el-button> -->
             <el-button
               size="mini"
               type="danger"
               style="margin: 0 0 10px"
               @click="handleDelete(scope.row.shop_id)"
-            >删除</el-button>
+            >{{ $t('删除') }}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -110,18 +110,18 @@
       </div>
     </div>
     <!-- 店铺新增，详情，编辑弹框 -->
-    <el-dialog v-dialogDrag center :title="dialogType=='add'? '新增店铺': dialogType=='edit'? '编辑店铺': '店铺详情'" :visible.sync="dialogFormVisible">
+    <el-dialog v-dialogDrag center :title="dialogType=='add'? '新增店铺': dialogType=='edit'? `${$t('编辑店铺')}`: `${$t('店铺详情')}`" :visible.sync="dialogFormVisible">
       <el-form ref="shopForm" :model="shopForm" :rules="rules" label-width="100px" label-position="left" size="small">
-        <el-form-item label="店铺名称" prop="shop_name">
+        <el-form-item :label="$t('店铺名称')" prop="shop_name">
           <el-input v-model="shopForm.shop_name " :disabled="dialogType=='detail'" />
         </el-form-item>
-        <el-form-item label="管理员名称" prop="name">
+        <el-form-item :label="$t('管理员名称')" prop="name">
           <el-input v-model="shopForm.name " :disabled="dialogType=='detail'" />
         </el-form-item>
-        <el-form-item label="手机号" prop="phone">
+        <el-form-item :label="$t('手机号')" prop="phone">
           <el-input v-model="shopForm.phone " :disabled="dialogType=='detail'" />
         </el-form-item>
-        <el-form-item v-if="dialogType!=='detail'" label="密码" prop="password">
+        <el-form-item v-if="dialogType!=='detail'" :label="$t('密码')" prop="password">
           <el-input v-model="shopForm.password " :disabled="dialogType=='detail'" />
         </el-form-item>
         <el-form-item label="店铺logo" prop="logo">
@@ -132,20 +132,20 @@
             @chooseImg="imageChoose"
           />
         </el-form-item>
-        <el-form-item label="到期时间" prop="system_end_time">
+        <el-form-item :label="$t('到期时间')" prop="system_end_time">
           <el-date-picker
             v-model="shopForm.system_end_time"
             type="date"
             format="yyyy-MM-dd"
             value-format="yyyy-MM-dd"
             :disabled="dialogType=='detail'"
-            placeholder="选择店铺到期时间"
+            :placeholder="$t('选择店铺到期时间')"
           />
         </el-form-item>
         <el-form-item>
-          <el-button v-if="dialogType!=='detail'" type="primary" @click="onSubmit('shopForm')">保存</el-button>
-          <el-button v-else type="primary" @click="dialogType='edit'">编辑</el-button>
-          <el-button @click="dialogFormVisible = false">取消</el-button>
+          <el-button v-if="dialogType!=='detail'" type="primary" @click="onSubmit('shopForm')">{{ $t('保存') }}</el-button>
+          <el-button v-else type="primary" @click="dialogType='edit'">{{ $t('编辑') }}</el-button>
+          <el-button @click="dialogFormVisible = false">{{ $t('取消') }}</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -173,14 +173,14 @@ export default {
   data() {
     const validatePhone = (rule, value, callback) => {
       if (!validPhone(value)) {
-        callback(new Error('手机号不正确'))
+        callback(new Error(`${this.$t('手机号不正确')}`))
       } else {
         callback()
       }
     }
     const validatePassword = (rule, value, callback) => {
       if (this.dialogType === 'add' && this.shopForm.password === '') {
-        callback(new Error('请输入密码'))
+        callback(new Error(`${this.$t('请输入密码')}`))
       } else {
         callback()
       }
@@ -205,12 +205,12 @@ export default {
       total: 0,
       imageUrl: '',
       rules: {
-        shop_name: [{ required: true, message: '请填写店铺名称', trigger: 'blur' }],
-        name: [{ required: true, message: '请填写管理员姓名', trigger: 'blur' }],
+        shop_name: [{ required: true, message: `${this.$t('请填写店铺名称')}`, trigger: 'blur' }],
+        name: [{ required: true, message: `${this.$t('请填写管理员姓名')}`, trigger: 'blur' }],
         phone: [{ required: true, trigger: 'blur', validator: validatePhone }],
         password: [{ trigger: 'blur', validator: validatePassword }],
-        system_end_time: [{ required: true, message: '请输入选择店铺到期时间', trigger: 'blur' }],
-        logo: [{ required: true, message: '请上传店铺logo', trigger: 'blur' }]
+        system_end_time: [{ required: true, message: `${this.$t('请输入选择店铺到期时间')}`, trigger: 'blur' }],
+        logo: [{ required: true, message: `${this.$t('请上传店铺')}logo`, trigger: 'blur' }]
       },
       dialogType: 'add'
     }
@@ -283,14 +283,14 @@ export default {
               if (res.code === 0) {
                 this.$message({
                   type: 'success',
-                  message: res.msg || '修改成功!'
+                  message: this.$t(res.msg) || `${this.$t('修改成功')}!`
                 })
                 // 重置表单
                 _this.$refs[formName].resetFields()
                 this.dialogFormVisible = false
                 this.fetchData()
               } else {
-                this.$message.success(res.msg || '修改失败!')
+                this.$message.success(this.$t(res.msg) || `${this.$t('修改失败')}!`)
               }
             })
           } else {
@@ -298,14 +298,14 @@ export default {
               if (res.code === 0) {
                 this.$message({
                   type: 'success',
-                  message: res.msg || '添加成功!'
+                  message: this.$t(res.msg) || `${this.$t('添加成功')}!`
                 })
                 // 重置表单
                 _this.$refs[formName].resetFields()
                 this.dialogFormVisible = false
                 this.fetchData()
               } else {
-                this.$message.success(res.msg || '添加失败!')
+                this.$message.success(this.$t(res.msg) || `${this.$t('添加失败')}!`)
               }
             })
           }
@@ -323,23 +323,23 @@ export default {
       this.fetchData()
     },
     handleDelete(id) {
-      this.$confirm('是否删除该店铺?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(`${this.$t('是否删除该店铺')}?`, `${this.$t('提示')}`, {
+        confirmButtonText: `${this.$t('确定')}`,
+        cancelButtonText: `${this.$t('取消')}`,
         type: 'warning',
         confirmButtonClass: 'danger'
       }).then(() => {
         delShop({ shop_id: id }).then(res => {
           this.$message({
             type: 'success',
-            message: '删除成功!'
+            message: `${this.$t('删除成功')}!`
           })
           this.fetchData()
         })
       }).catch(() => {
         this.$message({
           type: 'info',
-          message: '已取消删除'
+          message: `${this.$t('已取消删除')}`
         })
       })
     },
@@ -353,10 +353,10 @@ export default {
       const isLt2M = file.size / 1024 / 1024 < 2
 
       if (!isJPG) {
-        this.$message.error('店铺logo只能是 JPG/PNG 格式!')
+        this.$message.error(`${this.$t('店铺')}logo${this.$t('只能是')} JPG/PNG 格式!`)
       }
       if (!isLt2M) {
-        this.$message.error('店铺logo大小不能超过 2MB!')
+        this.$message.error(`${this.$t('店铺')}logo${this.$t('大小不能超过')} 2MB!`)
       }
       return isJPG && isLt2M
     }

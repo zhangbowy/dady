@@ -9,13 +9,13 @@
       tooltip-effect="dark"
     >
       <el-table-column
-        label="序号"
+        :label="$t('序号')"
         align="center"
         width="100"
         type="index"
       />
       <el-table-column
-        label="团队/联系电话"
+        :label="`${$t('团队')}/${$t('联系电话')}`"
         align="center"
       >
         <template slot-scope="scope">
@@ -23,15 +23,15 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="提现金额"
+        :label="$t('提现金额')"
         align="center"
       >
         <template slot-scope="scope">
-          {{ scope.row.cash_amount }}元
+          {{ scope.row.cash_amount }}{{ $t('元') }}
         </template>
       </el-table-column>
       <el-table-column
-        label="结算方式"
+        :label="$t('结算方式')"
         align="center"
         width="100"
       >
@@ -40,45 +40,45 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="卡号/微信号/支付号"
+        :label="`${$t('卡号')}/${$t('微信号')}/${$t('支付号')}`"
         align="left"
       >
         <template slot-scope="scope">
-          <p style="margin:0 ">卡号：{{ scope.row.bank_card_number }}</p>
-          <p style="margin:0 ">微信号：{{ scope.row.wechat }}</p>
-          <p style="margin:0 ">支付宝：{{ scope.row.alipay }}</p>
+          <p style="margin:0 ">{{ $t('卡号') }}：{{ scope.row.bank_card_number }}</p>
+          <p style="margin:0 ">{{ $t('微信号') }}：{{ scope.row.wechat }}</p>
+          <p style="margin:0 ">{{ $t('支付号') }}：{{ scope.row.alipay }}</p>
         </template>
       </el-table-column>
       <el-table-column
-        label="状态"
+        :label="$t('状态')"
         align="center"
         width="100"
       >
         <template slot-scope="scope">
           <el-tag :type="scope.row.status | statusFilter">
-            {{ scope.row._status }}
+            {{ $t(scope.row._status) }}
           </el-tag>
         </template>
       </el-table-column>
 
       <el-table-column
         prop="created_at"
-        label="申请日期"
+        :label="$t('申请日期')"
         align="center"
       />
       <el-table-column
         prop="verify_time"
-        label="发放/驳回时间"
+        :label="`${$t('发放')}/${$t('驳回时间')}`"
         align="center"
       />
       <el-table-column
         prop="remark"
-        label="说明"
+        :label="$t('说明')"
         align="center"
       />
       <el-table-column
         fixed="right"
-        label="操作"
+        :label="$t('操作')"
         align="center"
       >
         <template slot-scope="scope">
@@ -88,21 +88,21 @@
             type="primary"
             style="margin: 0 0 10px"
             @click.native="showDialog( scope.row)"
-          >修改</el-button>
+          >{{ $t('修改') }}</el-button>
           <el-button
             v-if="scope.row.status==1"
             size="mini"
             type="primary"
             style="margin: 0 0 10px"
             @click.native="showDialog( scope.row)"
-          >发放</el-button>
+          >{{ $t('发放') }}</el-button>
           <el-button
             v-if="scope.row.status==1"
             size="mini"
             type="danger"
             style="margin: 0 0 10px"
             @click="rejectApply(scope.row)"
-          >驳回</el-button>
+          >{{ $t('驳回') }}</el-button>
         </template>
       </el-table-column>
     </el-table>

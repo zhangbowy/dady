@@ -5,15 +5,15 @@
         <el-input
           v-model="keywords"
           size="small"
-          placeholder="请输入角色名称"
+          :placeholder="$t('请输入角色名称')"
           clearable
           style="width:220px"
         />
-        <el-button size="small" icon="el-icon-search" type="primary" @click="doSearch">搜索</el-button>
+        <el-button size="small" icon="el-icon-search" type="primary" @click="doSearch">{{ $t('搜索') }}</el-button>
       </div>
       <div class="operation">
         <router-link :to="'/manage/roles/edit'">
-          <el-button size="small" icon="el-icon-plus" type="primary">新增</el-button>
+          <el-button size="small" icon="el-icon-plus" type="primary">{{ $t('新增') }}</el-button>
         </router-link>
       </div>
     </div>
@@ -32,50 +32,50 @@
         />
         <el-table-column
           prop="admin_role_name"
-          label="角色名称"
+          :label="$t('角色名称')"
           align="center"
         />
         <el-table-column
-          label="状态"
+          :label="$t('状态')"
           align="center"
           width="250"
         >
           <template slot-scope="scope">
-            <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status==0?'禁用':'正常' }}</el-tag>
+            <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status==0?$t('禁用'):$t('正常') }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column
           prop="created_at"
-          label="创建时间"
+          :label="$t('创建时间')"
           align="center"
         />
         <el-table-column
           prop="updated_at"
-          label="最后更新时间"
+          :label="$t('最后更新时间')"
           align="center"
         />
         <el-table-column
           fixed="right"
-          label="操作"
+          :label="$t('操作')"
           align="center"
         >
           <template slot-scope="scope">
             <!-- <router-link :to="`/manage/roles/detail?id=${scope.row.admin_role_id}`">
               <el-button
                 size="mini"
-              >查看</el-button>
+              >{{ $t('查看') }}</el-button>
             </router-link> -->
             <router-link :to="`/manage/roles/edit?id=${scope.row.admin_role_id}`">
               <el-button
                 type="primary"
                 size="mini"
-              >编辑</el-button>
+              >{{ $t('编辑') }}</el-button>
             </router-link>
             <el-button
               size="mini"
               type="danger"
               @click="handleDelete(scope.row.admin_role_id)"
-            >删除</el-button>
+            >{{ $t('删除') }}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -143,9 +143,9 @@ export default {
       this.getRoleList()
     },
     handleDelete(id) {
-      this.$confirm('是否删除该角色?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(`${this.$t('是否删除该角色')}?`, `${this.$t('提示')}`, {
+        confirmButtonText: `${this.$t('确定')}`,
+        cancelButtonText: `${this.$t('取消')}`,
         type: 'warning',
         confirmButtonClass: 'danger',
         center: true
@@ -153,14 +153,14 @@ export default {
         rolesApi.delRole({ admin_role_id: id }).then(res => {
           this.$message({
             type: 'success',
-            message: '删除成功!'
+            message: `${this.$t('删除成功')}!`
           })
           this.getRoleList()
         })
       }).catch(() => {
         this.$message({
           type: 'info',
-          message: '已取消删除'
+          message: `${this.$t('已取消删除')}`
         })
       })
     }

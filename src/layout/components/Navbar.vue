@@ -5,6 +5,17 @@
     <breadcrumb class="breadcrumb-container" />
 
     <div class="right-menu">
+      <el-dropdown @command="handleCommand">
+        <span class="el-dropdown-link">
+          <svg-icon icon-class="language" />
+          {{ command || '中文' }}
+          <i class="el-icon-arrow-down el-icon--right" />
+        </span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item command="中文">中文</el-dropdown-item>
+          <el-dropdown-item command="Englist">Englist</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <img v-if="adminInfo.logo" :src="adminInfo.logo" class="user-avatar">
@@ -15,20 +26,20 @@
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
           <el-dropdown-item class="dropdown-item">
             <div v-if="adminInfo.role_type!=1" class="shop-info">
-              店铺：<span>{{ adminInfo.shop_name }}</span>
+              {{ `${$t('店铺')}${$t('：')}` }}<span>{{ adminInfo.shop_name }}</span>
             </div>
           </el-dropdown-item>
           <el-dropdown-item class="dropdown-item">
-            <p>账号：{{ adminInfo.phone }}</p>
+            <p>{{ `${$t('账号')}${$t('：')}` }}{{ adminInfo.phone }}</p>
           </el-dropdown-item>
           <el-dropdown-item v-if="adminInfo.role_type!=1" class="dropdown-item">
-            有效期：<span style="color: #f4516c">[{{ adminInfo.system_end_time }}]</span>
+            {{ `${$t('有效期')}${$t('：')}` }}<span style="color: #f4516c">[{{ adminInfo.system_end_time }}]</span>
           </el-dropdown-item>
           <el-dropdown-item divided style="text-align:center" @click.native="showChange = true">
-            修改密码
+            {{ $t('修改密码') }}
           </el-dropdown-item>
           <el-dropdown-item class="dropdown-item" divided @click.native="logout">
-            <span style="display:block;">退出登录</span>
+            <span style="display:block;">{{ $t('退出登录') }}</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -55,17 +66,34 @@ export default {
   },
   data() {
     return {
-      showChange: false
+      showChange: false,
+      command: '中文',
+      langsType: {
+        '中文': 'zh',
+        'Englist': 'en',
+        'zh': '中文',
+        'en': 'Englist'
+      }
     }
   },
   computed: {
     ...mapGetters([
       'sidebar',
       'avatar',
-      'adminInfo'
+      'adminInfo',
+      'lang'
     ])
   },
+  created() {
+    this.command = this.langsType[this.lang]
+  },
   methods: {
+    handleCommand(value) {
+      this.command = value
+      this.$i18n.locale = this.langsType[value] || 'zh'
+      document.documentElement.dataset.lang = this.langsType[value]
+      this.$store.dispatch('settings/changeSetting', { key: 'lang', value: this.langsType[value] })
+    },
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
     },
@@ -158,6 +186,9 @@ export default {
     }
 
   }
+}
+.el-dropdown-link {
+  cursor: pointer;
 }
 .user-dropdown{
   .dropdown-item{

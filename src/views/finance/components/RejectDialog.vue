@@ -1,13 +1,13 @@
 <template>
   <div class="finance-dialog">
-    <el-dialog v-dialogDrag title="驳回申请" :visible.sync="value" width="30%" :before-close="beforeClose">
+    <el-dialog v-dialogDrag :title="$t('驳回申请')" :visible.sync="value" width="30%" :before-close="beforeClose">
       <el-form ref="form" :model="form" :rules="rules" size="small">
-        <el-form-item label="驳回理由" prop="remark">
+        <el-form-item :label="$t('驳回理由')" prop="remark">
           <el-input v-model="form.remark" type="textarea" />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submit('form')">确定</el-button>
-          <el-button @click="beforeClose">取消</el-button>
+          <el-button type="primary" @click="submit('form')">{{ $t('确定') }}</el-button>
+          <el-button @click="beforeClose">{{ $t('取消') }}</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -36,7 +36,7 @@ export default {
       },
       rules: {
         remark: [
-          { required: true, message: '请填写驳回理由', trigger: 'blur' }
+          { required: true, message: `${this.$t('请填写驳回理由')}`, trigger: 'blur' }
         ]
       }
     }

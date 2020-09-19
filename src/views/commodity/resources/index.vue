@@ -2,7 +2,7 @@
   <div class="resource-view">
     <div class="resource-content">
       <el-tabs v-model="activeName" @tab-click="handleClick">
-        <el-tab-pane label="图片" name="1">
+        <el-tab-pane :label="$t('图片')" name="1">
           <img-resources />
         </el-tab-pane>
       </el-tabs>

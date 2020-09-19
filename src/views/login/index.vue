@@ -3,7 +3,7 @@
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
       <div class="title-container">
-        <h3 class="title">账号登录</h3>
+        <h3 class="title">{{ $t('账号登录') }}</h3>
       </div>
 
       <el-form-item prop="username">
@@ -13,7 +13,7 @@
         <el-input
           ref="username"
           v-model="loginForm.username"
-          placeholder="用户名"
+          :placeholder="$t('用户名')"
           name="username"
           type="text"
           tabindex="1"
@@ -30,7 +30,7 @@
           ref="password"
           v-model="loginForm.password"
           :type="passwordType"
-          placeholder="登录密码"
+          :placeholder="$t('登录密码')"
           name="password"
           tabindex="2"
           auto-complete="off"
@@ -48,7 +48,7 @@
         <el-input
           ref="code"
           v-model="loginForm.code"
-          placeholder="验证码"
+          :placeholder="$t('验证码')"
           name="code"
           tabindex="3"
           @keyup.enter.native="handleLogin"
@@ -58,7 +58,7 @@
         </span>
       </el-form-item>
 
-      <el-button class="login-btn" :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">立即登录</el-button>
+      <el-button class="login-btn" :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">{{ $t('立即登录') }}</el-button>
     </el-form>
   </div>
 </template>
@@ -77,7 +77,7 @@ export default {
     // }
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
-        callback(new Error('密码不能小于6位'))
+        callback(new Error(`${this.$t('密码不能小于6位')}`))
       } else {
         callback()
       }
@@ -90,9 +90,9 @@ export default {
       },
       baseUrl: process.env.VUE_APP_BASE_API,
       loginRules: {
-        username: [{ required: true, trigger: 'blur', message: '用户名不能为空' }],
+        username: [{ required: true, trigger: 'blur', message: `${this.$t('用户名不能为空')}` }],
         password: [{ required: true, trigger: 'blur', validator: validatePassword }],
-        code: [{ required: true, trigger: 'blur', message: '验证码不能为空' }]
+        code: [{ required: true, trigger: 'blur', message: `${this.$t('验证码不能为空')}` }]
       },
       loading: false,
       passwordType: 'password',

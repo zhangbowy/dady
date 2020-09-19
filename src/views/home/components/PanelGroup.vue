@@ -3,7 +3,7 @@
   <el-row :gutter="40" class="panel-group">
     <el-row>
       <el-col>
-        <span class="data-title">数据概览</span>
+        <span class="data-title">{{ $t('数据概览') }}</span>
       </el-col>
     </el-row>
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
@@ -13,7 +13,7 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            用户数量
+            {{ $t('用户数量') }}
           </div>
           <count-to :start-val="0" :end-val="panelData.user_count" :duration="2600" class="card-panel-num" />
         </div>
@@ -26,7 +26,7 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            花样数量
+            {{ $t('花样数量') }}
           </div>
           <count-to :start-val="0" :end-val="panelData.design_count" :duration="3000" class="card-panel-num" />
         </div>
@@ -39,7 +39,7 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            商品数量
+            {{ $t('商品数量') }}
           </div>
           <count-to :start-val="0" :end-val="panelData.gooods_count" :duration="3600" class="card-panel-num" />
         </div>
@@ -52,7 +52,7 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            总销售额
+            {{ $t('总销售额') }}
           </div>
           <count-to :start-val="0" :end-val="panelData.total_order_amount" :decimals="2" :duration="3200" class="card-panel-num" />
         </div>
@@ -109,7 +109,8 @@ export default {
     box-shadow: 4px 4px 40px rgba(0, 0, 0, .05);
     border-color: rgba(0, 0, 0, .05);
     border-radius: 20px;
-
+    display: flex;
+    align-items: center;
     &:hover {
       .card-panel-icon-wrapper {
         color: #fff;

@@ -2,7 +2,7 @@
   <div class="platform-setting">
     <el-form>
       <div class="form-content-item">
-        <div class="block-title"><card-tag tag-name="平台设置" /></div>
+        <div class="block-title"><card-tag :tag-name="$t('平台设置')" /></div>
         <div class="block-content">
           <el-form-item label="是否调用澳洲api">
             <el-switch
@@ -42,23 +42,23 @@ export default {
       })
     },
     switchTab() {
-      this.$confirm(`${this.is_request_wilcom === 0 ? '开启后，手绘定制将调用澳洲api生成刺绣图案！' : '是否关闭调用澳洲接口？'}`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(`${this.is_request_wilcom === 0 ? `${this.$t('开启后')}, ${this.$t('手绘定制将调用澳洲api生成刺绣图案！')}` : `${this.$t('是否关闭调用澳洲接口')}`}`, `${this.$t('提示')}`, {
+        confirmButtonText: `${this.$t('确定')}`,
+        cancelButtonText: `${this.$t('取消')}`,
         type: 'warning',
         confirmButtonClass: 'danger'
       }).then(() => {
         settingApi.editSetting({ key: 'is_request_wilcom', value: this.is_request_wilcom === 0 ? 1 : 0 }).then(res => {
           this.$message({
             type: 'success',
-            message: res.msg
+            message: this.$t(res.msg)
           })
           this.is_request_wilcom === 0 ? this.is_request_wilcom = 1 : this.is_request_wilcom = 0
         })
       }).catch(() => {
         this.$message({
           type: 'info',
-          message: '已取消!'
+          message: `${this.$t('已取消')}!`
         })
       })
     }

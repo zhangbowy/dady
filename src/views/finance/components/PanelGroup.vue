@@ -3,7 +3,7 @@
   <el-row :gutter="40" class="panel-group">
     <el-row>
       <el-col>
-        <span class="data-title">财务统计</span>
+        <span class="data-title">{{ $t('财务统计') }}</span>
       </el-col>
     </el-row>
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
@@ -13,7 +13,7 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            提现中
+            {{ $t('提现中') }}
           </div>
           <count-to :start-val="0" :end-val="panelData.audit_commission" :decimals="2" :duration="2600" class="card-panel-num" />
         </div>
@@ -26,7 +26,7 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            已提现
+            {{ $t('已提现') }}
           </div>
           <count-to :start-val="0" :end-val="panelData.withdrawals_commission" :decimals="2" :duration="3000" class="card-panel-num" />
         </div>
@@ -39,7 +39,7 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            累计提现
+            {{ $t('累计提现') }}
           </div>
           <count-to :start-val="0" :end-val="panelData.total_commission" :decimals="2" :duration="3600" class="card-panel-num" />
         </div>
@@ -52,7 +52,7 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            累计收入
+            {{ $t('累计收入') }}
           </div>
           <count-to :start-val="0" :end-val="panelData.total_pay_amount" :decimals="2" :duration="3200" class="card-panel-num" />
         </div>
@@ -109,7 +109,8 @@ export default {
     box-shadow: 4px 4px 40px rgba(0, 0, 0, .05);
     border-color: rgba(0, 0, 0, .05);
     border-radius: 20px;
-
+    display: flex;
+    align-items: center;
     &:hover {
       .card-panel-icon-wrapper {
         color: #fff;

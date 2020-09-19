@@ -1,14 +1,14 @@
 <template>
   <div class="role-edit roles">
     <div class="title-info">
-      <card-tag :tag-name="id!=''? '编辑角色': '新增角色'" />
+      <card-tag :tag-name="id!=''? `${$t('编辑角色')}`: `${$t('新增角色')}`" />
     </div>
     <div class="form-info">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px" label-position="top" size="small">
-        <el-form-item label="角色名称" prop="admin_role_name">
+        <el-form-item :label="$t('角色名称')" prop="admin_role_name">
           <el-input v-model="form.admin_role_name" style="width: 30%" disabled="" />
         </el-form-item>
-        <el-form-item label="角色权限">
+        <el-form-item :label="$t('角色权限')">
           <!-- <el-input v-model="form.name" style="width: 30%" /> -->
           <div class="permission-tree">
             <el-tree
@@ -25,8 +25,8 @@
           </div>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="()=>this.$router.push({path:`/manage/roles/edit?id=${id}`})">编辑</el-button>
-          <el-button @click="()=>this.$router.go(-1)">返回</el-button>
+          <el-button type="primary" @click="()=>this.$router.push({path:`/manage/roles/edit?id=${id}`})">{{ $t('编辑') }}</el-button>
+          <el-button @click="()=>this.$router.go(-1)">{{ $t('返回') }}</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -51,7 +51,7 @@ export default {
         authority_list: []
       },
       rules: {
-        admin_role_name: [{ required: true, message: '请输入角色名称', trigger: 'blur' }]
+        admin_role_name: [{ required: true, message: `${this.$t('请输入角色名称')}`, trigger: 'blur' }]
       },
       defaultProps: {
         children: 'children',
@@ -112,13 +112,13 @@ export default {
             rolesApi.addRole(this.form).then(res => {
               this.$message({
                 type: 'success',
-                message: res.msg
+                message: this.$t(res.msg)
               })
               _this.$router.go(-1)
             }).catch(() => {
               this.$message({
                 type: 'info',
-                message: '创建失败'
+                message: `${this.$t('创建失败')}`
               })
             })
           }

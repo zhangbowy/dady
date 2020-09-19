@@ -60,28 +60,28 @@
       <template>
         <div class="btns-group-wrapper">
           <div class="btns-group">
-            <el-button type="primary" icon="el-icon-finished" @click="toggleSelection(data)">全部选择</el-button>
-            <el-button type="danger" icon="el-icon-circle-close" @click="toggleSelection()">取消</el-button>
-            <el-button type="primary" icon="el-icon-edit" @click="onBatchEdit('current_price')">批量修改价格</el-button>
-            <el-button type="primary" icon="el-icon-edit" @click="onBatchEdit('weight')">批量修改重量</el-button>
-            <el-button type="primary" icon="el-icon-edit" @click="onBatchEdit('num')">批量修改库存</el-button>
+            <el-button type="primary" icon="el-icon-finished" @click="toggleSelection(data)">{{ $t('全部选择') }}</el-button>
+            <el-button type="danger" icon="el-icon-circle-close" @click="toggleSelection()">{{ $t('取消') }}</el-button>
+            <el-button type="primary" icon="el-icon-edit" @click="onBatchEdit('current_price')">{{ $t('批量修改价格') }}</el-button>
+            <el-button type="primary" icon="el-icon-edit" @click="onBatchEdit('weight')">{{ $t('批量修改重量') }}</el-button>
+            <el-button type="primary" icon="el-icon-edit" @click="onBatchEdit('num')">{{ $t('批量修改库存') }}</el-button>
           </div>
         </div>
         <el-dialog
           v-dialogDrag
-          title="提示"
+          :title="$t('提示')"
           :visible.sync="inputDialogVisible"
           width="30%"
           center
         >
           <el-input
             v-model="inputValue"
-            placeholder="请输入内容"
+            :placeholder="$t('请输入内容')"
             :clearable="true"
           />
           <span slot="footer" class="dialog-footer">
-            <el-button @click="inputDialogVisible = false">取 消</el-button>
-            <el-button type="primary" @click="onInputConfirm">确 定</el-button>
+            <el-button @click="inputDialogVisible = false">{{ $t('取 消') }}</el-button>
+            <el-button type="primary" @click="onInputConfirm">{{ $t('确 定') }}</el-button>
           </span>
         </el-dialog>
       </template>
@@ -150,7 +150,7 @@ export default {
       return [
         ...specList,
         {
-          label: '图片',
+          label: `${this.$t('图片')}`,
           width: 120,
           component: Vue.extend({
             props: {
@@ -203,7 +203,7 @@ export default {
           })
         },
         {
-          label: '价格',
+          label: `${this.$t('价格')}`,
           width: 150,
           component: Vue.extend({
             // eslint-disable-next-line vue/require-prop-types
@@ -211,7 +211,7 @@ export default {
             render() {
               return (
                 <ElInputNumber
-                  placeholder='请输入价格'
+                  placeholder={`${this.$t('请输入价格')}`}
                   value={this.row.current_price}
                   step={1}
                   min={0}
@@ -226,7 +226,7 @@ export default {
           })
         },
         {
-          label: '重量（公斤）',
+          label: `${this.$t('重量')}${this.$t('（')}${this.$t('公斤')}${this.$t('）')}`,
           width: 150,
           component: Vue.extend({
             // eslint-disable-next-line vue/require-prop-types
@@ -234,7 +234,7 @@ export default {
             render() {
               return (
                 <ElInputNumber
-                  placeholder='请输入重量'
+                  placeholder={`${this.$t('请输入重量')}`}
                   value={this.row.weight}
                   step={1}
                   min={0}
@@ -249,7 +249,7 @@ export default {
           })
         },
         {
-          label: '库存（件）',
+          label: `${this.$t('库存')}${this.$t('（')}${this.$t('件')}${this.$t('）')}`,
           width: 150,
           component: Vue.extend({
             // eslint-disable-next-line vue/require-prop-types
@@ -257,7 +257,7 @@ export default {
             render() {
               return (
                 <ElInputNumber
-                  placeholder='请输入库存'
+                  placeholder={`${this.$t('请输入库存')}`}
                   value={this.row.num}
                   step={1}
                   min={0}
@@ -354,7 +354,7 @@ export default {
     },
     onBatchEdit(type) {
       if (!this.checkoutList.length) {
-        this.$message('请选择至少一个商品规格')
+        this.$message(`${this.$t('请选择至少一个商品规格')}`)
         return
       }
       if (type !== this.currentType) {

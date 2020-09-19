@@ -2,7 +2,7 @@
   <div class="customizable main-content">
     <div class="screen-box">
       <div class="operation">
-        <el-button v-has="807" size="small" icon="el-icon-plus" type="primary" @click="showDialog('add')">新增</el-button>
+        <el-button v-has="807" size="small" icon="el-icon-plus" type="primary" @click="showDialog('add')">{{ $t('新增') }}</el-button>
       </div>
     </div>
     <div class="content">
@@ -15,13 +15,13 @@
         tooltip-effect="dark"
       >
         <el-table-column
-          label="序号"
+          :label="$t('序号')"
           align="center"
           width="100"
           type="index"
         />
         <el-table-column
-          label="背景图片"
+          :label="$t('背景图片')"
           align="center"
           width="100"
         >
@@ -31,11 +31,11 @@
         </el-table-column>
         <el-table-column
           prop="custom_category_name"
-          label="名称"
+          :label="$t('名称')"
           align="center"
         />
         <el-table-column
-          label="关联机器"
+          :label="$t('关联机器')"
           align="center"
         >
           <template slot-scope="scope">
@@ -44,42 +44,42 @@
         </el-table-column>
         <el-table-column
           prop="created_at"
-          label="创建时间"
+          :label="$t('创建时间')"
           align="center"
         />
         <el-table-column
           fixed="right"
-          label="操作"
+          :label="$t('操作')"
           align="center"
         >
           <template slot-scope="scope">
             <el-button
               size="mini"
               @click.native="showDialog('detail', scope.row)"
-            >查看</el-button>
+            >{{ $t('查看') }}</el-button>
             <el-button
               v-has="810"
               size="mini"
               type="primary"
               @click.native="showRelation(scope.row)"
-            >关联机器</el-button>
+            >{{ $t('关联机器') }}</el-button>
             <el-button
               v-has="809"
               size="mini"
               type="danger"
               @click="handleDelete(scope.row.custom_category_id)"
-            >删除</el-button>
+            >{{ $t('删除') }}</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
     <!-- 新增可定制分类 -->
-    <el-dialog center :title="dialogType=='add'? '新增分类': dialogType=='edit'? '编辑分类': '分类详情'" :visible.sync="dialogFormVisible" @open="onDialogOpen">
+    <el-dialog center :title="dialogType=='add'? $t('新增分类'): dialogType=='edit'? `${$t('编辑分类')}`: `${$t('分类详情')}`" :visible.sync="dialogFormVisible" @open="onDialogOpen">
       <el-form ref="form" :model="form" :rules="rules" label-width="100px" label-position="left" size="small">
-        <el-form-item label="分类名称" prop="custom_category_name">
+        <el-form-item :label="$t('分类名称')" prop="custom_category_name">
           <el-input v-model="form.custom_category_name " :disabled="dialogType=='detail'" />
         </el-form-item>
-        <el-form-item label="背景图片" prop="design_bg">
+        <el-form-item :label="$t('背景图片')" prop="design_bg">
           <img-upload
             :img-data="form.design_bg"
             :pic-max="1"
@@ -87,7 +87,7 @@
             @chooseImg="imageChoose"
           />
         </el-form-item>
-        <el-form-item v-if="showBgArea" label="定制区域">
+        <el-form-item v-if="showBgArea" :label="$t('定制区域')">
           <div class="text-event" :style="{backgroundImage: `url(${form.design_bg})`,backgroundSize: `${form.design_bg_width}px ${form.design_bg_height}px`, width: `${form.design_bg_width}px`, height: `${form.design_bg_height}px`}">
             <vue-draggable-resizable
               :key="form.design_bg"
@@ -124,15 +124,15 @@
           </div>
         </el-form-item>
         <el-form-item>
-          <el-button v-if="dialogType!=='detail'" v-has="807" type="primary" @click="onSubmit('form')">保存</el-button>
-          <el-button v-else v-has="808" type="primary" @click="dialogType='edit'">编辑</el-button>
-          <el-button @click="dialogFormVisible = false">取消</el-button>
+          <el-button v-if="dialogType!=='detail'" v-has="807" type="primary" @click="onSubmit('form')">{{ $t('保存') }}</el-button>
+          <el-button v-else v-has="808" type="primary" @click="dialogType='edit'">{{ $t('编辑') }}</el-button>
+          <el-button @click="dialogFormVisible = false">{{ $t('取消') }}</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
     <!-- 关联设备弹框 -->
-    <el-dialog center title="关联机器" :visible.sync="relationMachine">
-      <el-select v-model="checkedMachine" size="mini" placeholder="选择机器">
+    <el-dialog center :title="$t('关联机器')" :visible.sync="relationMachine">
+      <el-select v-model="checkedMachine" size="mini" :placeholder="$t('选择机器')">
         <el-option
           v-for="item in machineList"
           :key="item.machine_id"
@@ -141,14 +141,14 @@
           :disabled="item.disabled"
         />
       </el-select>
-      <el-button v-has="810" type="primary" size="mini" @click="addMachine()">添加</el-button>
-      <el-table :data="itemMachine" empty-text="未绑定机器">
-        <el-table-column property="machine_code" label="机器码" width="150" />
-        <el-table-column property="machine_name" label="机器名称" width="200" />
-        <el-table-column property="desc" label="描述" />
+      <el-button v-has="810" type="primary" size="mini" @click="addMachine()">{{ $t('添加') }}</el-button>
+      <el-table :data="itemMachine" :empty-text="$t('未绑定机器')">
+        <el-table-column property="machine_code" :label="$t('机器码')" width="150" />
+        <el-table-column property="machine_name" :label="$t('机器名称')" width="200" />
+        <el-table-column property="desc" :label="$t('描述')" />
         <el-table-column
           fixed="right"
-          label="操作"
+          :label="$t('操作')"
           align="center"
         >
           <template slot-scope="scope">
@@ -157,7 +157,7 @@
               size="mini"
               type="danger"
               @click="deleteMachine(scope.row.machine_id)"
-            >解除关联</el-button>
+            >{{ $t('解除关联') }}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -198,10 +198,10 @@ export default {
       showRefLine: false, // 显示竖向的辅助线
       rules: {
         custom_category_name: [
-          { required: true, message: '请输入分类名称', trigger: 'blur' }
+          { required: true, message: `${this.$t('请输入分类名称')}`, trigger: 'blur' }
         ],
         design_bg: [
-          { required: true, message: '请上传分类图片', trigger: 'blur' }
+          { required: true, message: `${this.$t('请上传分类图片')}`, trigger: 'blur' }
         ]
       },
       dialogType: 'add',
@@ -307,16 +307,16 @@ export default {
       }).then(res => {
         this.$message({
           type: 'success',
-          message: '添加成功!'
+          message: `${this.$t('添加成功')}!`
         })
         this.fetchData()
         this.getMachineById(this.checkedItem.custom_category_id)
       })
     },
     deleteMachine(id) {
-      this.$confirm('是否解除绑定设备?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(`${this.$t('是否解除绑定设备')}?`, `${this.$t('提示')}`, {
+        confirmButtonText: `${this.$t('确定')}`,
+        cancelButtonText: `${this.$t('取消')}`,
         type: 'warning',
         confirmButtonClass: 'danger'
       }).then(() => {
@@ -326,7 +326,7 @@ export default {
         }).then(res => {
           this.$message({
             type: 'success',
-            message: '解除成功!'
+            message: `${this.$t('解除成功')}!`
           })
           this.fetchData()
           this.getMachineById(this.checkedItem.custom_category_id)
@@ -334,7 +334,7 @@ export default {
       }).catch(() => {
         this.$message({
           type: 'info',
-          message: '已取消！'
+          message: `${this.$t('已取消')}!`
         })
       })
     },
@@ -347,7 +347,7 @@ export default {
               if (res.code === 0) {
                 this.$message({
                   type: 'success',
-                  message: res.msg || '修改成功!'
+                  message: this.$t(res.msg) || `${this.$t('修改成功')}!`
                 })
                 // 重置表单
                 _this.$refs[formName].resetFields()
@@ -356,7 +356,7 @@ export default {
                 // 刷新页面
                 _this.reload()
               } else {
-                this.$message.success(res.msg || '修改失败!')
+                this.$message.success(this.$t(res.msg) || `${this.$t('修改失败')}!`)
               }
             })
           } else {
@@ -364,14 +364,14 @@ export default {
               if (res.code === 0) {
                 this.$message({
                   type: 'success',
-                  message: res.msg || '添加成功!'
+                  message: this.$t(res.msg) || `${this.$t('添加成功')}!`
                 })
                 // 重置表单
                 _this.$refs[formName].resetFields()
                 this.dialogFormVisible = false
                 this.fetchData()
               } else {
-                this.$message.success(res.msg || '添加失败!')
+                this.$message.success(this.$t(res.msg) || `${this.$t('添加失败')}!`)
               }
             })
           }
@@ -399,23 +399,24 @@ export default {
     },
 
     handleDelete(id) {
-      this.$confirm('是否删除该分类?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(`${this.$t('是否删除该分类')}?`, `${this.$t('提示')}`, {
+        confirmButtonText: `${this.$t('确定')}`,
+        cancelButtonText: `${this.$t('取消')}`,
         type: 'warning',
         confirmButtonClass: 'danger'
       }).then(() => {
+        const $this = this
         customCateApi.delCustomCate({ custom_category_id: id }).then(res => {
           this.$message({
             type: 'success',
-            message: '删除成功!'
+            message: `${$this.$t('删除成功')}!`
           })
           this.fetchData()
         })
       }).catch(() => {
         this.$message({
           type: 'info',
-          message: '已取消删除'
+          message: `${this.$t('已取消删除')}`
         })
       })
     },

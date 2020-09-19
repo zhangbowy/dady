@@ -7,7 +7,7 @@
 <script>
 // import io from 'socket.io-client'
 // import { getToken, getAdminId } from '@/utils/auth'
-
+import { mapGetters } from 'vuex'
 export default {
   name: 'App',
   data() {
@@ -21,7 +21,11 @@ export default {
       reload: this.reload
     }
   },
+  computed: {
+    ...mapGetters(['lang'])
+  },
   mounted() {
+    document.documentElement.dataset.lang = this.lang
     // const WS_HOST = 'http://192.168.31.180:8001'
     // const msgSocket = io(`${WS_HOST}`, {
     //   // secure: true,

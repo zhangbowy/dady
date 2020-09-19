@@ -5,11 +5,11 @@
         <el-input
           v-model.trim="keywords"
           size="small"
-          placeholder="请输入花样名称"
+          :placeholder="$t('请输入花样名称')"
           clearable
           style="width:220px"
         />
-        <el-select v-model="designer_team_id" size="small" clearable placeholder="请选择设计师团队">
+        <el-select v-model="designer_team_id" size="small" clearable :placeholder="$t('请选择设计师团队')">
           <el-option
             v-for="item in teamOptions"
             :key="item.designer_team_id"
@@ -17,7 +17,7 @@
             :value="item.designer_team_id"
           />
         </el-select>
-        <el-select v-model="design_category_id" size="small" clearable placeholder="请选择设花样类别">
+        <el-select v-model="design_category_id" size="small" clearable :placeholder="$t('请选择设花样类别')">
           <el-option
             v-for="item in figureCategoryList"
             :key="item.id"
@@ -25,7 +25,7 @@
             :value="item.id"
           />
         </el-select>
-        <el-button size="small" icon="el-icon-search" type="primary" @click="doSearch()">搜索</el-button>
+        <el-button size="small" icon="el-icon-search" type="primary" @click="doSearch()">{{ $t('搜索') }}</el-button>
       </div>
 
     </div>
@@ -34,7 +34,7 @@
         <el-tab-pane
           v-for="(item, index) in figureCount"
           :key="index"
-          :label="`${item._status}(${item.count})`"
+          :label="`${$t(item._status)}(${item.count})`"
           :name="`${item.status}`"
         />
         <div class="tab-content">
@@ -46,18 +46,18 @@
                 <div style="padding: 14px; font-szie: 12px">
                   <span>{{ item.design_name }}</span>
                   <div class="bottom clearfix">
-                    <span style="color: #F56C6C">￥{{ item.price.toFixed(2) }}</span>
+                    <span style="color: #F56C6C">{{ $t('￥') }}{{ item.price.toFixed(2) }}</span>
                   </div>
                   <div class="bottom clearfix">
                     <time class="time">{{ item.created_at }}</time>
                   </div>
                   <div class="bottom clearfix btn-group">
-                    <!-- <el-button v-if="item.status!=3 && roles===1" type="text" class="button" @click.stop="editItem(item)">修改</el-button>
-                    <el-button v-if="item.status!=3 && roles===1" type="text" class="button" @click.stop="bindPrice(item)">标价</el-button> -->
-                    <el-button v-if="item.status!=1" :style="{color: item.status===3?'#F56C6C':'#67c23a'}" type="text" class="button" @click.stop="changeStatus(item)">{{ item.status==2?'上架':item.status==3?'下架':'' }}</el-button>
-                    <!-- <el-button v-if="item.status!=3" type="text" style="color:#F56C6C" class="button" @click.stop="handleDelete(item.design_id)">删除</el-button> -->
-                    <el-button v-has="20005" type="text" class="button" @click.stop="setCatetory(item)">设置分类</el-button>
-                    <el-button v-has="20006" type="text" class="button" @click.stop="setPresell(item)">{{ item.is_presell ? '取消预售' : '预售' }}</el-button>
+                    <!-- <el-button v-if="item.status!=3 && roles===1" type="text" class="button" @click.stop="editItem(item)">{{ $t('修改') }}</el-button>
+                    <el-button v-if="item.status!=3 && roles===1" type="text" class="button" @click.stop="bindPrice(item)">{{ $t('标价') }}</el-button> -->
+                    <el-button v-if="item.status!=1" :style="{color: item.status===3?'#F56C6C':'#67c23a'}" type="text" class="button" @click.stop="changeStatus(item)">{{ item.status==2?$t('上架'):item.status==3?$t('下架'):'' }}</el-button>
+                    <!-- <el-button v-if="item.status!=3" type="text" style="color:#F56C6C" class="button" @click.stop="handleDelete(item.design_id)">{{ $t('删除') }}</el-button> -->
+                    <el-button v-has="20005" type="text" class="button" @click.stop="setCatetory(item)">{{ $t('设置分类') }}</el-button>
+                    <el-button v-has="20006" type="text" class="button" @click.stop="setPresell(item)">{{ item.is_presell ? $t('取消预售') : $t('预售') }}</el-button>
                   </div>
                 </div>
               </el-card>
@@ -79,10 +79,10 @@
       </div>
     </div>
     <!-- 修改分类 -->
-    <el-dialog v-dialogDrag auto width="300px" title="修改花样分类" :visible.sync="showCategorySelector">
+    <el-dialog v-dialogDrag auto width="300px" :title="$t('修改花样分类')" :visible.sync="showCategorySelector">
       <el-form ref="form" :model="form">
         <el-form-item>
-          <el-select v-model="form.design_category_id" size="small" clearable placeholder="请选择花样类别">
+          <el-select v-model="form.design_category_id" size="small" clearable :placeholder="$t('请选择花样类别')">
             <el-option
               v-for="item in figureCategoryList"
               :key="item.id"
@@ -92,8 +92,8 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit('form')">确定</el-button>
-          <el-button @click="showCategorySelector = false">取消</el-button>
+          <el-button type="primary" @click="onSubmit('form')">{{ $t('确定') }}</el-button>
+          <el-button @click="showCategorySelector = false">{{ $t('取消') }}</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -127,7 +127,7 @@ export default {
       },
       rules: {
         design_category_id: [
-          { required: true, message: '请选择花样分类', trigger: 'blur' }
+          { required: true, message: `${this.$t('请选择花样分类')}`, trigger: 'blur' }
         ]
       }
     }
@@ -189,14 +189,14 @@ export default {
             if (res.code === 0) {
               this.$message({
                 type: 'success',
-                message: res.msg || '设置成功!'
+                message: this.$t(res.msg) || `${this.$t('设置成功')}!`
               })
               // 重置表单
               _this.$refs[formName].resetFields()
               this.showCategorySelector = false
               this.fetchData()
             } else {
-              this.$message.success(res.msg || '设置失败!')
+              this.$message.success(this.$t(res.msg) || `${this.$t('设置失败')}!`)
             }
           })
         } else {
@@ -238,9 +238,9 @@ export default {
     },
     // 预售
     setPresell(item) {
-      this.$confirm(`是否${!item.is_presell ? '' : '取消'}预售该花样?`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(`${this.$t(`是否${!item.is_presell ? '' : `取消`}预售该花样`)}?`, `${this.$t('提示')}`, {
+        confirmButtonText: `${this.$t('确定')}`,
+        cancelButtonText: `${this.$t('取消')}`,
         type: 'warning',
         confirmButtonClass: 'danger'
       }).then(() => {
@@ -250,16 +250,16 @@ export default {
         }).then(res => {
           this.$message({
             type: 'success',
-            message: res.msg
+            message: this.$t(res.msg)
           })
           this.fetchData()
         })
       }, () => {})
     },
     changeStatus(item) {
-      this.$confirm(`是否${item.status === 2 ? '上架' : '下架'}该花样?`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(`${this.$t(`是否${item.status === 2 ? '上架' : '下架'}该花样`)}?`, `${this.$t('提示')}`, {
+        confirmButtonText: `${this.$t('确定')}`,
+        cancelButtonText: `${this.$t('取消')}`,
         type: 'warning',
         confirmButtonClass: 'danger'
       }).then(() => {
@@ -269,7 +269,7 @@ export default {
         }).then(res => {
           this.$message({
             type: 'success',
-            message: res.msg
+            message: this.$t(res.msg)
           })
           this.fetchData()
         })

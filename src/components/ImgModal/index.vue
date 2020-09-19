@@ -191,11 +191,11 @@ export default {
       const isPNG = file.raw.type === 'image/png'
       const isLt2M = file.size / 1024 / 1024 < 2
       if (!isJPG && !isPNG) {
-        this.$message.error('上传头像图片只能是 JPG或png 格式!')
+        this.$message.error(`${this.$t('上传头像图片只能是 JPG或png 格式')}!`)
         this.dialog.upLoadImg.urlListShow = fileList.splice(fileList.length, 1)
       }
       if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!')
+        this.$message.error(`${this.$t('上传头像图片大小不能超过 2MB')}!`)
         this.dialog.upLoadImg.urlListShow = fileList.splice(fileList.length, 1)
       }
       if ((isPNG || isJPG) && isLt2M) {
@@ -214,7 +214,7 @@ export default {
         this.dialog.upLoadImg.show = false
         this.getImgList()
         this.$message({
-          message: '上传图片成功',
+          message: this.$t('上传图片成功'),
           type: 'success'
         })
         this.visibleInside = false
@@ -235,7 +235,7 @@ export default {
           })
         } else {
           this.$message({
-            message: '操作成功',
+            message: this.$t('操作成功'),
             type: 'success'
           })
           this.isAdd = false
@@ -291,7 +291,7 @@ export default {
           this.chooseCategory(this.categoryList[0])
         } else {
           this.$message({
-            message: res.msg,
+            message: this.$t(res.msg),
             type: 'error'
           })
         }
@@ -322,7 +322,7 @@ export default {
           this.currentPage = res.data.currentPage
         } else {
           this.$message({
-            message: res.data.msg,
+            message: this.$t(res.data.msg),
             type: 'error'
           })
         }
@@ -378,7 +378,7 @@ export default {
         } else {
           if (this.chooseList.length === this.picMax) {
             this.$message({
-              message: `选取图片不能超过${this.picMax}张`,
+              message: `${this.$t('选取图片不能超过')}${this.picMax}${this.$t('张')}`,
               type: 'error'
             })
           } else {

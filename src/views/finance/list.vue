@@ -5,7 +5,7 @@
     </div>
     <div class="screen-box">
       <div class="screen-item">
-        <el-select v-model="designer_team_id" clearable size="small" placeholder="设计师团队">
+        <el-select v-model="designer_team_id" clearable size="small" :placeholder="$t('设计师团队')">
           <el-option
             v-for="item in designerTeam"
             :key="item.designer_team_id"
@@ -13,7 +13,7 @@
             :value="item.designer_team_id"
           />
         </el-select>
-        <el-select v-model="status" clearable size="small" placeholder="提现状态">
+        <el-select v-model="status" clearable size="small" :placeholder="$t('提现状态')">
           <el-option
             v-for="item in statusOptions"
             :key="item.value"
@@ -26,10 +26,10 @@
           align="right"
           type="date"
           size="small"
-          placeholder="选择日期"
+          :placeholder="$t('选择日期')"
           :picker-options="pickerOptions"
         /> -->
-        <el-button size="small" icon="el-icon-search" type="primary" @click.native="fetchData">查询</el-button>
+        <el-button size="small" icon="el-icon-search" type="primary" @click.native="fetchData">{{ $t('查询') }}</el-button>
       </div>
     </div>
     <div class="content">
@@ -89,9 +89,9 @@ export default {
     return {
       keywords: '',
       statusOptions: [
-        { label: '提现中', value: 1 },
-        { label: '已驳回', value: 2 },
-        { label: '已提现', value: 3 }
+        { label: `${this.$t('提现中')}`, value: 1 },
+        { label: `${this.$t('已驳回')}`, value: 2 },
+        { label: `${this.$t('已提现')}`, value: 3 }
       ],
       date: '',
       pickerOptions: {
@@ -99,19 +99,19 @@ export default {
           return time.getTime() > Date.now()
         },
         shortcuts: [{
-          text: '今天',
+          text: `${this.$t('今天')}`,
           onClick(picker) {
             picker.$emit('pick', new Date())
           }
         }, {
-          text: '昨天',
+          text: `${this.$t('昨天')}`,
           onClick(picker) {
             const date = new Date()
             date.setTime(date.getTime() - 3600 * 1000 * 24)
             picker.$emit('pick', date)
           }
         }, {
-          text: '一周前',
+          text: `${this.$t('一周前')}`,
           onClick(picker) {
             const date = new Date()
             date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
@@ -193,7 +193,7 @@ export default {
       }).then(res => {
         this.$message({
           type: 'success',
-          message: res.msg || '操作成功'
+          message: this.$t(res.msg) || `${this.$t('操作成功')}`
         })
         this.fetchData()
         this.itemDialog = false
@@ -207,7 +207,7 @@ export default {
       }).then(res => {
         this.$message({
           type: 'success',
-          message: res.msg || '操作成功'
+          message: this.$t(res.msg) || `${this.$t('操作成功')}`
         })
         this.fetchData()
         this.showReject = false

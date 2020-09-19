@@ -2,7 +2,7 @@
   <div class="card-tag">
     <div class="tag-content" :style="`background:${backColor};color:${color};border-radius:${raidus};display: ${block?'block':'inline-block'}`">
       <svg-icon v-if="iconName" :icon-class="iconName" />
-      <span>{{ tagName }}</span>
+      <span>{{ $t(tagName) }}</span>
     </div>
   </div>
 </template>
