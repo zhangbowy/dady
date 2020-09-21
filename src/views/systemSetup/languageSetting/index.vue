@@ -98,6 +98,7 @@ export default {
     },
     handleCommand(value) {
       this.command = value
+      this.currentPage = 1
       this.fetchData()
     },
     onWordSave(word, index) {
@@ -112,7 +113,6 @@ export default {
       console.log()
     },
     onWordEdit(index) {
-      console.log(index)
       this.wordsList[index].editing = true
       this.wordsList = [...this.wordsList]
     },
