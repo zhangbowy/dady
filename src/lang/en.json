@@ -637,5 +637,9 @@
   "没有选中任何待上架商品": "No items to be put on the shelves are selected",
   "没有选中任何已上架商品": "No items have been selected",
   "输入关键字": "Enter keywords",
-  "功能名称设置": "Function name setting"
+  "功能名称设置": "Function name setting",
+  "功能名称": "Function name",
+  "非功能名称": "Non functional name",
+  "money": "dollar",
+  "total-income": "total-income-dollar"
 }

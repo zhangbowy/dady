@@ -48,7 +48,6 @@ zhLang = zhLang && JSON.parse(zhLang)
 enLang = enLang && JSON.parse(enLang)
 const lang = localStorage.getItem('lang') || 'zh'
 store.dispatch('settings/changeSetting', { key: 'lang', value: lang })
-console.log(zhLang)
 const i18n = new VueI18n({
   locale: lang,
   messages: {

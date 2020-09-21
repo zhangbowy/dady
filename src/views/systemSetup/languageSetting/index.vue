@@ -2,17 +2,16 @@
   <div class="embroid-template main-content">
     <div class="screen-box">
       <div class="screen-item">
-        <!-- <el-dropdown @command="handleCommand">
+        <el-dropdown @command="handleCommand">
           <span class="el-dropdown-link">
-            <svg-icon icon-class="language" />
-            {{ command || '中文' }}
+            {{ $t(command) }}
             <i class="el-icon-arrow-down el-icon--right" />
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="中文">中文</el-dropdown-item>
-            <el-dropdown-item command="Englist">Englist</el-dropdown-item>
+            <el-dropdown-item :command="$t('功能名称')">{{ $t('功能名称') }}</el-dropdown-item>
+            <el-dropdown-item :command="$t('非功能名称')">{{ $t('非功能名称') }}</el-dropdown-item>
           </el-dropdown-menu>
-        </el-dropdown> -->
+        </el-dropdown>
         <el-input
           v-model="keywords"
           size="small"
@@ -67,7 +66,7 @@ export default {
       total: 0,
       keywords: '',
       wordsList: [],
-      command: '中文',
+      command: '功能名称',
       langsType: {
         '中文': 'cn',
         'Englist': 'en'
@@ -83,7 +82,8 @@ export default {
         currentPage: this.currentPage,
         pageSize: this.pageSize,
         platform: this.type,
-        keywords: this.keywords
+        keywords: this.keywords,
+        is_func_name: this.command === '功能名称'
       }).then(res => {
         if (res.code === 0) {
           this.wordsList = res.data.data
@@ -98,6 +98,7 @@ export default {
     },
     handleCommand(value) {
       this.command = value
+      this.fetchData()
     },
     onWordSave(word, index) {
       this.wordsList[index].editing = false
@@ -124,7 +125,6 @@ export default {
       this.fetchData()
     },
     handleClick(type) {
-      console.log(type)
       this.currentPage = 1
       this.fetchData()
     }
