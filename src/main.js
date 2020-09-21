@@ -15,7 +15,6 @@ import VueI18n from 'vue-i18n'
 import './icons' // icon
 import '@/permission' // 路由拦截器-权限控制
 // import VueSocketIO from 'vue-socket.io'
-import './language'
 import Directive from '@/directive'
 
 import enLocale from 'element-ui/lib/locale/lang/en'

@@ -1,5 +1,8 @@
 <template>
   <div class="login-container">
+    <section class="login-container_header">
+      <language-selector />
+    </section>
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
       <div class="title-container">
@@ -65,8 +68,12 @@
 
 <script>
 // import { validUsername } from '@/utils/validate'
+import LanguageSelector from '@/components/LanguageSelector'
 export default {
   name: 'Login',
+  components: {
+    LanguageSelector
+  },
   data() {
     // const validateUsername = (rule, value, callback) => {
     //   if (!validUsername(value)) {
@@ -175,6 +182,20 @@ $cursor: #fff;
 
 /* reset element-ui css */
 .login-container {
+  &_header {
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 10px 30px;
+    box-sizing: border-box;
+    .el-dropdown-link {
+      color: #fff;
+      .svg-icon {
+        color: #fff
+      }
+    }
+  }
   .el-input {
     display: inline-block;
     height: 50px;

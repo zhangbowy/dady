@@ -34,6 +34,8 @@ router.beforeEach(async(to, from, next) => {
         // 没有请求用户信息，获取权限表
         store.dispatch('user/getInfo').then(res => {
           const permission = res.authority_list
+          // 获取语言包
+          store.dispatch('settings/getLanguage', { currentPage: 1, pageSize: 1000, platform: 1 })
           store.dispatch('GenerateRoutes', permission).then(() => { // 根据roles权限生成可访问的路由表
             router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
             if (from.path !== '/login') {

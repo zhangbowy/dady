@@ -7,7 +7,6 @@
         <el-input v-model="word['en']" size="small" :disabled="!word.editing" style="width: 25%" />
         <el-button
           v-if="word.editing"
-          v-has="817"
           size="small"
           type="primary"
           icon="el-icon-finished"
@@ -16,7 +15,6 @@
         >{{ $t('保存') }}</el-button>
         <el-button
           v-else
-          v-has="817"
           size="small"
           type="primary"
           icon="el-icon-edit"

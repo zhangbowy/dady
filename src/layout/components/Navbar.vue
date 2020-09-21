@@ -5,17 +5,7 @@
     <breadcrumb class="breadcrumb-container" />
 
     <div class="right-menu">
-      <el-dropdown @command="handleCommand">
-        <span class="el-dropdown-link">
-          <svg-icon icon-class="language" />
-          {{ command || '中文' }}
-          <i class="el-icon-arrow-down el-icon--right" />
-        </span>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item command="中文">中文</el-dropdown-item>
-          <el-dropdown-item command="Englist">Englist</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
+      <language-selector />
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <img v-if="adminInfo.logo" :src="adminInfo.logo" class="user-avatar">
@@ -57,43 +47,27 @@ import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import ChangePassword from './ChangePassword'
-
+import LanguageSelector from '@/components/LanguageSelector'
 export default {
   components: {
     Breadcrumb,
     Hamburger,
-    ChangePassword
+    ChangePassword,
+    LanguageSelector
   },
   data() {
     return {
-      showChange: false,
-      command: '中文',
-      langsType: {
-        '中文': 'zh',
-        'Englist': 'en',
-        'zh': '中文',
-        'en': 'Englist'
-      }
+      showChange: false
     }
   },
   computed: {
     ...mapGetters([
       'sidebar',
       'avatar',
-      'adminInfo',
-      'lang'
+      'adminInfo'
     ])
   },
-  created() {
-    this.command = this.langsType[this.lang]
-  },
   methods: {
-    handleCommand(value) {
-      this.command = value
-      this.$i18n.locale = this.langsType[value] || 'zh'
-      document.documentElement.dataset.lang = this.langsType[value]
-      this.$store.dispatch('settings/changeSetting', { key: 'lang', value: this.langsType[value] })
-    },
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
     },
@@ -186,9 +160,6 @@ export default {
     }
 
   }
-}
-.el-dropdown-link {
-  cursor: pointer;
 }
 .user-dropdown{
   .dropdown-item{
