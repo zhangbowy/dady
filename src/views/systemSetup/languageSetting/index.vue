@@ -25,13 +25,13 @@
     </div>
     <div class="content">
       <el-tabs v-model="type" type="border-card" @tab-click="handleClick">
-        <el-tab-pane :label="$t('移动端商城')" name="3">
-          <words-list :words-list="wordsList" :lang="langsType[command]" @edit="onWordEdit" @save="onWordSave" />
-        </el-tab-pane>
         <el-tab-pane :label="$t('管理后台')" name="1">
           <words-list :words-list="wordsList" :lang="langsType[command]" @edit="onWordEdit" @save="onWordSave" />
         </el-tab-pane>
         <el-tab-pane :label="$t('设计师管理后台')" name="2">
+          <words-list :words-list="wordsList" :lang="langsType[command]" @edit="onWordEdit" @save="onWordSave" />
+        </el-tab-pane>
+        <el-tab-pane :label="$t('移动端商城')" name="3">
           <words-list :words-list="wordsList" :lang="langsType[command]" @edit="onWordEdit" @save="onWordSave" />
         </el-tab-pane>
       </el-tabs>
