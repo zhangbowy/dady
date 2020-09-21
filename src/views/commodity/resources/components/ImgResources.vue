@@ -149,8 +149,8 @@
           </el-upload>
         </el-form-item>
         <el-form-item>
-          <el-button size="small" @click="uploadDialog = false">{{ $t('取 消') }}</el-button>
-          <el-button v-has="405" size="small" type="primary" @click="fileUpload">{{ $t('确 定') }}</el-button>
+          <el-button size="small" @click="uploadDialog = false">{{ $t('取消') }}</el-button>
+          <el-button v-has="405" size="small" type="primary" @click="fileUpload">{{ $t('确定') }}</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -171,7 +171,7 @@
         </el-form-item>
         <el-form-item>
           <el-button @click="addGroupDialog = false">{{ $t('取 消') }}</el-button>
-          <el-button v-has="407" type="primary" @click="addGrops">{{ $t('确 定') }}</el-button>
+          <el-button v-has="407" type="primary" @click="addGrops">{{ $t('确定') }}</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -192,7 +192,7 @@
         </el-form-item>
         <el-form-item>
           <el-button @click="changeGroupDialog = false">{{ $t('取 消') }}</el-button>
-          <el-button v-has="408" type="primary" @click="ensureChange">{{ $t('确 定') }}</el-button>
+          <el-button v-has="408" type="primary" @click="ensureChange">{{ $t('确定') }}</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>

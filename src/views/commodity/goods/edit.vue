@@ -298,7 +298,7 @@ export default {
       rules: {
         name: [
           { required: true, message: `${this.$t('请输入商品名称')}`, trigger: 'blur' },
-          { max: 30, message: `${this.$t('长度不超过')}30${this.$t('个字符')}`, trigger: 'blur' }
+          { max: 30, message: `${this.$t('长度不超过30个字符')}`, trigger: 'blur' }
         ],
         old_price: [
           { required: true, message: `${this.$t('请输入商品原价')}`, trigger: 'blur' }

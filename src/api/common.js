@@ -63,3 +63,22 @@ export function getExpressList(params) {
     params
   })
 }
+
+// 获取语言包
+export function getLanguage(params) {
+  return request({
+    url: '/index/getLang',
+    method: 'get',
+    params
+  })
+}
+
+// 修改语言包
+
+export function editLanguage(data) {
+  return request({
+    url: '/system/editLang',
+    method: 'post',
+    data
+  })
+}

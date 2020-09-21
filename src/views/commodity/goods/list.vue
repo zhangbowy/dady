@@ -363,7 +363,7 @@ export default {
           this.toggleSelection()
           this.$message({
             type: 'warning',
-            message: `没有选中任何${status === 2 ? `${this.$t('待上架')}` : `${this.$t('已上架')}`}商品`
+            message: this.$t(`没有选中任何${status === 2 ? '待上架' : '已上架'}商品`)
           })
           return
         }
@@ -371,7 +371,7 @@ export default {
           return item.status !== status
         })
         this.toggleSelection(unSelectList)
-        this.$confirm(this.$t(this.$t(`是否${status === 2 ? '上架' : '下架'}选中的商品!`)), `${this.$t('提示')}`, {
+        this.$confirm(`${this.$t(`是否${status === 2 ? '上架' : '下架'}选中的商品`)}!`, `${this.$t('提示')}`, {
           confirmButtonText: `${this.$t('确定')}`,
           cancelButtonText: `${this.$t('取消')}`,
           type: 'warning',

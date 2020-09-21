@@ -80,8 +80,8 @@
             :clearable="true"
           />
           <span slot="footer" class="dialog-footer">
-            <el-button @click="inputDialogVisible = false">{{ $t('取 消') }}</el-button>
-            <el-button type="primary" @click="onInputConfirm">{{ $t('确 定') }}</el-button>
+            <el-button @click="inputDialogVisible = false">{{ $t('取消') }}</el-button>
+            <el-button type="primary" @click="onInputConfirm">{{ $t('确定') }}</el-button>
           </span>
         </el-dialog>
       </template>

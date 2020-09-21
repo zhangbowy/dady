@@ -303,7 +303,7 @@ export const asyncRouter = [
         path: 'languageSetting',
         name: 'LanguageSetting',
         component: () => import('@/views/systemSetup/languageSetting/index'),
-        meta: { title: '语言设置' }
+        meta: { title: '功能名称设置' }
       }]
   },
 

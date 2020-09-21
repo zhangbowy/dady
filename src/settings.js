@@ -16,7 +16,7 @@ module.exports = {
   sidebarLogo: true,
   lang: 'zh',
   langsType: {
-    'zh': {
+    'cn': {
       name: 'zh',
       path: path.resolve(__dirname, '../src/lang/zh.json')
     },
