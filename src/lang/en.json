@@ -446,7 +446,7 @@
   "取消修改": "Cancel modification",
   "修改成功": "Modified successfully",
   "中文": "Chinese",
-  "退出登录": "Log out",
+  "退出登录": "Log out", 
   "有效期": "Term of validity",
   "请再次输入新密码": "Please enter the new password again",
   "两次输入的密码不一致": "The two passwords are not the same",
@@ -641,5 +641,7 @@
   "功能名称": "Function name",
   "非功能名称": "Non functional name",
   "money": "dollar",
-  "total-income": "total-income-dollar"
+  "total-income": "total-income-dollar",
+  "请输入新密码": "Please enter a new password",
+  "请选择图片": "Please select a picture"
 }

@@ -46,11 +46,11 @@ router.beforeEach(async(to, from, next) => {
           })
         }).catch((err) => {
           console.log(err)
-          // store.dispatch('user/logout').then(() => {
-          //   store.dispatch('user/resetToken')
-          //   // Message.error(err || '验证失败，请重新登陆')
-          //   next({ path: '/' })
-          // })
+          store.dispatch('user/logout').then(() => {
+            store.dispatch('user/resetToken')
+            // Message.error(err || '验证失败，请重新登陆')
+            next({ path: '/' })
+          })
         })
       }
     }
@@ -62,6 +62,7 @@ router.beforeEach(async(to, from, next) => {
     } else {
     // 校验登录状态
       await store.dispatch('user/checkLogin').then(() => {
+        console.log(store.getters.permission)
         next()
       }).catch(() => {
         // next(`/login?redirect=${to.path}`)

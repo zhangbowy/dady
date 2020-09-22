@@ -572,6 +572,10 @@ export default {
     },
     // 删除图片
     deleteImg(id) {
+      if (!this.deleteArr.length) {
+        this.$message(this.$t('请选择图片'))
+        return
+      }
       this.$confirm(`${this.$t('此操作将永久删除图片')}, ${this.$t('是否继续')}?`, `${this.$t('提示')}`, {
         confirmButtonText: `${this.$t('确定')}`,
         cancelButtonText: `${this.$t('取消')}`,
