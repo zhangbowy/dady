@@ -83,7 +83,7 @@ export default {
         pageSize: this.pageSize,
         platform: this.type,
         keywords: this.keywords,
-        is_func_name: this.command === '功能名称'
+        is_func_name: this.command === '功能名称' || this.command === 'Function name'
       }).then(res => {
         if (res.code === 0) {
           this.wordsList = res.data.data
