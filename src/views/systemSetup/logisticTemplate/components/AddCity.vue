@@ -50,8 +50,8 @@
         </el-row>
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button size="mini" type="primary" @click="chooseCityConfirm">{{ $t('确 定') }}</el-button>
-        <el-button size="mini" @click="hiddenDialog">{{ $t('取 消') }}</el-button>
+        <el-button size="mini" type="primary" @click="chooseCityConfirm">{{ $t('确定') }}</el-button>
+        <el-button size="mini" @click="hiddenDialog">{{ $t('取消') }}</el-button>
       </div>
     </el-dialog>
   </div>

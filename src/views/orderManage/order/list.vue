@@ -120,8 +120,8 @@
         <span v-else>{{ $t('该定制分类没有关联任何机器') }}</span>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">{{ $t('取 消') }}</el-button>
-        <el-button type="primary" @click="onDialogClick">{{ $t('确 定') }}</el-button>
+        <el-button @click="dialogVisible = false">{{ $t('取消') }}</el-button>
+        <el-button type="primary" @click="onDialogClick">{{ $t('确定') }}</el-button>
       </span>
     </el-dialog>
     <div class="content">
