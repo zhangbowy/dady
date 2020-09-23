@@ -292,7 +292,7 @@ export default {
             fontApi.editFont(this.fontForm).then(res => {
               this.$message({
                 type: 'success',
-                message: this.$t(res.msg) || `${this.$t('编辑成功')}!`
+                message: this.$t(...res.msg) || `${this.$t('编辑成功')}!`
               })
               this.$refs.fontForm.resetFields()
               this.fetchData()

@@ -456,12 +456,12 @@ export default {
                 if (res.code === 0) {
                   this.$message({
                     type: 'success',
-                    message: this.$t(res.msg) || `${this.$t('修改成功')}!`
+                    message: this.$t(...res.msg) || `${this.$t('修改成功')}!`
                   })
                   // 重置表单
                   _this.$router.replace({ path: '/commodity/goods/list' })
                 } else {
-                  this.$message.success(this.$t(res.msg) || `${this.$t('修改失败')}!`)
+                  this.$message.success(this.$t(...res.msg) || `${this.$t('修改失败')}!`)
                 }
               })
             } else {
@@ -469,12 +469,12 @@ export default {
                 if (res.code === 0) {
                   this.$message({
                     type: 'success',
-                    message: this.$t(res.msg) || `${this.$t('添加成功')}!`
+                    message: this.$t(...res.msg) || `${this.$t('添加成功')}!`
                   })
                   // 重置表单
                   _this.$router.replace({ path: '/commodity/goods/list' })
                 } else {
-                  this.$message.success(this.$t(res.msg) || `${this.$t('添加失败')}!`)
+                  this.$message.success(this.$t(...res.msg) || `${this.$t('添加失败')}!`)
                 }
               })
             }

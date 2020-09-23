@@ -291,7 +291,7 @@ export default {
           this.chooseCategory(this.categoryList[0])
         } else {
           this.$message({
-            message: this.$t(res.msg),
+            message: this.$t(...res.msg),
             type: 'error'
           })
         }

@@ -464,7 +464,7 @@ export default {
           orderApi.replyOrder(this.replayForm).then(res => {
             this.$message({
               type: 'success',
-              message: this.$t(res.msg)
+              message: this.$t(...res.msg)
             })
           })
           this.replayDialog = false
@@ -494,7 +494,7 @@ export default {
           }).then(res => {
             this.$message({
               type: 'success',
-              message: this.$t(res.msg)
+              message: this.$t(...res.msg)
             })
           })
           this.dispatchDialog = false
@@ -516,7 +516,7 @@ export default {
           }).then(res => {
             this.$message({
               type: 'success',
-              message: this.$t(res.msg)
+              message: this.$t(...res.msg)
             })
           })
           this.orderDiaLog = false
@@ -537,7 +537,7 @@ export default {
         }).then(res => {
           this.$message({
             type: 'success',
-            message: this.$t(res.msg)
+            message: this.$t(...res.msg)
           })
         })
         this.getOrderList()
@@ -565,7 +565,7 @@ export default {
         }).then(res => {
           this.$message({
             type: 'success',
-            message: this.$t(res.msg)
+            message: this.$t(...res.msg)
           })
         })
         this.getOrderList()

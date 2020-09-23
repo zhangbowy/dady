@@ -4,7 +4,9 @@ import { MessageBox, Message, Notification } from 'element-ui'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
 // import router from './../router/index'
-
+import i18n from '../plugins/i18n'
+const { messages } = i18n
+console.log(i18n)
 // 创建axios相应拦截器
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
@@ -48,6 +50,26 @@ service.interceptors.request.use(
   }
 )
 
+// 翻译
+function translate(msg) {
+  const lang = i18n.locale
+  if (Array.isArray(msg)) {
+    const [key, params] = msg
+    console.log(key, params)
+    const reg = /{\s{0,1}\w+\s{0,1}}/g
+    let value = messages[lang][key] || ''
+    value = value.replace(reg, val => {
+      const param = val.replace(/[{|}]/g, '')
+      return translate(params[param]) || params[param] || ''
+    })
+    return value || key
+  } else if (typeof msg === 'string') {
+    return messages[lang][msg] || msg
+  } else {
+    return msg
+  }
+}
+
 // 响应拦截器
 service.interceptors.response.use(
   /**
@@ -61,14 +83,14 @@ service.interceptors.response.use(
   */
   response => {
     const res = response.data
-
+    // const lang = store.getters.lang
     // code为1即请求成功.
     if (res.code !== 0) {
       if (res.code === 402) {
         // 去重新登录
-        MessageBox.confirm('您未登录或登录失效，请重新登录！', '确认退出', {
-          confirmButtonText: '重新登录',
-          cancelButtonText: '取消',
+        MessageBox.confirm(translate('您未登录或登录失效，请重新登录！'), translate('确认退出'), {
+          confirmButtonText: translate('重新登录'),
+          cancelButtonText: translate('取消'),
           type: 'warning'
         }).then(() => {
           store.dispatch('user/resetToken').then(() => {
@@ -78,19 +100,19 @@ service.interceptors.response.use(
         })
       } else if (res.code === 401) {
         Notification({
-          title: '系统提示',
+          title: translate('系统提示'),
           duration: 5 * 1000,
-          message: res.msg,
+          message: translate(res.msg),
           type: 'warning'
         })
       } else {
         Message({
-          message: res.msg || `请求异常：${res.code}`,
+          message: translate(res.msg) || `${translate('请求异常')}：${res.code}`,
           type: 'error',
           duration: 5 * 1000
         })
       }
-      return Promise.reject(new Error(res.msg || 'Error'))
+      return Promise.reject(new Error(translate(res.msg) || 'Error'))
     } else {
       return res
     }
@@ -98,7 +120,7 @@ service.interceptors.response.use(
   error => {
     console.log('err' + error) // debug
     Message({
-      message: error.msg || '请求异常',
+      message: translate(error.msg) || translate('请求异常'),
       type: 'error',
       duration: 5 * 1000
     })

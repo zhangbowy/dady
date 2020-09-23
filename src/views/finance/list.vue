@@ -193,7 +193,7 @@ export default {
       }).then(res => {
         this.$message({
           type: 'success',
-          message: this.$t(res.msg) || `${this.$t('操作成功')}`
+          message: this.$t(...res.msg) || `${this.$t('操作成功')}`
         })
         this.fetchData()
         this.itemDialog = false
@@ -207,7 +207,7 @@ export default {
       }).then(res => {
         this.$message({
           type: 'success',
-          message: this.$t(res.msg) || `${this.$t('操作成功')}`
+          message: this.$t(...res.msg) || `${this.$t('操作成功')}`
         })
         this.fetchData()
         this.showReject = false

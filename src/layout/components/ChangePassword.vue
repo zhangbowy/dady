@@ -109,7 +109,7 @@ export default {
             changePsd(this.form).then(res => {
               this.$message({
                 type: 'success',
-                message: this.$t(res.msg) || `${this.$t('修改成功')}`
+                message: this.$t(...res.msg) || `${this.$t('修改成功')}`
               })
               this.beforeClose()
               // this.$store.dispatch('user/getInfo')

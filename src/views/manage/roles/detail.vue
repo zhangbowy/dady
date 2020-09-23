@@ -112,7 +112,7 @@ export default {
             rolesApi.addRole(this.form).then(res => {
               this.$message({
                 type: 'success',
-                message: this.$t(res.msg)
+                message: this.$t(...res.msg)
               })
               _this.$router.go(-1)
             }).catch(() => {

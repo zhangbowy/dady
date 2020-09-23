@@ -51,7 +51,7 @@ export default {
         settingApi.editSetting({ key: 'is_request_wilcom', value: this.is_request_wilcom === 0 ? 1 : 0 }).then(res => {
           this.$message({
             type: 'success',
-            message: this.$t(res.msg)
+            message: this.$t(...res.msg)
           })
           this.is_request_wilcom === 0 ? this.is_request_wilcom = 1 : this.is_request_wilcom = 0
         })

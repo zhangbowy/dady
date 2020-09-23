@@ -322,14 +322,14 @@ export default {
       if (res.code === 0) {
         this.$message({
           showClose: true,
-          message: this.$t(res.msg),
+          message: this.$t(...res.msg),
           type: 'success'
         })
         this.reload()
       } else {
         this.$message({
           showClose: true,
-          message: this.$t(res.msg),
+          message: this.$t(...res.msg),
           type: 'error'
         })
       }
@@ -478,7 +478,7 @@ export default {
           if (res.code === 0) {
             this.$message({
               type: 'success',
-              message: this.$t(res.msg)
+              message: this.$t(...res.msg)
             })
           }
         }).catch(() => {

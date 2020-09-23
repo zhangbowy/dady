@@ -109,7 +109,7 @@ export default {
           settingApi.saveWxConfig(this.settingForm).then(res => {
             this.$message({
               type: 'success',
-              message: this.$t(res.msg) || `${this.$t('保存成功')}!`
+              message: this.$t(...res.msg) || `${this.$t('保存成功')}!`
             })
           })
         } else {

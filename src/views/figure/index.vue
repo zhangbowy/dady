@@ -70,7 +70,7 @@
         <el-pagination
           :total="total"
           :current-page="currentPage"
-          :page-sizes="[10, 14,28]"
+          :page-sizes="[10, 14, 28]"
           :page-size="pageSize"
           layout="total, sizes, prev, pager, next, jumper"
           @size-change="handleSizeChange"
@@ -161,7 +161,6 @@ export default {
     getFigureCategory() {
       Category.getList().then(res => {
         this.figureCategoryList = res.data
-        console.log(this.figureCategoryList)
       })
     },
     // 统计
@@ -189,14 +188,14 @@ export default {
             if (res.code === 0) {
               this.$message({
                 type: 'success',
-                message: this.$t(res.msg) || `${this.$t('设置成功')}!`
+                message: this.$t(...res.msg) || `${this.$t('设置成功')}!`
               })
               // 重置表单
               _this.$refs[formName].resetFields()
               this.showCategorySelector = false
               this.fetchData()
             } else {
-              this.$message.success(this.$t(res.msg) || `${this.$t('设置失败')}!`)
+              this.$message.success(this.$t(...res.msg) || `${this.$t('设置失败')}!`)
             }
           })
         } else {
@@ -250,7 +249,7 @@ export default {
         }).then(res => {
           this.$message({
             type: 'success',
-            message: this.$t(res.msg)
+            message: this.$t(...res.msg)
           })
           this.fetchData()
         })
@@ -269,7 +268,7 @@ export default {
         }).then(res => {
           this.$message({
             type: 'success',
-            message: this.$t(res.msg)
+            message: this.$t(...res.msg)
           })
           this.fetchData()
         })

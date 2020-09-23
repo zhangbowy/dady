@@ -299,7 +299,7 @@ export const asyncRouter = [
         meta: { title: '系统设置' }
       }, {
         pid: 8,
-        id: 37,
+        id: 36,
         path: 'languageSetting',
         name: 'LanguageSetting',
         component: () => import('@/views/systemSetup/languageSetting/index'),

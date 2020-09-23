@@ -127,7 +127,7 @@ export default {
         } else {
           this.$message({
             type: 'error',
-            message: this.$t(res.msg)
+            message: this.$t(...res.msg)
           })
         }
       })
@@ -165,7 +165,7 @@ export default {
         } else {
           this.$message({
             type: 'error',
-            message: this.$t(res.msg)
+            message: this.$t(...res.msg)
           })
         }
       })
@@ -180,12 +180,16 @@ export default {
       })
     },
     importGoods() {
+      if (!this.form.urlList[0].url) {
+        this.$message(`${this.$t('请输入商品链接')}`)
+        return
+      }
       importGood({
         tb_url: this.form.urlList.map(item => item.url)
       }).then(data => {
         if (data.code === 0) {
           this.$message({
-            message: this.$t(data.msg),
+            message: this.$t(...data.msg),
             type: 'success'
           })
           this.form.urlList = [

@@ -91,7 +91,7 @@ export default {
         } else {
           this.$message({
             type: 'error',
-            message: this.$t(res.msg)
+            message: this.$t(...res.msg)
           })
         }
       })
@@ -107,7 +107,7 @@ export default {
       editLanguage({ lang_id: word.lang_id, cn: word.cn, en: word.en }).then(res => {
         this.$message({
           type: res.code === 0 ? 'success' : 'error',
-          message: this.$t(res.msg)
+          message: this.$t(...res.msg)
         })
       })
       console.log()

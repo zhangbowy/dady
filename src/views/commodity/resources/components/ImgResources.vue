@@ -87,7 +87,7 @@
             </el-col>
           </div>
           <div v-if="imgList.length==0">
-            该分组下暂无图片...
+            {{ $t('该分组下暂无图片') }}...
           </div>
         </div>
         <div class="paging">
@@ -353,6 +353,13 @@ export default {
     },
     // 修改图片分组
     changeImgGrops() {
+      if (!this.changeFrom.group_id[0]) {
+        this.$message({
+          type: 'info',
+          message: `${this.$t('请选择图片分组')}`
+        })
+        return
+      }
       imgApi.setImgGroup({
         id: this.changeFrom.img_id,
         gallery_group_id: this.changeFrom.group_id[0]
@@ -374,6 +381,13 @@ export default {
     },
     // 修改图片名称
     changeImgName() {
+      if (!this.changeFrom.img_name) {
+        this.$message({
+          type: 'info',
+          message: `${this.$t('请填写图片名称')}`
+        })
+        return
+      }
       imgApi.editImageName({
         id: this.changeFrom.img_id,
         img_name: this.changeFrom.img_name
@@ -409,12 +423,12 @@ export default {
       const isJPG = file.raw.type === 'image/jpeg' || file.raw.type === 'image/png'
       const isLt2M = file.size / 1024 / 1024 < 2
       if (!isJPG) {
-        this.$message.error(`${this.$t('上传头像图片只能是')} JPG 格式!`)
+        this.$message.error(`${this.$t('上传头像图片只能是 JPG 格式')}！`)
         fileList.pop()
         return isJPG
       }
       if (!isLt2M) {
-        this.$message.error(`${this.$t('上传头像图片大小不能超过')} 2MB!`)
+        this.$message.error(`${this.$t('上传头像图片大小不能超过 2MB')}!`)
         fileList.pop()
         return isLt2M
       }
@@ -504,7 +518,7 @@ export default {
       imgApi.addImage(formData).then(res => {
         if (res.code === 0) {
           this.$message({
-            message: this.$t(res.msg) || `${this.$t('上传成功')}`,
+            message: this.$t(...res.msg) || `${this.$t('上传成功')}`,
             type: 'success'
           })
           this.getImgList()
@@ -516,7 +530,7 @@ export default {
         } else {
           loading.close()
           this.$message({
-            message: this.$t(res.msg) || `${this.$t('上传失败')}`,
+            message: this.$t(...res.msg) || `${this.$t('上传失败')}`,
             type: 'error'
           })
         }
@@ -625,7 +639,7 @@ export default {
         level: data.level
       }).then(res => {
         this.$message({
-          message: this.$t(res.msg),
+          message: this.$t(...res.msg),
           type: 'success'
         })
         this.fetchData()
@@ -646,7 +660,7 @@ export default {
         level: data.level
       }).then(res => {
         this.$message({
-          message: this.$t(res.msg),
+          message: this.$t(...res.msg),
           type: 'success'
         })
         this.fetchData()

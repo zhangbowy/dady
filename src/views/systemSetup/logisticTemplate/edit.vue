@@ -204,7 +204,7 @@ export default {
             ).then(res => {
               this.$message({
                 type: 'success',
-                message: this.$t(res.msg) || `${this.$t('修改成功')}!`
+                message: this.$t(...res.msg) || `${this.$t('修改成功')}!`
               })
               this.$router.go(-1)
             })
@@ -214,7 +214,7 @@ export default {
             ).then(res => {
               this.$message({
                 type: 'success',
-                message: this.$t(res.msg) || `${this.$t('修改成功')}!`
+                message: this.$t(...res.msg) || `${this.$t('修改成功')}!`
               })
               this.$router.go(-1)
             })
