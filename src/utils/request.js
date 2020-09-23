@@ -6,7 +6,7 @@ import { getToken } from '@/utils/auth'
 // import router from './../router/index'
 import i18n from '../plugins/i18n'
 const { messages } = i18n
-console.log(i18n)
+
 // 创建axios相应拦截器
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
@@ -55,7 +55,6 @@ function translate(msg) {
   const lang = i18n.locale
   if (Array.isArray(msg)) {
     const [key, params] = msg
-    console.log(key, params)
     const reg = /{\s{0,1}\w+\s{0,1}}/g
     let value = messages[lang][key] || ''
     value = value.replace(reg, val => {

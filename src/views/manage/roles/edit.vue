@@ -59,6 +59,7 @@ export default {
   },
   computed: {
     getRulesList() {
+      this.translate(this.authorityList)
       return tree.listToTreeMulti(this.authorityList)
     }
   },
@@ -70,6 +71,15 @@ export default {
     }
   },
   methods: {
+    // 翻译
+    translate(list) {
+      list.forEach(item => {
+        item.auth_name = this.$t(item.auth_name)
+        if (Array.isArray(item.children)) {
+          this.translate(item.children)
+        }
+      })
+    },
     // 获取权限列表
     async getPermission() {
       await rolesApi.authorityList().then(res => {
@@ -77,8 +87,6 @@ export default {
       })
     },
     loadNode(node, resolve) {
-      console.log(node)
-
       resolve()
     },
     // 获取角色详情
