@@ -61,8 +61,8 @@ export default {
   computed: {
     ...mapGetters(['lang']),
     getRulesList() {
-      this.translate(this.authorityList)
-      return tree.listToTreeMulti(this.authorityList)
+      const templateAuthorityList = this.translate(this.authorityList)
+      return tree.listToTreeMulti(templateAuthorityList)
     }
   },
   watch: {
@@ -80,12 +80,14 @@ export default {
   methods: {
     // 翻译
     translate(list) {
-      list.forEach(item => {
+      const templateAuthorityList = JSON.parse(JSON.stringify(list))
+      templateAuthorityList.forEach(item => {
         item.auth_name = this.$t(item.auth_name)
         if (Array.isArray(item.children)) {
-          this.translate(item.children)
+          item.children = this.translate(item.children)
         }
       })
+      return templateAuthorityList
     },
     // 获取权限列表
     async getPermission() {
