@@ -35,6 +35,7 @@
 import CardTag from '@/components/CardTag'
 import { rolesApi } from '@/api/manage'
 import tree from '@/utils/tree'
+import { mapGetters } from 'vuex'
 export default {
   components: {
     CardTag
@@ -58,9 +59,15 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['lang']),
     getRulesList() {
       this.translate(this.authorityList)
       return tree.listToTreeMulti(this.authorityList)
+    }
+  },
+  watch: {
+    lang() {
+      this.translate(this.authorityList)
     }
   },
   created() {
