@@ -111,7 +111,7 @@ export default {
   },
   methods: {
     handleClick(value) {
-      console.log(value)
+      // console.log(value)
     },
     onRecharge(rechargetype) {
       importPay({

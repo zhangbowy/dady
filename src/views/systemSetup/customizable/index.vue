@@ -433,7 +433,7 @@ export default {
       this.form.design_top = y
     },
     onDialogOpen() {
-      console.log('open')
+      // console.log('open')
       this.form = Object.assign({}, this.form)
     }
   }

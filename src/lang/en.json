@@ -458,7 +458,7 @@
   "编辑分类": "Edit category",
   "顶级分类无需选择": "Top level categories do not need to be selected",
   "请填写分类名称": "Please fill in the classification name",
-  "长度在 1 到 5 个字符": "The length is between 1 and 5 characters",
+  "长度在 {0} 到 {1} 个字符": "The length is between {0} and {1} characters",
   "请上传分类logo": "Please upload the category logo",
   "请上传分类": "Please upload classification",
   "编辑商品": "Edit product",
@@ -466,7 +466,7 @@
   "请输入商品现价": "Please input the current price",
   "商品现价不得高于原价": "The current price of a commodity shall not be higher than its original price",
   "请输入商品名称": "Please enter the product name",
-  "长度不超过30个字符": "No more than 30 characters in length",
+  "长度不超过{0}个字符": "No more than {0} characters in length",
   "请输入商品原价": "Please enter the original price of the product",
   "请输入商品库存": "Please enter the inventory of goods",
   "请输入商品重量": "Please input product weight",
@@ -490,7 +490,6 @@
   "设计师团队详情": "Designer team details",
   "手机号格式不正确": "The format of mobile phone number is incorrect",
   "请填写团队名称": "Please fill in the team name",
-  "长度在 1 到 15 个字符": "Between 1 and 15 characters in length",
   "请填写设计师姓名": "Please fill in the designer's name",
   "请选择花样分类": "Please select the pattern classification",
   "剩余次数": "Number of times left",
@@ -701,5 +700,6 @@
   "编辑花样分类": "Edit pattern classification",
   "删除花样分类": "Delete pattern classification",
   "设置花样分类": "Set pattern classification",
-  "删除物流模板": "Delete logistics template"
+  "删除物流模板": "Delete logistics template",
+  "确认支付后无法恢复": "Cannot be recovered after confirmation of payment"
 }

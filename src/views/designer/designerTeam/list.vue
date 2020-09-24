@@ -147,7 +147,7 @@ export default {
       rules: {
         designer_team_name: [
           { required: true, message: `${this.$t('请填写团队名称')}`, trigger: 'blur' },
-          { min: 1, max: 15, message: `${this.$t('长度在 1 到 15 个字符')}`, trigger: 'blur' }
+          { min: 1, max: 15, message: `${this.$t('长度在 {0} 到 {1} 个字符', [1, 15])}`, trigger: 'blur' }
         ],
         designer_name: [
           { required: true, message: `${this.$t('请填写设计师姓名')}`, trigger: 'blur' }

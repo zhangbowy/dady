@@ -250,7 +250,6 @@ export default {
   },
   methods: {
     onCardClick(count) {
-      console.log(count)
       this.currentStatus = count.status
       this.status = count.status || ''
       this.currentPage = 1

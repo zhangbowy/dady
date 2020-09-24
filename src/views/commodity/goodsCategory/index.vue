@@ -149,10 +149,10 @@ export default {
       rules: {
         category_name: [
           { required: true, message: `${this.$t('请填写分类名称')}`, trigger: 'blur' },
-          { min: 1, max: 5, message: `${this.$t('长度在 1 到 5 个字符')}`, trigger: 'blur' }
+          { min: 1, max: 5, message: `${this.$t('长度在 {0} 到 {1} 个字符', [1, 5])}`, trigger: 'blur' }
         ],
         logo: [
-          { required: true, message: `${this.$t('请上传分类')}logo`, trigger: 'blur' }
+          { required: true, message: `${this.$t('请上传分类')} logo`, trigger: 'blur' }
         ],
         image_path: [
           { required: true, message: `${this.$t('请上传广告图')}`, trigger: 'blur' }

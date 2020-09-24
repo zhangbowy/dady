@@ -17,14 +17,22 @@
             :value="item.designer_team_id"
           />
         </el-select>
-        <el-select v-model="design_category_id" size="small" clearable :placeholder="$t('请选择设花样类别')">
+        <!-- <el-select v-model="design_category_id" size="small" clearable :placeholder="$t('请选择设花样类别')">
           <el-option
             v-for="item in figureCategoryList"
             :key="item.id"
             :label="item.category_name"
             :value="item.id"
           />
-        </el-select>
+        </el-select> -->
+        <el-cascader
+          v-model="design_category_id"
+          size="small"
+          :options="figureCategoryList"
+          :props="optionProps"
+          :placeholder="$t('请选择花样类别')"
+          clearable
+        />
         <el-button size="small" icon="el-icon-search" type="primary" @click="doSearch()">{{ $t('搜索') }}</el-button>
       </div>
 
@@ -82,14 +90,22 @@
     <el-dialog v-dialogDrag auto width="300px" :title="$t('修改花样分类')" :visible.sync="showCategorySelector">
       <el-form ref="form" :model="form">
         <el-form-item>
-          <el-select v-model="form.design_category_id" size="small" clearable :placeholder="$t('请选择花样类别')">
+          <!-- <el-select v-model="form.design_category_id" size="small" clearable :placeholder="$t('请选择花样类别')">
             <el-option
               v-for="item in figureCategoryList"
               :key="item.id"
               :label="item.category_name"
               :value="item.id"
-            />
-          </el-select>
+            </el-select>
+          /> -->
+          <el-cascader
+            v-model="form.design_category_id"
+            size="small"
+            :options="figureCategoryList"
+            :props="optionProps"
+            :placeholder="$t('请选择花样类别')"
+            clearable
+          />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit('form')">{{ $t('确定') }}</el-button>
@@ -121,6 +137,12 @@ export default {
       total: 0,
       design_category_id: '',
       showCategorySelector: false,
+      optionProps: {
+        checkStrictly: true,
+        expandTrigger: 'hover',
+        value: 'id',
+        label: 'category_name'
+      },
       form: {
         design_category_id: '',
         design_id: ''
@@ -132,8 +154,10 @@ export default {
       }
     }
   },
-  watch: {
-
+  computed: {
+    r_design_category_id() {
+      return Array.isArray(this.design_category_id) ? this.design_category_id[this.design_category_id.length - 1] : this.design_category_id
+    }
   },
   created() {
     this.fetchData()
@@ -148,7 +172,7 @@ export default {
         pageSize: this.pageSize,
         design_name: this.keywords,
         designer_team_id: this.designer_team_id,
-        design_category_id: this.design_category_id,
+        design_category_id: this.r_design_category_id,
         status: this.status
       }).then(res => {
         this.loading = false
@@ -167,7 +191,7 @@ export default {
     getdesignCount() {
       figureApi.designCount({
         design_name: this.keywords,
-        design_category_id: this.design_category_id,
+        design_category_id: this.r_design_category_id,
         designer_team_id: this.designer_team_id
       }).then(res => {
         this.figureCount = res.data
@@ -184,6 +208,9 @@ export default {
       const _this = this
       _this.$refs[formName].validate((valid) => {
         if (valid) {
+          const design_category_list = _this.form.design_category_id
+          const design_category_id = Array.isArray(design_category_list) ? design_category_list[design_category_list.length - 1] : design_category_list
+          _this.form.design_category_id = design_category_id
           figureApi.setCategory(_this.form).then(res => {
             if (res.code === 0) {
               this.$message({

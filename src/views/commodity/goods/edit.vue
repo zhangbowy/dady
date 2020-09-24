@@ -298,7 +298,7 @@ export default {
       rules: {
         name: [
           { required: true, message: `${this.$t('请输入商品名称')}`, trigger: 'blur' },
-          { max: 30, message: `${this.$t('长度不超过30个字符')}`, trigger: 'blur' }
+          { max: 100, message: `${this.$t('长度不超过{0}个字符', [100])}`, trigger: 'blur' }
         ],
         old_price: [
           { required: true, message: `${this.$t('请输入商品原价')}`, trigger: 'blur' }
@@ -535,7 +535,7 @@ export default {
     },
     // 鼠标单击的事件
     onClick(e, editor) {
-      console.log('Element clicked')
+      // console.log('Element clicked')
     },
     // 清空内容
     clear() {

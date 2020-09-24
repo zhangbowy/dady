@@ -117,8 +117,6 @@ export default {
     },
     // 右侧删除
     remove(node, data) {
-      console.log(node)
-      console.log(data)
       this.defaultExpanded = []
       // 判断是不是父元素
       if (data.pid !== 100000) {
