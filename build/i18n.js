@@ -148,7 +148,7 @@ function match(fileNameList, langObj) {
     })
     template = template.replace(jsCnReg, (value) => {
       value = value.replace(qmCnReg, val => {
-        console.log(val, 'dd')
+        // console.log(val, 'dd')
         val = val.replace(/['"]/g, '')
         val = val.replace(cnReg, v => {
           // console.log(v)
@@ -216,5 +216,4 @@ function translate(langObj, langSetting)  {
     langObj[item] = en[index]
   })
   fs.writeFileSync(langSetting.path, JSON.stringify(langObj))
-  console.log(langObj)
 }

@@ -111,6 +111,10 @@ export default {
     border-radius: 20px;
     display: flex;
     align-items: center;
+    padding: 0 10px;
+    .card-panel-description {
+      margin-left: 10px !important;
+    }
     &:hover {
       .card-panel-icon-wrapper {
         color: #fff;
