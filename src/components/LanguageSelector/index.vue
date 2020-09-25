@@ -7,7 +7,7 @@
     </span>
     <el-dropdown-menu slot="dropdown">
       <el-dropdown-item command="中文">中文</el-dropdown-item>
-      <el-dropdown-item command="Englist">Englist</el-dropdown-item>
+      <el-dropdown-item command="Englist">English</el-dropdown-item>
     </el-dropdown-menu>
   </el-dropdown>
 </template>
@@ -22,7 +22,7 @@ export default {
         '中文': 'zh',
         'Englist': 'en',
         'zh': '中文',
-        'en': 'Englist'
+        'en': 'English'
       }
     }
   },
