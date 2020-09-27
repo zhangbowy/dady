@@ -2,12 +2,12 @@
   <el-dropdown @command="handleCommand">
     <span class="el-dropdown-link">
       <svg-icon icon-class="language" />
-      {{ command || '中文' }}
+      {{ langsType[command] || '中文' }}
       <i class="el-icon-arrow-down el-icon--right" />
     </span>
     <el-dropdown-menu slot="dropdown">
-      <el-dropdown-item command="中文">中文</el-dropdown-item>
-      <el-dropdown-item command="Englist">English</el-dropdown-item>
+      <el-dropdown-item command="zh">中文</el-dropdown-item>
+      <el-dropdown-item command="en">English</el-dropdown-item>
     </el-dropdown-menu>
   </el-dropdown>
 </template>
@@ -17,12 +17,10 @@ import { mapGetters } from 'vuex'
 export default {
   data() {
     return {
-      command: '中文',
+      command: 'zh',
       langsType: {
-        '中文': 'zh',
-        'Englist': 'en',
-        'zh': '中文',
-        'en': 'English'
+        'zh': 'English',
+        'en': '中文'
       }
     }
   },
@@ -32,14 +30,14 @@ export default {
     ])
   },
   created() {
-    this.command = this.langsType[this.lang]
+    this.command = this.lang
   },
   methods: {
     handleCommand(value) {
       this.command = value
-      this.$i18n.locale = this.langsType[value] || 'zh'
-      document.documentElement.dataset.lang = this.langsType[value]
-      this.$store.dispatch('settings/changeSetting', { key: 'lang', value: this.langsType[value] })
+      this.$i18n.locale = value || 'zh'
+      document.documentElement.dataset.lang = value
+      this.$store.dispatch('settings/changeSetting', { key: 'lang', value: value })
     }
   }
 }

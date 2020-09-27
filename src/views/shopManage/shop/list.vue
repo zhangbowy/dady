@@ -344,7 +344,7 @@ export default {
       })
     },
     handleAvatarSuccess(res, file) {
-      console.log(res)
+      // console.log(res)
       this.imageUrl = URL.createObjectURL(file.raw)
       this.shopForm.logo = res.data.url
     },
