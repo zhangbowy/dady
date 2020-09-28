@@ -309,6 +309,7 @@ export default {
     // 定制分类改变
     customCategoryChange(value) {
       this.fetchData()
+      this.getOrderCount()
     },
     onCheckboxChange(list) {
       this.checkedList = list
@@ -366,7 +367,8 @@ export default {
         start_pay_time: this.formInline.pay_time[0],
         end_pay_time: this.formInline.pay_time[1],
         receiver_phone: this.formInline.receiver_phone,
-        shop_id: this.formInline.shop_id
+        shop_id: this.formInline.shop_id,
+        custom_category_id: this.formInline.custom_category_id
       }).then(res => {
         this.orderCount = res.data
       })
