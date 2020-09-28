@@ -344,23 +344,6 @@ export default {
     exportTemplate() {
       window.open(this.baseUrl + '/system/exportEmbPrice')
     },
-    importTemplate(e) {
-      const formData = new FormData()
-      formData.append('excel', e.file)
-      formData.append('template_id', 2)
-      const loading = this.$loading({
-        lock: true,
-        text: `${this.$t('文件上传中')}`,
-        spinner: 'el-icon-loading',
-        background: 'rgba(255, 255, 255, 0.5)'
-      })
-      embTemplate.importTemplate(formData).then(data => {
-        loading.close()
-        this.reload()
-      }).catch(() => {
-        loading.close()
-      })
-    },
     // 获取所有模板
     getEmbTemplate() {
       embTemplate.getEmbTemplate({

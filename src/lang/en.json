@@ -701,5 +701,10 @@
   "删除花样分类": "Delete pattern classification",
   "设置花样分类": "Set pattern classification",
   "删除物流模板": "Delete logistics template",
-  "确认支付后无法恢复": "Cannot be recovered after confirmation of payment"
+  "确认支付后无法恢复": "Cannot be recovered after confirmation of payment",
+  "澳洲api": "Australian API",
+  "绣线颜色对照表": "Embroidery thread color comparison table",
+  "EMB颜色对照表!": "EMB color chart!",
+  "颜色名称": "Color name",
+  "RGB色值": "RGB color value"
 }

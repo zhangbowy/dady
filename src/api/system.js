@@ -1,5 +1,41 @@
 import request from '@/utils/request'
 
+export const embColorTable = {
+  /**
+   * 追加导入
+   * @param {* excel}
+   */
+  importColorTable(data) {
+    return request({
+      url: '/system/addEmbColor',
+      method: 'post',
+      data
+    })
+  },
+  /**
+   * 获取颜色表
+   * @param {* excel}
+   */
+  getColorTable(params) {
+    return request({
+      url: '/system/getEmbColor',
+      method: 'get',
+      params
+    })
+  },
+  /**
+   * 导出颜色表
+   * @param {* excel}
+   */
+  exportColorTable(params) {
+    return request({
+      url: '/system/exportEmbColor',
+      method: 'get',
+      params
+    })
+  }
+}
+
 export const embTemplate = {
   /**
    * 获取定制模板列表
