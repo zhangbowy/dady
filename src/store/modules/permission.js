@@ -16,11 +16,15 @@ const permission = {
     GenerateRoutes({ commit }, data) {
       return new Promise((resolve, reject) => {
         const userPermission = data
-        let accessedRouters = []
+        const accessedRouters = []
         // 根据角色权限，动态生成新路由
         // 返回一级
-        accessedRouters = asyncRouter.filter(item => {
-          return userPermission.indexOf(item.id) > -1
+        asyncRouter.forEach(item => {
+          if (userPermission.indexOf(item.id) > -1) {
+            const route = Object.assign({}, item)
+            route.children = [...item.children]
+            accessedRouters.push(route)
+          }
         })
         // 返回二级路由
         accessedRouters.map((item) => {

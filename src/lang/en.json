@@ -706,5 +706,13 @@
   "绣线颜色对照表": "Embroidery thread color comparison table",
   "EMB颜色对照表!": "EMB color chart!",
   "颜色名称": "Color name",
-  "RGB色值": "RGB color value"
+  "RGB色值": "RGB color value",
+  "密码不能小于6位": "The password cannot be less than 6 digits",
+  "请填写店铺名称": "Please fill in the shop name",
+  "请输入选择店铺到期时间": "Please enter the expiration time of the selected store",
+  "请上传店铺": "Please upload the store",
+  "店铺详情": "Shop details",
+  "是否删除该店铺": "Delete this store",
+  "编辑店铺": "Edit store",
+  "您不能进入这个页面": "You cannot enter this page"
 }
