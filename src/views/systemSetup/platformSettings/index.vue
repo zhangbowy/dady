@@ -147,7 +147,6 @@ export default {
       this.importDialogVisible = true
     },
     uploadSuccess(res) {
-      console.log(res)
       if (res.code === 0) {
         this.$message({
           showClose: true,
@@ -170,8 +169,8 @@ export default {
     exportTemplate() {
       window.open(this.baseUrl + '/system/exportEmbColor')
     },
-    handleSizeChange(currentPage) {
-      console.log(currentPage, 'currentPage')
+    handleSizeChange(pageSize) {
+      this.pageSize = pageSize
     },
     handleCurrentChange(currentPage) {
       this.currentPage = currentPage
