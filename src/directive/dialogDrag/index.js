@@ -85,10 +85,8 @@ export default {
 
         styT = +sty.top.replace(/\px/g, '')
       }
-
-      document.onmousemove = function(e) {
+      function onMousedown(e) {
         // 通过事件委托，计算移动的距离
-
         const l = e.clientX - disX
 
         const t = e.clientY - disY
@@ -103,12 +101,11 @@ export default {
 
         // binding.value({x:e.pageX,y:e.pageY})
       }
-
-      document.onmouseup = function(e) {
-        document.onmousemove = null
-
-        document.onmouseup = null
-      }
+      document.addEventListener('mousemove', onMousedown)
+      document.addEventListener('mouseup', () => {
+        document.removeEventListener('mousemove', onMousedown)
+        // document.onmouseup = null
+      })
     }
 
     dialogHeaderEl.onmousedown = moveDown
@@ -156,7 +153,6 @@ export default {
     dragDom.onmousemove = function(e) {
       // eslint-disable-next-line no-unused-vars
       const moveE = e
-
       if (e.clientX > dragDom.offsetLeft + dragDom.clientWidth - 10 || dragDom.offsetLeft + 10 > e.clientX) {
         dragDom.style.cursor = 'w-resize'
       } else if (el.scrollTop + e.clientY > dragDom.offsetTop + dragDom.clientHeight - 10) {

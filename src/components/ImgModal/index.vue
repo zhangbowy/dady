@@ -1,5 +1,5 @@
 <template>
-  <el-dialog width="1040px" :visible.sync="visibleInside" title="我的图片" append-to-body>
+  <el-dialog v-dialogDrag width="1040px" :visible.sync="visibleInside" title="我的图片" append-to-body>
     <div class="modal-header">
       <el-button type="primary" size="small" @click="isAdd = true">上传图片</el-button>
       <el-input
@@ -60,7 +60,7 @@
     <span slot="footer" class="dialog-btn-center">
       <el-button type="primary" size="small" @click="confirm">确 定</el-button>
     </span>
-    <el-dialog :visible.sync="isAdd" title="上传图片" append-to-body :before-close="handleClose">
+    <el-dialog v-dialogDrag :visible.sync="isAdd" title="上传图片" append-to-body :before-close="handleClose">
       <el-form :model="dialog.upLoadImg" label-width="96px">
         <el-form-item label="图片分组：">
           <el-cascader

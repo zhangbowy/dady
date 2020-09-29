@@ -74,7 +74,7 @@
       </el-table>
     </div>
     <!-- 新增可定制分类 -->
-    <el-dialog center :title="dialogType=='add'? $t('新增分类'): dialogType=='edit'? `${$t('编辑分类')}`: `${$t('分类详情')}`" :visible.sync="dialogFormVisible" @open="onDialogOpen">
+    <el-dialog v-dialogDrag center :title="dialogType=='add'? $t('新增分类'): dialogType=='edit'? `${$t('编辑分类')}`: `${$t('分类详情')}`" :visible.sync="dialogFormVisible" @open="onDialogOpen">
       <el-form ref="form" :model="form" :rules="rules" label-width="100px" label-position="left" size="small">
         <el-form-item :label="$t('分类名称')" prop="custom_category_name">
           <el-input v-model="form.custom_category_name " :disabled="dialogType=='detail'" />
@@ -131,7 +131,7 @@
       </el-form>
     </el-dialog>
     <!-- 关联设备弹框 -->
-    <el-dialog center :title="$t('关联机器')" :visible.sync="relationMachine">
+    <el-dialog v-dialogDrag center :title="$t('关联机器')" :visible.sync="relationMachine">
       <el-select v-model="checkedMachine" size="mini" :placeholder="$t('选择机器')">
         <el-option
           v-for="item in machineList"

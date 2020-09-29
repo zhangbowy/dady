@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="$t('修改密码')" :visible.sync="value" append-to-body modal-append-to-body width="40%" center :before-close="beforeClose">
+  <el-dialog v-dialogDrag :title="$t('修改密码')" :visible.sync="value" append-to-body modal-append-to-body width="40%" center :before-close="beforeClose">
     <el-form ref="form" :model="form" :rules="rules" size="small">
       <el-form-item :label="$t('旧登录密码')" prop="old_password">
         <el-input v-model="form.old_password" type="password" :placeholder="$t('请输入旧登录密码')" />
