@@ -17,6 +17,14 @@
             :value="item.value"
           />
         </el-select>
+        <el-cascader
+          v-model="category_id_list"
+          size="small"
+          :options="categoryList"
+          :props="optionProps"
+          :placeholder="$t('请选择商品分类')"
+          clearable
+        />
         <el-button size="small" icon="el-icon-search" type="primary" @click="fetchData">{{ $t('搜索') }}</el-button>
         <el-button size="small" icon="el-icon-refresh-right" @click="reset">{{ $t('重置') }}</el-button>
       </div>
@@ -204,7 +212,8 @@
 </template>
 
 <script>
-import { getList, deleteGoods, changeStatus } from '@/api/goods'
+import { getList, deleteGoods, changeStatus, Category } from '@/api/goods'
+
 export default {
   filters: {
     statusFilter(status) {
@@ -228,6 +237,8 @@ export default {
       goodsList: [],
       countsList: [],
       currentStatus: 0,
+      category_id_list: '',
+      categoryList: [],
       statusOption: [{
         value: -1,
         label: '全部'
@@ -241,12 +252,27 @@ export default {
         value: 3,
         label: '已上架'
       }],
+      optionProps: {
+        checkStrictly: true,
+        expandTrigger: 'hover',
+        value: 'id',
+        label: 'category_name'
+      },
       status: '',
       multipleSelection: []
     }
   },
+  computed: {
+    category_id() {
+      if (!Array.isArray(this.category_id_list)) {
+        return ''
+      }
+      return this.category_id_list[this.category_id_list.length - 1]
+    }
+  },
   created() {
     this.fetchData()
+    this.getFigureCategory()
   },
   methods: {
     onCardClick(count) {
@@ -258,6 +284,7 @@ export default {
     reset() {
       this.name = ''
       this.status = ''
+      this.category_id_list = ''
       this.fetchData(0)
     },
     fetchData() {
@@ -266,7 +293,8 @@ export default {
         name: this.keywords,
         pageSize: this.pageSize,
         currentPage: this.currentPage,
-        status: this.status
+        status: this.status,
+        category_id: this.category_id
       }).then(res => {
         this.loading = false
         this.goodsList = res.data.data
@@ -278,6 +306,11 @@ export default {
           type: 'info',
           message: `${this.$t('获取失败')}!`
         })
+      })
+    },
+    getFigureCategory() {
+      Category.getList().then(res => {
+        this.categoryList = res.data
       })
     },
     handleSelectionChange(val) {
