@@ -374,7 +374,7 @@ export default {
 }
 </style>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .logo-uploader{
     .el-upload {
       border: 1px dashed #d9d9d9;

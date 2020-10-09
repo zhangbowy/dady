@@ -222,7 +222,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .platform-setting{
   padding: 10px;
   .form-content-item{

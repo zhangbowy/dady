@@ -412,6 +412,7 @@ export default {
     }
     .selector {
       float: left;
+      margin-right: 10px;
     }
     .operation{
       position: relative;
