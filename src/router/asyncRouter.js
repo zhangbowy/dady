@@ -241,7 +241,7 @@ export const asyncRouter = [
       {
         pid: 8,
         id: 22,
-        path: '/machineManage',
+        path: 'machineManage',
         name: 'machineManage',
         component: () => import('@/views/systemSetup/machineManage/list'),
         meta: { title: '机器管理' }

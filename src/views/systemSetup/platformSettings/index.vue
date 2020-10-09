@@ -58,17 +58,17 @@
             align="center"
           >
             <template slot-scope="scope">
-              <div :style="{background: `rgb(${scope.row.rgb})`}">{{ scope.row.rgb }}</div>
+              <div :style="{background: `rgb(${scope.row.rgb})`, color: '#fff'}">{{ scope.row.rgb }}</div>
             </template>
           </el-table-column>
           <el-table-column
             prop="code"
-            label="Yes"
+            :label="$t('颜色代码')"
             align="center"
           />
           <el-table-column
             prop="brand"
-            label="Sakura"
+            :label="$t('品牌')"
             align="center"
             width="200"
           />
