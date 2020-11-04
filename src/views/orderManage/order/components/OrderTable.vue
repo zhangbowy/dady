@@ -106,6 +106,7 @@
                 <div v-if="item.status==7" class="operate-btn">
                   <p>{{ $t('已支付') }} {{ $t('待派单') }}</p>
                   <el-button
+                    v-has="506"
                     size="mini"
                     type="primary"
                     @click="dispatch(7, item)"
@@ -157,6 +158,7 @@
                 <div v-if="item.status==5" class="operate-btn">
                   <p>{{ $t('询价中') }}</p>
                   <el-button
+                    v-has="507"
                     size="mini"
                     type="primary"
                     @click="showReplay(item.id)"

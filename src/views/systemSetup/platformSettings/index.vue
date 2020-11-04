@@ -171,6 +171,7 @@ export default {
     },
     handleSizeChange(pageSize) {
       this.pageSize = pageSize
+      this.getColorList()
     },
     handleCurrentChange(currentPage) {
       this.currentPage = currentPage
