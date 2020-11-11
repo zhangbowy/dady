@@ -48,11 +48,17 @@
         <div class="tab-content">
           <el-row class="figure-data" type="flex">
             <el-col v-for="item in figureList" :key="item.design_id" class="list-item">
-              <el-card :body-style="{ padding: '0px' }" shadow="hover">
+              <el-card :body-style="{ padding: '0px' }" shadow="hover" class="figure-item">
                 <!-- <img v-lazy="item.prev_png_path" :src="item.prev_png_path" class="image"> -->
                 <el-image :key="item.design_id" class="image" :src="item.prev_png_path" lazy fit="contain" />
                 <div style="padding: 14px; font-szie: 12px">
                   <span>{{ item.design_name }}</span>
+                  <div class="figure-item_designer">
+                    <span>{{ item.designer.designer_name }}</span>
+                    <span class="designer_avatar">
+                      <img :src="item.designer.avatar_url" alt="">
+                    </span>
+                  </div>
                   <div class="bottom clearfix">
                     <span style="color: #F56C6C">{{ $t('￥') }}{{ item.price.toFixed(2) }}</span>
                   </div>
@@ -346,7 +352,30 @@ export default {
       }
     }
   }
-
+  .figure-item {
+    position: relative;
+    &_designer {
+      display: flex;
+      align-items: center;
+      .designer {
+        &_avatar {
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          overflow: hidden;
+          border: 0.02667rem solid #f5f5f5;
+          box-shadow: 0 0 0.53333rem #f3f3f3;
+          background: #fff;
+          margin-left: 4px;
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+        }
+      }
+    }
+  }
   .clearfix:before,
   .clearfix:after {
       display: table;
