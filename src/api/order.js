@@ -128,6 +128,16 @@ export const orderApi = {
       },
       data
     })
+  },
+  /**
+   * 取消下发
+   * @param { order_id  } data
+   */
+  cancelSendMachine(data) {
+    return request({
+      url: '/order/cancelSend',
+      method: 'post',
+      data
+    })
   }
-
 }

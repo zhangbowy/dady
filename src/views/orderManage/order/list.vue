@@ -107,23 +107,6 @@
         </el-col>
       </el-row>
     </div>
-    <el-dialog
-      v-dialogDrag
-      :title="$t('请选择机器')"
-      :visible.sync="dialogVisible"
-      width="30%"
-    >
-      <div>
-        <el-radio-group v-if="machineList.length" v-model="machine_id" size="small">
-          <el-radio v-for="machine in machineList" :key="machine.machine_code" :label="machine.machine_code" border>{{ machine.machine_name }}</el-radio>
-        </el-radio-group>
-        <span v-else>{{ $t('该定制分类没有关联任何机器') }}</span>
-      </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">{{ $t('取消') }}</el-button>
-        <el-button type="primary" @click="onDialogClick">{{ $t('确定') }}</el-button>
-      </span>
-    </el-dialog>
     <div class="content">
       <el-tabs v-model="activeName" v-loading="loading" type="card" @tab-click="handleClick">
         <el-tab-pane
@@ -133,12 +116,11 @@
           :name="`${item.status}`"
         />
         <div class="tab-content">
-          <order-table :data="orderList" @getList="getListData" @checkboxChange="onCheckboxChange" />
+          <order-table :data="orderList" :active-name="activeName" :custom-category-list="customCategoryList" @getList="getListData" @checkboxChange="onCheckboxChange" @reload="getListData" />
         </div>
       </el-tabs>
       <!-- 分页 -->
       <div class="pagination-box">
-        <el-button v-if="showIssuedBtn" type="primary" class="issued-btn" @click="onIssuedBtnClick">{{ $t('下发机器') }}</el-button>
         <el-pagination
           :total="total"
           :current-page="currentPage"
@@ -183,8 +165,6 @@ export default {
       orderList: [],
       shopsList: [],
       total_amount: 0,
-      machineList: [],
-      machine_id: 0,
       orderTypeOption: [{
         value: '1',
         label: '普通订单'
@@ -228,10 +208,7 @@ export default {
       checkedList: [],
       activeName: '0',
       orderCount: {},
-      showCustomCategory: true,
-      showIssuedBtn: false,
-      dialogVisible: false,
-      current_custom_category_id: 0
+      showCustomCategory: true
     }
   },
   computed: {
@@ -251,29 +228,6 @@ export default {
       handler(newValue, oldValue) {
         if (newValue === null) {
           this.formInline.pay_time = []
-        }
-      }
-    },
-    current_custom_category_id: {
-      handler(newValue, oldValue) {
-        if (newValue) {
-          this.customCategoryList.forEach(item => {
-            if (newValue === item.custom_category_id) {
-              this.machineList = item.machine || []
-              this.machineList.length && (this.machine_id = this.machineList[0].machine_code)
-              return
-            }
-          })
-        }
-      }
-    },
-    activeName: {
-      handler(newValue, oldValue) {
-        // 如果是下发机器，添加定制分类筛选框
-        if (newValue === '10') {
-          this.showIssuedBtn = true
-        } else {
-          this.showIssuedBtn = false
         }
       }
     }
@@ -313,23 +267,6 @@ export default {
     },
     onCheckboxChange(list) {
       this.checkedList = list
-    },
-    onDialogClick() {
-      if (this.machine_id) {
-        orderApi.sendMachine({
-          order_id: this.checkedList,
-          custom_template_id: this.current_custom_category_id,
-          machine_id: this.machine_id
-        }).then($data => {
-          this.$message({
-            message: this.$t($data.msg) || `${this.$t('操作成功')}!`,
-            type: 'success'
-          })
-          this.dialogVisible = false
-        })
-      } else {
-        this.dialogVisible = false
-      }
     },
     // 请求列表数据
     fetchData() {
@@ -380,56 +317,6 @@ export default {
       this.loading = true
       this.getOrderCount()
       this.fetchData()
-    },
-    onIssuedBtnClick() {
-      if (!this.checkedList.length) {
-        this.$message({
-          // title: `${this.$t('警告')}`,
-          message: `${this.$t('没有选择订单')}`,
-          type: 'warning'
-        })
-      } else {
-        const checkedOrderList = this.orderList.filter(item => {
-          return this.checkedList.includes(item.id)
-        })
-        if (checkedOrderList.length) {
-          const custom_category_id = checkedOrderList[0].custom_category_id
-          let is_same = true
-          checkedOrderList.forEach(item => {
-            if (item.custom_category_id !== custom_category_id) {
-              this.$message({
-                // title: `${this.$t('警告')}`,
-                message: `${this.$t('必须选择相同的定制分类')}`,
-                type: 'error'
-              })
-              is_same = false
-              return
-            }
-            if (item._logistics_type === `${this.$t('门店自提')}`) {
-              this.$message({
-                // title: `${this.$t('警告')}`,
-                message: `${this.$t('门店自提订单无法下发机器')}`,
-                type: 'error'
-              })
-              is_same = false
-              return
-            }
-          })
-          if (!custom_category_id) {
-            this.$message({
-              // title: `${this.$t('警告')}`,
-              message: `${this.$t('定制分类错误')}`,
-              type: 'error'
-            })
-            return
-          }
-          console.log(custom_category_id)
-          if (is_same) {
-            this.current_custom_category_id = custom_category_id
-            this.dialogVisible = true
-          }
-        }
-      }
     },
     // 执行搜索
     doSearch() {

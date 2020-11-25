@@ -19,8 +19,8 @@ export default {
     return {
       command: 'zh',
       langsType: {
-        'zh': 'English',
-        'en': '中文'
+        'zh': '选择语言',
+        'en': 'Languages'
       }
     }
   },

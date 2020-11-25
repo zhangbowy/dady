@@ -38,6 +38,7 @@
               <span>{{ $t(item._order_type) }}</span>
               <span>{{ item.created_at }}</span>
               <span v-if="item._logistics_type" style="color: orange;">{{ $t(item._logistics_type) }}</span>
+              <span v-if="item.status === 11" style="color: red;">{{ $t('机器码') }}: {{ item.machine_code }}{{ item.machine_name && ` (${item.machine_name})` }}</span>
               <div class="header-btn" :style="{marginLeft: '10px'}">
                 <el-button
                   v-if="item.order_type==2 || item.order_type==3 || item.order_type==4"
@@ -145,6 +146,15 @@
                     style="margin: 10px 0 0"
                     @click="conReceived(item.id, item._logistics_type)"
                   >{{ $t('确认完成') }}</el-button>
+                </div>
+                <div v-if="item.status==11" v-has="509" class="operate-btn">
+                  <el-button
+                    v-has="504"
+                    size="mini"
+                    type="primary"
+                    style="margin: 10px 0 0"
+                    @click="cancelDistribution(item.id)"
+                  >{{ $t('取消下发') }}</el-button>
                 </div>
                 <div v-if="item.status==4" class="operate-btn">
                   <p>{{ $t('交易完成') }}</p>
@@ -279,6 +289,28 @@
       </el-form>
     </el-dialog>
     <design-dialog v-model="designInfo" :info-item="designInfoItem" @close="designInfo = false" />
+    <el-dialog
+      v-dialogDrag
+      :title="$t('请选择机器')"
+      :visible.sync="dialogVisible"
+      width="30%"
+    >
+      <div>
+        <el-radio-group v-if="machineList.length" v-model="machine_id" size="small">
+          <el-radio v-for="machine in machineList" :key="machine.machine_code" :label="machine.machine_code" border>{{ machine.machine_name }}</el-radio>
+        </el-radio-group>
+        <span v-else>{{ $t('该定制分类没有关联任何机器') }}</span>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">{{ $t('取消') }}</el-button>
+        <el-button type="primary" @click="onDialogClick">{{ $t('确定') }}</el-button>
+      </span>
+    </el-dialog>
+    <div v-if="activeName === '10'" v-has="508" class="btn_group">
+      <el-button type="primary" class="issued-btn" @click="onIssuedBtnClick">{{ $t('下发机器') }}</el-button>
+      <el-button type="success" class="issued-btn" icon="el-icon-finished" @click="checkAll">{{ $t('全选') }}</el-button>
+      <el-button type="warning" class="issued-btn" icon="el-icon-close" @click="unCheckAll">{{ $t('取消全选') }}</el-button>
+    </div>
   </div>
 </template>
 
@@ -291,6 +323,7 @@ export default {
   components: {
     DesignDialog
   },
+  inject: ['reload'],
   filters: {
     statusFilter(status) {
       const statusMap = {
@@ -309,6 +342,14 @@ export default {
     data: {
       type: Array,
       default: () => []
+    },
+    activeName: {
+      type: String,
+      default: '1'
+    },
+    customCategoryList: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
@@ -324,7 +365,11 @@ export default {
       sendItem: {}, // 要发货的订单信息
       designerList: [], // 设计师团队
       checkedGoods: [],
+      machineList: [], // 机器列表
+      current_custom_category_id: 0,
       express_name: '',
+      dialogVisible: false,
+      machine_id: 0, // 机器id
       sendForm: {
         checkedGoods: [],
         express_id: '',
@@ -410,6 +455,24 @@ export default {
           this.$refs.sendForm.resetFields()
         }
       }
+    },
+    current_custom_category_id: {
+      handler(newValue, oldValue) {
+        if (newValue) {
+          this.customCategoryList.forEach(item => {
+            if (newValue === item.custom_category_id) {
+              this.machineList = item.machine || []
+              this.machineList.length && (this.machine_id = this.machineList[0].machine_code)
+              return
+            }
+          })
+        }
+      }
+    },
+    data: {
+      handler() {
+        this.checkList = []
+      }
     }
   },
   created() {
@@ -418,6 +481,89 @@ export default {
     this.getTeamList()
   },
   methods: {
+    onDialogClick() {
+      if (this.machine_id) {
+        orderApi.sendMachine({
+          order_id: this.checkList,
+          custom_template_id: this.current_custom_category_id,
+          machine_id: this.machine_id
+        }).then($data => {
+          this.$message({
+            message: this.$t($data.msg) || `${this.$t('操作成功')}!`,
+            type: 'success'
+          })
+          this.dialogVisible = false
+        })
+      } else {
+        this.dialogVisible = false
+      }
+    },
+    checkAll() {
+      this.checkList = this.data.map(item => item.id)
+    },
+    unCheckAll() {
+      this.checkList = []
+    },
+    onIssuedBtnClick() {
+      if (!this.checkList.length) {
+        this.$message({
+          // title: `${this.$t('警告')}`,
+          message: `${this.$t('没有选择订单')}`,
+          type: 'warning'
+        })
+      } else {
+        const checkedOrderList = this.data.filter(item => {
+          return this.checkList.includes(item.id)
+        })
+        if (checkedOrderList.length) {
+          const custom_category_id = checkedOrderList[0].custom_category_id
+          let is_same = true
+          checkedOrderList.forEach(item => {
+            if (item.custom_category_id !== custom_category_id) {
+              this.$message({
+                // title: `${this.$t('警告')}`,
+                message: `${this.$t('必须选择相同的定制分类')}`,
+                type: 'error'
+              })
+              is_same = false
+              return
+            }
+            if (item._logistics_type === `${this.$t('门店自提')}`) {
+              this.$message({
+                // title: `${this.$t('警告')}`,
+                message: `${this.$t('门店自提订单无法下发机器')}`,
+                type: 'error'
+              })
+              is_same = false
+              return
+            }
+          })
+          if (!custom_category_id) {
+            this.$message({
+              // title: `${this.$t('警告')}`,
+              message: `${this.$t('定制分类错误')}`,
+              type: 'error'
+            })
+            return
+          }
+          if (is_same) {
+            this.current_custom_category_id = custom_category_id
+            this.dialogVisible = true
+          }
+        }
+      }
+    },
+    cancelDistribution(orderId) {
+      orderApi.cancelSendMachine({ order_id: orderId }).then(res => {
+        if (res.code === 0) {
+          this.$emit('reload')
+          this.$message({
+            type: 'success',
+            message: this.$t(...res.msg)
+          })
+        }
+      })
+    },
     showDesign(orderDetail) {
       this.designInfo = true
       this.designInfoItem = orderDetail.order_item[0]
