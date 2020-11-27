@@ -22,6 +22,7 @@
   </div>
 </template>
 <script>
+import ImgApi from '@/api/common/image'
 import ImgUpload from '@/components/ImgUpload'
 import Editor from '@tinymce/tinymce-vue'
 import tinymce from 'tinymce/tinymce'
@@ -83,6 +84,26 @@ export default {
       paste_data_images: true, // 允许粘贴图像
       menubar: false, // 隐藏最上方menu
       language: 'zh_CN', // 中文
+      images_upload_handler: (blobInfo, succFun, failFun) => {
+        // 保存图片
+        const formData = new FormData()
+        const file = blobInfo.blob()
+        formData.append('image', file)
+        formData.append('gallery_group_id', 0)
+        ImgApi.addImage(formData).then(res => {
+          if (res.code !== 0) {
+            this.$message({
+              message: res.data.msg,
+              type: 'error'
+            })
+          } else {
+            this.$message({
+              message: this.$t('图片上传成功!'),
+              type: 'success'
+            })
+          }
+        })
+      },
       language_url: '/tinymce/langs/zh_CN.js',
       plugins: 'advlist table lists paste preview fullscreen',
       skin_url: '/tinymce/skins/ui/oxide/skin.min.css', // skin路径
