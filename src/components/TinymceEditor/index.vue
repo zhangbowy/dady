@@ -97,6 +97,7 @@ export default {
               type: 'error'
             })
           } else {
+            succFun('http://' + res.data.res.Location)
             this.$message({
               message: this.$t('图片上传成功!'),
               type: 'success'
