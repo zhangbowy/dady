@@ -257,7 +257,7 @@ export default {
     // 请求定制分类
     getCustomCategory() {
       customCateApi.getCategoryList().then(({ data }) => {
-        this.customCategoryList = data || []
+        this.customCategoryList = data.data || []
       })
     },
     // 定制分类改变
