@@ -404,7 +404,7 @@ export default {
     // 获取定制分类列表
     getCategoryList() {
       customCateApi.getCategoryList().then(res => {
-        this.customCategory = res.data
+        this.customCategory = res.data.data
       })
     },
     // 初始化商品详情
