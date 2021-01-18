@@ -256,7 +256,7 @@ export default {
     },
     // 请求定制分类
     getCustomCategory() {
-      customCateApi.getCategoryList().then(({ data }) => {
+      customCateApi.getCategoryList({ pageSize: 9999 }).then(({ data }) => {
         this.customCategoryList = data.data || []
       })
     },

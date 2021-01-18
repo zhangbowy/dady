@@ -403,7 +403,7 @@ export default {
     },
     // 获取定制分类列表
     getCategoryList() {
-      customCateApi.getCategoryList().then(res => {
+      customCateApi.getCategoryList({ pageSize: 9999 }).then(res => {
         this.customCategory = res.data.data
       })
     },
