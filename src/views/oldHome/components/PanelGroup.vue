@@ -3,7 +3,7 @@
   <el-row :gutter="40" class="panel-group">
     <el-row>
       <el-col>
-        <span class="data-title">数据概览</span>
+        <span class="data-title">{{ $t('数据概览') }}</span>
       </el-col>
     </el-row>
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
@@ -13,7 +13,7 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            总文章数
+            {{ $t('用户数量') }}
           </div>
           <count-to :start-val="0" :end-val="panelData.user_count" :duration="2600" class="card-panel-num" />
         </div>
@@ -22,11 +22,11 @@
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-pattern">
-          <svg-icon icon-class="release" class-name="card-panel-icon" />
+          <svg-icon icon-class="pattern" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            待发布文章
+            {{ $t('花样数量') }}
           </div>
           <count-to :start-val="0" :end-val="panelData.design_count" :duration="3000" class="card-panel-num" />
         </div>
@@ -35,11 +35,11 @@
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-shopping">
-          <svg-icon icon-class="released" class-name="card-panel-icon" />
+          <svg-icon icon-class="shopping" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            已发布文章
+            {{ $t('商品数量') }}
           </div>
           <count-to :start-val="0" :end-val="panelData.gooods_count" :duration="3600" class="card-panel-num" />
         </div>
@@ -48,11 +48,11 @@
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-money">
-          <svg-icon icon-class="delete" class-name="card-panel-icon" />
+          <svg-icon :icon-class="$t('money')" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            已删除文章
+            {{ $t('总销售额') }}
           </div>
           <count-to :start-val="0" :end-val="panelData.total_order_amount" :decimals="2" :duration="3200" class="card-panel-num" />
         </div>

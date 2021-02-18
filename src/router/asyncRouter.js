@@ -60,7 +60,7 @@ export const asyncRouter = [
   //   component: Layout,
   //   alwaysShow: true,
   //   redirect: '/commodity/goodsCategory',
-  //   meta: { title: '商品管理', icon: 'goods' },
+  //   meta: { title: '文章', icon: 'goods' },
   //   children: [{
   //     pid: 4,
   //     id: 13,
