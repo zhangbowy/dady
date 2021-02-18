@@ -32,7 +32,7 @@ const permission = {
             item.children = item.children.filter(child => {
               return userPermission.indexOf(child.id) > -1
             })
-            item.redirect = item.children[0] ? `${item.path}/${item.children[0].path}` : ''
+            item.redirect = item.children[0] ? `${item.path === '/' ? '' : item.path}/${item.children[0].path}` : ''
           }
         })
         // accessedRouters = asyncRouter

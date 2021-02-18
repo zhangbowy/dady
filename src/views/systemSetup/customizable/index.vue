@@ -162,6 +162,18 @@
         </el-table-column>
       </el-table>
     </el-dialog>
+    <!-- 分页 -->
+    <div class="pagination-box">
+      <el-pagination
+        :total="total"
+        :current-page="currentPage"
+        :page-sizes="[5, 10, 50, 100]"
+        :page-size="pageSize"
+        layout="slot, total, sizes, prev, pager, next, jumper"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
+    </div>
   </div>
 </template>
 
@@ -207,7 +219,10 @@ export default {
       dialogType: 'add',
       itemMachine: [], // 分类绑定的机器列表
       checkedItem: {}, // 关联设备按钮选中的分类信息
-      checkedMachine: '' // select选中的设备
+      checkedMachine: '', // select选中的设备，
+      pageSize: 10,
+      currentPage: 1,
+      total: 2
     }
   },
   watch: {
@@ -252,9 +267,10 @@ export default {
   methods: {
     fetchData() {
       // 获取分类列表
-      customCateApi.getCategoryList().then(res => {
+      customCateApi.getCategoryList({ currentPage: this.currentPage, pageSize: this.pageSize }).then(res => {
         this.loading = false
-        this.categoryList = res.data
+        this.categoryList = res.data.data
+        this.total = res.data.count
       }).catch(() => {
         this.loading = false
       })
@@ -435,6 +451,16 @@ export default {
     onDialogOpen() {
       // console.log('open')
       this.form = Object.assign({}, this.form)
+    },
+    // 分页当前页改变
+    handleCurrentChange(val) {
+      this.currentPage = val
+      this.fetchData()
+    },
+    // 分页大小改变
+    handleSizeChange(val) {
+      this.pageSize = val
+      this.fetchData()
     }
   }
 }
