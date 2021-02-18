@@ -15,15 +15,7 @@
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
           <el-dropdown-item class="dropdown-item">
-            <div v-if="adminInfo.role_type!=1" class="shop-info">
-              {{ `${$t('店铺')}${$t('：')}` }}<span>{{ adminInfo.shop_name }}</span>
-            </div>
-          </el-dropdown-item>
-          <el-dropdown-item class="dropdown-item">
             <p>{{ `${$t('账号')}${$t('：')}` }}{{ adminInfo.phone }}</p>
-          </el-dropdown-item>
-          <el-dropdown-item v-if="adminInfo.role_type!=1" class="dropdown-item">
-            {{ `${$t('有效期')}${$t('：')}` }}<span style="color: #f4516c">[{{ adminInfo.system_end_time }}]</span>
           </el-dropdown-item>
           <el-dropdown-item divided style="text-align:center" @click.native="showChange = true">
             {{ $t('修改密码') }}
@@ -166,7 +158,7 @@ export default {
     text-align: center;
     p{
       height: auto;
-      margin: 0
+      margin: 0;
     }
   }
 }
