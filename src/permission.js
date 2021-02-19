@@ -1,5 +1,5 @@
 import router from './router'
-import store from './store'
+// import store from './store'
 // import { Message } from 'element-ui'
 import NProgress from 'nprogress' // 进度条
 import 'nprogress/nprogress.css' // 进度条样式
@@ -19,40 +19,41 @@ router.beforeEach(async(to, from, next) => {
 
   // 确定用户是否已登录
   const token = getToken()
-  console.log(token, 'token')
   if (token) {
     if (to.path === '/login') {
       // 如果已经登录，重定向到首页
-      next({ path: '/' })
       NProgress.done()
+      next({ path: '/' })
     } else {
-      // next()
+      next()
       // 判断vuex里边是否有权限表
-      if (store.getters.permission.length > 0) {
-        next()
-      } else {
-        // 没有请求用户信息，获取权限表
-        store.dispatch('user/getInfo').then(async res => {
-          const permission = res.authority_list
-          // 获取语言包
-          await store.dispatch('settings/getLanguage', { currentPage: 1, pageSize: 1000, platform: 1 })
-          store.dispatch('GenerateRoutes', permission).then(() => { // 根据roles权限生成可访问的路由表
-            router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
-            if (from.path !== '/login') {
-              next({ ...to, replace: true }) // hack方法 确保addRoutes已完成
-            } else {
-              next({ path: store.getters.addRouters[0].path, replace: true }) // hack方法 确保addRoutes已完成
-            }
-          })
-        }).catch((err) => {
-          console.log(err)
-          // store.dispatch('user/logout').then(() => {
-          //   store.dispatch('user/resetToken')
-          //   // Message.error(err || '验证失败，请重新登陆')
-          //   next({ path: '/' })
-          // })
-        })
-      }
+      // if (store.getters.permission.length > 0) {
+      //   console.log(store.getters.permission.length, 'store.getters.permission.length')
+      //   next()
+      // } else {
+      //   // 没有请求用户信息，获取权限表
+      //   store.dispatch('user/getInfo').then(async res => {
+      //     const permission = res.authority_list
+      //     // 获取语言包
+      //     // await store.dispatch('settings/getLanguage', { currentPage: 1, pageSize: 1000, platform: 1 })
+      //     store.dispatch('GenerateRoutes', permission).then(() => { // 根据roles权限生成可访问的路由表
+      //       router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
+      //       console.log(router)
+      //       if (from.path !== '/login') {
+      //         next({ ...to, replace: true }) // hack方法 确保addRoutes已完成
+      //       } else {
+      //         next({ path: store.getters.addRouters[0].path, replace: true }) // hack方法 确保addRoutes已完成
+      //       }
+      //     })
+      //   }).catch((err) => {
+      //     console.log(err)
+      //     // store.dispatch('user/logout').then(() => {
+      //     //   store.dispatch('user/resetToken')
+      //     //   // Message.error(err || '验证失败，请重新登陆')
+      //     //   next({ path: '/' })
+      //     // })
+      //   })
+      // }
     }
   } else {
   /* 没有token*/

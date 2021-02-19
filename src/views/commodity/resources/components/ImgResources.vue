@@ -704,6 +704,11 @@ export default {
         width:100%;
       }
     }
+    ::v-deep .el-image {
+      img {
+        object-fit: cover;
+      }
+    }
     .img-list{
       display: flex;
       flex-flow: wrap;
@@ -721,6 +726,7 @@ export default {
         img{
           width: 100%;
           height: 180px;
+          object-fit: contain;
         }
       }
     }

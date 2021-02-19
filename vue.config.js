@@ -2,6 +2,7 @@
 const path = require('path')
 const defaultSettings = require('./src/settings.js')
 const WebpackBar = require('webpackbar')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 function resolve(dir) {
   return path.join(__dirname, dir)
@@ -49,7 +50,10 @@ module.exports = {
       }
     },
     plugins: [
-      new WebpackBar()
+      new WebpackBar(),
+      new BundleAnalyzerPlugin({
+        analyzerPort: 9999
+      })
     ]
   },
   chainWebpack(config) {

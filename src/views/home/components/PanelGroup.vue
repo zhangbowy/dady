@@ -26,7 +26,7 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            待发布文章
+            草稿
           </div>
           <count-to :start-val="0" :end-val="panelData.design_count" :duration="3000" class="card-panel-num" />
         </div>
@@ -52,7 +52,7 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            已删除文章
+            废纸篓文章
           </div>
           <count-to :start-val="0" :end-val="panelData.total_order_amount" :decimals="2" :duration="3200" class="card-panel-num" />
         </div>

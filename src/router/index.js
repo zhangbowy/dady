@@ -13,13 +13,6 @@ export const constantRoutes = [
     component: () => import('@/views/login/index'),
     hidden: true
   },
-
-  {
-    path: '/404',
-    component: () => import('@/views/404'),
-    hidden: true
-  },
-
   {
     pid: 0,
     id: 1,
@@ -37,32 +30,24 @@ export const constantRoutes = [
   },
 
   {
-    pid: 0,
-    id: 4,
+    pid: 10,
+    id: 10,
     path: '/management',
     component: Layout,
     alwaysShow: true,
     redirect: '/management/articleCategory',
     meta: { title: '文章管理', icon: 'all' },
     children: [{
-      pid: 4,
-      id: 13,
+      pid: 10,
+      id: 10,
       path: 'articleCategory',
       name: 'ArticleCategory',
       component: () => import('@/views/management/articleCategory/index'),
       meta: { title: '文章分类' }
     },
     {
-      pid: 4,
-      id: 13,
-      path: 'draft',
-      name: 'Draft',
-      component: () => import('@/views/management/draft/index'),
-      meta: { title: '草稿箱' }
-    },
-    {
-      pid: 4,
-      id: 14,
+      pid: 10,
+      id: 10,
       path: 'article',
       name: 'Article',
       redirect: '/management/article/list',
@@ -70,24 +55,24 @@ export const constantRoutes = [
       meta: { title: '文章列表' },
       children: [
         {
-          pid: 4,
-          id: 14,
+          pid: 10,
+          id: 10,
           path: 'list',
           name: 'ArticleList',
           hidden: true,
           component: () => import('@/views/management/article/list'),
           meta: { activeMenu: '/management/article' }
         }, {
-          pid: 4,
-          id: 15,
+          pid: 10,
+          id: 10,
           path: 'edit:id(\\d+)?',
           name: 'GoodsEdit',
           hidden: true,
           component: () => import('@/views/management/article/edit'),
           meta: { title: '文章编辑', activeMenu: '/management/article' }
         }, {
-          pid: 4,
-          id: 16,
+          pid: 10,
+          id: 10,
           path: 'detail:id(\\d+)?',
           name: 'GoodsDetail',
           hidden: true,
@@ -96,21 +81,26 @@ export const constantRoutes = [
         }
       ]
     }, {
-      pid: 4,
-      id: 17,
+      pid: 10,
+      id: 10,
       path: 'resources',
       name: 'Resources',
       component: () => import('@/views/management/resources'),
       meta: { title: '我的资源', activeMenu: '/management/resources' }
     },
     {
-      pid: 4,
-      id: 36,
+      pid: 10,
+      id: 10,
       path: 'import',
       name: 'Import',
       component: () => import('@/views/management/import/index'),
       meta: { title: '文章导入', activeMenu: '/management/import' }
     }]
+  },
+  {
+    path: '/404',
+    component: () => import('@/views/404'),
+    hidden: true
   }
 ]
 

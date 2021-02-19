@@ -1,36 +1,39 @@
 <template>
   <div class="goods-edit">
     <div class="title-info">
-      <card-tag :tag-name="id!=''? `${$t('编辑商品')}`: `${$t('新增商品')}`" />
+      <card-tag :tag-name="id!=''? `${'编辑文章'}`: `${'新增文章'}`" />
     </div>
     <!-- 表单部分 -->
     <div class="form-info">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px" label-position="top" size="small">
         <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-          <el-tab-pane :label="$t('基本信息')" name="1">
+          <el-tab-pane label="基本信息" name="1">
             <div class="form-content-item">
-              <div class="block-title"><card-tag :tag-name="$t('基本信息')" /></div>
+              <div class="block-title"><card-tag tag-name="基本信息" /></div>
               <div class="block-content">
-                <el-form-item :label="$t('商品标题')" prop="name">
-                  <el-input v-model="form.name" />
+                <el-form-item label="文章作者" prop="author">
+                  <el-input v-model="form.author" />
                 </el-form-item>
-                <el-form-item :label="$t('分享描述')" prop="desc">
-                  <el-input v-model="form.desc" />
+                <el-form-item label="文章标题" prop="title">
+                  <el-input v-model="form.title" />
                 </el-form-item>
-                <el-form-item :label="$t('商品图片')">
+                <el-form-item label="文章摘要" prop="summary">
+                  <el-input v-model="form.summary" type="textarea" :rows="2" placeholder="请输入文章摘要" />
+                </el-form-item>
+                <el-form-item label="封面图片">
                   <img-upload
-                    :img-data="form.images"
-                    :pic-max="5"
+                    :img-data="form.cover_image"
+                    :pic-max="1"
                     @chooseImg="imageChoose"
                     @changePsit="changeImg"
                   />
                 </el-form-item>
-                <el-form-item :label="$t('商品分类')" prop="category_id">
+                <el-form-item label="文章分类" prop="category_id">
                   <el-cascader
-                    v-model="form.category_id_list"
+                    v-model="category_id_list"
                     :options="categories"
                     :props="optionProps"
-                    :placeholder="$t('选择商品分类')"
+                    placeholder="选择文章分类"
                     clearable
                     @change="onCascaderChange"
                   />
@@ -38,71 +41,66 @@
               </div>
             </div>
             <div class="form-content-item">
-              <div class="block-title"><card-tag :tag-name="$t('开启定制')" /></div>
+              <div class="block-title"><card-tag tag-name="开启SEO" /></div>
               <div class="block-content">
-                <el-form-item label="">
-                  <el-switch
-                    v-model="form.is_custom"
-                    :active-text="$t('开启')"
-                    :inactive-text="$t('关闭')"
-                    :active-value="1"
-                    :inactive-value="0"
-                  />
-                  <el-select v-model="form.custom_category_id" :placeholder="$t('请选择定制分类')" :disabled="form.is_custom==0">
-                    <el-option
-                      v-for="item in customCategory"
-                      :key="item.custom_category_id"
-                      :label="item.custom_category_name"
-                      :value="item.custom_category_id"
+                <el-form-item label="标题">
+                  <el-input v-model="form.seo_title" type="text" placeholder="请输入SEO标题" style="width: 15%; margin-top: 10px" />
+                </el-form-item>
+                <el-form-item label="描述">
+                  <el-input v-model="form.seo_desc" type="textarea" :rows="2" placeholder="请输入SEO描述" style="width: 35%; margin-top: 10px" />
+                </el-form-item>
+                <el-form-item label="关键字">
+                  <div style="margin-top: 10px">
+                    <el-tag
+                      v-for="(tag, index) in keysList"
+                      :key="`${tag}${index}`"
+                      closable
+                      :disable-transitions="false"
+                      @close="handleClose(tag)"
+                    >
+                      {{ tag }}
+                    </el-tag>
+                    <el-input
+                      v-if="inputVisible"
+                      ref="saveTagInput"
+                      v-model="inputValue"
+                      class="input-new-tag"
+                      size="small"
+                      style="width: 10%;"
+                      @keyup.enter.native="handleInputConfirm"
+                      @blur="handleInputConfirm"
                     />
-                  </el-select>
+                    <el-button v-else class="button-new-tag" size="small" @click="showInput">新增</el-button>
+                  </div>
                 </el-form-item>
               </div>
             </div>
             <div class="form-content-item">
-              <div class="block-title"><card-tag :tag-name="$t('开启预售')" /></div>
+              <div class="block-title"><card-tag tag-name="开启热榜" /></div>
               <div class="block-content">
                 <el-form-item label="">
                   <el-switch
-                    v-model="form.is_presell"
-                    :active-text="$t('开启')"
-                    :inactive-text="$t('关闭')"
+                    v-model="form.hasWeigth"
+                    active-text="开启"
+                    inactive-text="关闭"
                     :active-value="1"
                     :inactive-value="0"
                   />
                 </el-form-item>
-              </div>
-            </div>
-            <div class="form-content-item">
-              <div class="block-title"><card-tag :tag-name="$t('物流信息')" /></div>
-              <div class="block-content">
-                <el-form-item :label="$t('物流设置')">
-                  <el-radio-group v-model="form.express_type">
-                    <el-radio :label="0">{{ $t('包邮') }}</el-radio>
-                    <el-radio :label="1" style="margin-right: 0">{{ `${$t('统一运费')}${$t('：')}` }} </el-radio>
-                    <el-input v-model="form.express_fee" type="number" style="width: 25%; margin-right: 30px" :disabled="form.express_type!=1">
-                      <template slot="append">{{ $t('元') }}</template>
-                    </el-input>
-                    <el-radio :label="2" style="margin-right: 0">{{ `${$t('物流模板')}${$t('：')}` }}  </el-radio>
-                    <el-select v-model="form.express_template_id" :placeholder="$t('请选择物流模板')" :disabled="form.express_type!=2">
-                      <el-option
-                        v-for="item in expressList"
-                        :key="item.express_template_id"
-                        :label="item.express_template_name"
-                        :value="item.express_template_id"
-                      />
-                    </el-select>
-                  </el-radio-group>
+                <el-form-item label="权重">
+                  <el-input v-model="form.weight" type="number" placeholder="请输入权重值" style="width: 15%; margin-right: 30px" />
                 </el-form-item>
               </div>
             </div>
+          </el-tab-pane>
+          <el-tab-pane label="文章内容" name="2">
             <div class="form-content-item">
-              <div class="block-title"><card-tag :tag-name="$t('商品详情')" /></div>
+              <div class="block-title"><card-tag tag-name="文章内容" /></div>
               <el-form-item style="padding:10px 10px">
                 <tinymce-editor
                   ref="editor"
-                  v-model="form.detail"
-                  :value="form.detail"
+                  v-model="form.content"
+                  :value="form.content"
                   @onClick="onClick"
                 />
                 <!-- <Tinymce ref="editor" v-model="form.detail" :height="400" /> -->
@@ -110,134 +108,14 @@
               </el-form-item>
             </div>
           </el-tab-pane>
-          <el-tab-pane :label="$t('商品规格')" name="2">
-            <!-- sku规格部分 -->
-            <div class="sku_container">
-              <div v-for="(spec, index) in specification" :key="spec.id" class="sku_group mb10">
-                <div class="spec_title">
-                  <span class="label">{{ `${$t('规格名')}${$t('：')}` }}</span>
-                  <el-input v-model.trim="spec.value" class="input" :placeholder="$t('请输入规格名')" />
-                  <span class="remove" @click="delSepc(index)">x</span>
-                </div>
-                <div class="group_container">
-                  <span class="label">{{ `${$t('规格值')}${$t('：')}` }}</span>
-                  <el-popover
-                    v-for="(option, option_index) in spec.leaf"
-                    :key="option_index"
-                    placement="bottom"
-                    width="120"
-                    trigger="click"
-                  >
-                    <el-input v-model.trim="option.value" style="width: 110px;" />
-                    <div slot="reference" class="sku_item">
-                      <span class="remove" @click.stop="delOption(index, option_index)">x</span>
-                      <div class="text">{{ option.value }}</div>
-                    </div>
-                  </el-popover>
-                  <el-input
-                    v-model="addValues[index]"
-                    class="input"
-                    uffix-icon="el-icon-plus"
-                    :placeholder="$t('多个产品属性以空格隔开')"
-                    @keyup.native.enter="addOption(index)"
-                    @blur="addOption(index)"
-                  />
-                </div>
-              </div>
-              <div class="spec_title">
-                <el-button type="info" :disabled="disabled" @click="addSpec">{{ $t('添加规格项目') }}</el-button>
-              </div>
-            </div>
-
-            <!-- <div class="sku_container">
-              <sku-select :skus-data="specificationFilter" />
-            </div> -->
-            <div class="sku_container">
-              <sku-table ref="skutable" :skus-data="specificationFilter" />
-              <!-- <vue-json-pretty :data="specificationFilter" /> -->
-            </div>
-            <!-- 价格部分 -->
-            <div class="form-content-item">
-              <div class="block-title"><card-tag :tag-name="$t('价格库存')" /></div>
-              <div v-if="skuList.length>0" class="block-content">
-                <el-form-item :label="$t('商品原价')" prop="old_price">
-                  <el-input v-model="form.old_price">
-                    <template slot="append">{{ $t('元') }}</template>
-                  </el-input>
-                </el-form-item>
-                <el-form-item :label="$t('商品现价')" prop="current_price">
-                  <el-input v-model="priceInfo.minPrice" :disabled="skuList.length>0" :max="form.old_price">
-                    <template slot="append">{{ $t('元') }}</template>
-                  </el-input>
-                  <p style="margin:0;color:#F56C6C"> {{ $t('注：含sku的商品，商品现价取sku价格最小值') }}。</p>
-                </el-form-item>
-                <el-form-item :label="$t('商品库存')">
-                  <el-input v-model="priceInfo.totalNum" :disabled="skuList.length>0">
-                    <template slot="append">{{ $t('件') }}</template>
-                  </el-input>
-                </el-form-item>
-                <el-form-item :label="$t('商品重量')">
-                  <el-input v-model="priceInfo.minWeight" :disabled="skuList.length>0">
-                    <template slot="append">{{ $t('千克') }}</template>
-                  </el-input>
-                </el-form-item>
-              </div>
-              <div v-else class="block-content">
-                <el-form-item :label="$t('商品原价')" prop="old_price">
-                  <el-input v-model="form.old_price">
-                    <template slot="append">{{ $t('元') }}</template>
-                  </el-input>
-                </el-form-item>
-                <el-form-item :label="$t('商品现价')" prop="current_price">
-                  <el-input v-model="form.current_price" :max="form.old_price">
-                    <template slot="append">{{ $t('元') }}</template>
-                  </el-input>
-                </el-form-item>
-                <el-form-item :label="$t('商品库存')" prop="sum_stock">
-                  <el-input v-model="form.sum_stock">
-                    <template slot="append">{{ $t('件') }}</template>
-                  </el-input>
-                </el-form-item>
-                <el-form-item :label="$t('商品重量')" prop="weight">
-                  <el-input v-model="form.weight">
-                    <template slot="append">{{ $t('千克') }}</template>
-                  </el-input>
-                </el-form-item>
-              </div>
-            </div>
-            <div class="form-content-item">
-              <div class="block-title"><card-tag :tag-name="$t('小批量定制')" /></div>
-              <div class="block-content">
-                <el-form-item v-for="(item, index) in batchRules" :key="index" prop="old_price">
-                  <el-col :span="8">
-                    <el-col class="line" :span="4">{{ $t('商品数量') }}</el-col>
-                    <el-form-item prop="date1">
-                      <el-input v-model="item.number">
-                        <template slot="append">{{ $t('件') }}</template>
-                      </el-input>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="8">
-                    <el-col class="line" :span="4">{{ $t('商品价格') }}</el-col>
-                    <el-form-item prop="date2">
-                      <el-input v-model="item.price" />
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="8">
-                    <!-- <el-button v-if="!item.isSave" class="batch-rules-btn" icon="el-icon-check" size="mini" circle @click="onBatchRulesSave(index)" /> -->
-                    <el-button class="batch-rules-btn" icon="el-icon-close" size="mini" circle @click="onBatchRulesDelete(index)" />
-                  </el-col>
-                </el-form-item>
-              </div>
-              <div class="spec_title">
-                <el-button type="info" @click="onBatchRulesAdd">{{ $t('添加批量定制规则') }}</el-button>
-              </div>
-            </div>
-          </el-tab-pane>
         </el-tabs>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit('form')">{{ $t('保存') }}</el-button>
-          <el-button @click="()=>this.$router.go(-1)">{{ $t('取消') }}</el-button>
+          <el-button
+            type="success"
+            @click.stop="onSubmit('form', true)"
+          >保存并发布</el-button>
+          <el-button type="primary" @click="onSubmit('form')">保存</el-button>
+          <el-button @click="()=>this.$router.go(-1)">取消</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -249,74 +127,49 @@ import CardTag from '@/components/CardTag'
 // import { mavonEditor } from 'mavon-editor' // 富文本编辑器
 import TinymceEditor from '@/components/TinymceEditor'
 import ImgUpload from '@/components/ImgUpload' // 图片上传
-import SkuTable from '@/components/VueSku/sku-table' // skulist
+
 import { createUniqueString, uniqueArr } from '@/utils'
-import { addGood, editGood, goodDetail, Category } from '@/api/goods'
-import { mapGetters } from 'vuex'
-import { expressApi, customCateApi } from '@/api/system'
+import { Category } from '@/api/goods'
+import { articleApi } from '@/api/management'
 export default {
   components: {
     CardTag,
     ImgUpload,
-    SkuTable,
     TinymceEditor
   },
   data() {
-    var validateCPrice = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error(`${this.$t('请输入商品现价')}`))
-      } else if (parseFloat(value) > parseFloat(this.form.old_price)) {
-        callback(new Error(`${this.$t('商品现价不得高于原价')}`))
-      } else {
-        callback()
-      }
-    }
     return {
       id: '',
       picMax: 5, // 图片上传
       activeName: '1',
+      keysList: [], // 分类列表
+      inputVisible: false,
+      inputValue: '',
+      category_id_list: [],
       form: {
-        name: '', // 标题
-        old_price: '', // 原价
-        desc: '', // 分享描述
-        current_price: '', // 当前价格
-        sum_stock: '', // 库存
-        weight: '', // 重量
-        images: [], // 主图
-        sku_show: '', // 规则
-        sku_list: '', // 规则列表
+        article_id: '',
+        title: '', // 标题
+        author: '', // 作者
+        summary: '', // 摘要
+        cover_image: [], // 文章封面
+        seo_title: '', // seo标题
+        seo_desc: '', // seo描述
+        seo_keywords: '', // seo关键字
         category_id: '', // 分类
-        category_id_list: '', // 分类列表
-        express_type: 0, // 物流类型
-        freight: '', // 运费
-        logisticsTemplate: '', // 物流模板id
-        detail: '', // 描述
-        is_presell: 0,
-        item_price_template: ''
+        weight: 0, // 开启热榜时的权重
+        hasWeigth: false
       },
       batchRules: [],
       rules: {
-        name: [
-          { required: true, message: `${this.$t('请输入商品名称')}`, trigger: 'blur' },
-          { max: 100, message: `${this.$t('长度不超过{0}个字符', [100])}`, trigger: 'blur' }
+        title: [
+          { required: true, message: '请输入文章标题', trigger: 'blur' },
+          { max: 100, message: '长度不超过100个字符', trigger: 'blur' }
         ],
-        old_price: [
-          { required: true, message: `${this.$t('请输入商品原价')}`, trigger: 'blur' }
-        ],
-        sum_stock: [
-          { required: true, message: `${this.$t('请输入商品库存')}`, trigger: 'blur' }
-        ],
-        weight: [
-          { required: true, message: `${this.$t('请输入商品重量')}`, trigger: 'blur' }
-        ],
-        current_price: [
-          { validator: validateCPrice, trigger: 'blur' }
-        ],
-        images: [
-          { required: true, message: `${this.$t('请上传商品主图')}`, trigger: 'blur' }
+        author: [
+          { required: true, message: '请输入作者姓名', trigger: 'blur' }
         ],
         category_id: [
-          { required: true, message: `${this.$t('请选择分类')}`, trigger: 'change' }
+          { required: true, message: '请选择分类', trigger: 'change' }
         ]
       },
       categories: [], // 商品分类
@@ -333,29 +186,34 @@ export default {
       specification: [] // 规格数组
     }
   },
-  computed: {
-    ...mapGetters([
-      'skuList',
-      'priceInfo'
-    ]),
-    disabled() {
-      return this.specification.length > 3 || this.specification.some(item => !item.value)
-    },
-    // 过滤掉属性名和属性值为空的数据规格项目
-    specificationFilter() {
-      return this.specification.filter(item => item.value && item.leaf.length)
-    }
-  },
   created() {
     this.getCategory()
-    this.getExpressList()
-    this.getCategoryList()
     this.id = this.$route.query.id ? this.$route.query.id : ''
     if (this.$route.query.id) {
       this.fetchData(this.$route.query.id)
     }
   },
   methods: {
+    handleClose(tag) {
+      this.keysList.splice(this.keysList.indexOf(tag), 1)
+    },
+
+    showInput() {
+      this.inputVisible = true
+      this.$nextTick(_ => {
+        this.$refs.saveTagInput.$refs.input.focus()
+      })
+    },
+
+    handleInputConfirm() {
+      const inputValue = this.inputValue
+      if (inputValue) {
+        this.keysList.push(inputValue)
+        this.form.seo_keywords = this.keysList.join(',')
+      }
+      this.inputVisible = false
+      this.inputValue = ''
+    },
     onCascaderChange(val) {
       this.form.category_id = val[val.length - 1]
     },
@@ -365,7 +223,7 @@ export default {
     //   this.form.item_price_template = JSON.stringify(batchRulesList)
     //   this.$message({
     //     type: 'success',
-    //     message: `${this.$t('保存成功')}!`
+    //     message: '保存成功'
     //   })
     // },
     // 删除批量规则
@@ -378,7 +236,7 @@ export default {
       this.batchRules.splice(index, 1)
       this.$message({
         type: 'success',
-        message: `${this.$t('删除成功')}!`
+        message: '删除成功'
       })
     },
     // 添加批量规则
@@ -395,89 +253,53 @@ export default {
         this.categories = res.data
       })
     },
-    // 获取物流模板
-    getExpressList() {
-      expressApi.getExpressList().then(res => {
-        this.expressList = res.data.data
-      })
-    },
-    // 获取定制分类列表
-    getCategoryList() {
-      customCateApi.getCategoryList({ pageSize: 9999 }).then(res => {
-        this.customCategory = res.data.data
-      })
-    },
     // 初始化商品详情
     fetchData(id) {
-      goodDetail({
-        id: id
+      articleApi.articleDetail({
+        article_id: id
       }).then(res => {
         this.form = res.data
-        this.form.images = res.data.images
-        this.$refs.skutable.data = res.data.sku_list
-        this.specification = res.data.sku_show
-        this.form.sku_show = res.data.sku_show
-        this.form.sku_list = res.data.sku_list
-        this.form.category_id_list = res.data.category_id
-        this.item_price_template = res.data.item_price_template
-        this.batchRules = JSON.parse(res.data.item_price_template) || []
+        this.form.article_id = id
+        this.category_id_list = [res.data.category_id]
+        this.keysList = res.data.seo_keywords ? res.data.seo_keywords.split(',') : []
+        this.form.cover_image = [res.data.cover_image]
         // console.log(this.form.sku_list)
       })
     },
     // 提交按钮
-    onSubmit(formName) {
+    onSubmit(formName, isPublish) {
       const _this = this
-      if (this.skuList.length > 0) {
-        _this.form.current_price = this.priceInfo.minPrice
-        _this.form.weight = this.priceInfo.minWeight
-        _this.form.sum_stock = this.priceInfo.totalNum
-      }
-      // _this.form.category_id = _this.form.category_id_list[_this.form.category_id_list.length - 1]
+      _this.form.category_id = _this.category_id_list[_this.category_id_list.length - 1]
+      _this.form.cover_image = _this.form.cover_image[0]
+      _this.form.is_publish = !!isPublish
       _this.$refs[formName].validate((valid) => {
         if (valid) {
-          _this.form.sku_list = this.skuList // 取store里面的skuList
-          _this.form.sku_show = _this.specificationFilter
-          let hasEmpty = true
-          Array.isArray(this.batchRules) && this.batchRules.forEach(item => {
-            if (!item.number && !item.price) {
-              hasEmpty = false
-              return
-            }
-          })
-          if (!hasEmpty) {
-            this.$message({
-              message: `${this.$t('请填写正确的小批量定制规则')}!`
+          if (_this.form.article_id) {
+            articleApi.editArticle(_this.form).then(res => {
+              if (res.code === 0) {
+                this.$message({
+                  type: 'success',
+                  message: res.msg || '修改成功'
+                })
+                // 重置表单
+                _this.$router.replace({ path: '/management/article/list' })
+              } else {
+                this.$message.success(res.msg || '修改失败')
+              }
             })
-            // return false
           } else {
-            this.form.item_price_template = JSON.stringify(this.batchRules)
-            if (_this.form.id) {
-              editGood(_this.form).then(res => {
-                if (res.code === 0) {
-                  this.$message({
-                    type: 'success',
-                    message: this.$t(...res.msg) || `${this.$t('修改成功')}!`
-                  })
-                  // 重置表单
-                  _this.$router.replace({ path: '/commodity/goods/list' })
-                } else {
-                  this.$message.success(this.$t(...res.msg) || `${this.$t('修改失败')}!`)
-                }
-              })
-            } else {
-              addGood(_this.form).then(res => {
-                if (res.code === 0) {
-                  this.$message({
-                    type: 'success',
-                    message: this.$t(...res.msg) || `${this.$t('添加成功')}!`
-                  })
-                  // 重置表单
-                  _this.$router.replace({ path: '/commodity/goods/list' })
-                } else {
-                  this.$message.success(this.$t(...res.msg) || `${this.$t('添加失败')}!`)
-                }
-              })
-            }
+            articleApi.addArticle(_this.form).then(res => {
+              if (res.code === 0) {
+                this.$message({
+                  type: 'success',
+                  message: res.msg || '添加成功'
+                })
+                // 重置表单
+                _this.$router.replace({ path: '/management/article/list' })
+              } else {
+                this.$message.success(res.msg || '添加失败')
+              }
+            })
           }
         } else {
           return false
@@ -488,16 +310,8 @@ export default {
     handleClick(tab, event) {
     },
     // 图片上传模块
-    imageChoose(imgArray) {
-      this.form.images = []
-      if (imgArray.length > 0) {
-        const that = this
-        imgArray.forEach(item => {
-          // 这里的this指向前面对象的this
-          that.form.images.push(item)
-        })
-      }
-      this.$refs.form.validateField('images')
+    imageChoose(imgUrl) {
+      this.form.cover_image = [imgUrl]
       // this.imageModalConfig.visible = false;
     },
     // 拖拽后触发

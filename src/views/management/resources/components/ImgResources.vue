@@ -721,6 +721,7 @@ export default {
         img{
           width: 100%;
           height: 180px;
+          object-fit: contain;
         }
       }
     }

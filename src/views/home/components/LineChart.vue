@@ -72,7 +72,7 @@ export default {
           // 默认为10
           // 2.主副标题之间的间距
           itemGap: 40,
-          text: `${this.$t('近7日销售额趋势图')}`,
+          text: `${this.$t('近7日阅读量趋势图')}`,
           textStyle: {
             // 文字颜色
             color: '#333',

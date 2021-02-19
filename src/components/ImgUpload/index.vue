@@ -16,13 +16,13 @@
     <div v-if="picMax==1 && imgList !=''" class="img-list">
       <div class="img-item">
         <i v-if="!disabled" class="el-icon-circle-close close-btn" @click="deleteImg()" />
-        <img v-if="widths" :src="imgList" :style="`width:{widths}}px;height:88px;`">
+        <img v-if="widths" :src="imgList" :style="`width:${widths}px;height:88px;`">
         <img v-else :src="imgList" width="100" height="100">
       </div>
     </div>
     <!-- 上传按钮 -->
     <div v-if="!disabled">
-      <div v-if="imgList && imgList.length<picMax" class="img-box" @click="showGoodsModal">
+      <div v-if="picMax > 1 && imgList && imgList.length<picMax" class="img-box" @click="showGoodsModal">
         <i v-if="!disabled" class="el-icon-plus" />
       </div>
       <div v-if="picMax==1 && imgList==''" class="img-box" @click="showGoodsModal">
@@ -84,6 +84,7 @@ export default {
       this.imageModalConfig.visible = true
     },
     imageChoose(ArrList) {
+      console.log(ArrList, 'arrList')
       ArrList.forEach((item, index) => {
         if (this.imgList.length < this.picMax) {
           if (this.picMax === 1) {
@@ -154,6 +155,7 @@ export default {
             img{
                 width: 80px;
                 height: 80px;
+                object-fit: contain;
             }
             i{
                 position:absolute;

@@ -78,23 +78,23 @@ export default {
   },
   methods: {
     fetchData() {
-      getLanguage({
-        currentPage: this.currentPage,
-        pageSize: this.pageSize,
-        platform: this.type,
-        keywords: this.keywords,
-        is_func_name: this.command === '功能名称' || this.command === 'Function name'
-      }).then(res => {
-        if (res.code === 0) {
-          this.wordsList = res.data.data
-          this.total = res.data.count
-        } else {
-          this.$message({
-            type: 'error',
-            message: this.$t(...res.msg)
-          })
-        }
-      })
+      // getLanguage({
+      //   currentPage: this.currentPage,
+      //   pageSize: this.pageSize,
+      //   platform: this.type,
+      //   keywords: this.keywords,
+      //   is_func_name: this.command === '功能名称' || this.command === 'Function name'
+      // }).then(res => {
+      //   if (res.code === 0) {
+      //     this.wordsList = res.data.data
+      //     this.total = res.data.count
+      //   } else {
+      //     this.$message({
+      //       type: 'error',
+      //       message: this.$t(...res.msg)
+      //     })
+      //   }
+      // })
     },
     handleCommand(value) {
       this.command = value

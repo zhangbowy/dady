@@ -151,7 +151,9 @@ export default {
           this.$store.dispatch('user/login', this.loginForm).then(() => {
             // 获取用户数据
             // this.$store.dispatch('user/getInfo')
-            this.$router.push({ path: this.redirect || '/' })
+            console.log(this.redirect, 'this.redirect')
+            console.log(this.$router)
+            this.$router.push({ path: '/' })
             this.loading = false
           }).catch(() => {
             this.loading = false
