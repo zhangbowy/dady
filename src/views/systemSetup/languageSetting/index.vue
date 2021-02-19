@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import { getLanguage, editLanguage } from '@/api/common'
+import { editLanguage } from '@/api/common'
 import WordsList from './components/WordsList'
 export default {
   components: {
