@@ -19,9 +19,9 @@
         <el-cascader
           v-model="category_id_list"
           size="small"
-          :options="[]"
+          :options="categoryList"
           :props="optionProps"
-          placeholder="请选择商品分类"
+          placeholder="请选择文章分类"
           clearable
         />
         <el-button size="small" icon="el-icon-search" type="primary" @click="fetchData">搜索</el-button>
@@ -241,7 +241,7 @@
 
 <script>
 import { articleApi } from '@/api/management'
-
+import { Category } from '@/api/goods'
 export default {
   filters: {
     statusFilter(status) {
@@ -293,6 +293,7 @@ export default {
   },
   computed: {
     category_id() {
+      console.log(this.category_id_list)
       if (!Array.isArray(this.category_id_list)) {
         return ''
       }
@@ -397,7 +398,8 @@ export default {
         pageSize: this.pageSize,
         status: this.currentStatus,
         title: this.keywords,
-        authorKeywords: this.authorKeywords
+        authorKeywords: this.authorKeywords,
+        category_id: this.category_id
       }).then(res => {
         this.loading = false
         this.articleList = res.data.data
@@ -412,7 +414,7 @@ export default {
       })
     },
     getFigureCategory() {
-      articleApi.articleList().then(res => {
+      Category.getList().then(res => {
         this.categoryList = res.data
       })
     },
