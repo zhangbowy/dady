@@ -84,7 +84,6 @@ export default {
       this.imageModalConfig.visible = true
     },
     imageChoose(ArrList) {
-      console.log(ArrList, 'arrList')
       ArrList.forEach((item, index) => {
         // this.picMax === 1
         if (this.picMax !== 1) {
