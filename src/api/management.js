@@ -42,5 +42,27 @@ export const articleApi = {
       method: 'POST',
       data
     })
+  },
+  // 收录
+  setIndexed(data) {
+    return request({
+      url: '/article/seo',
+      method: 'POST',
+      data
+    })
+  },
+  setSEOSetting(data) {
+    return request({
+      url: '/article/options',
+      method: 'POST',
+      data
+    })
+  },
+  getSEOSetting(params) {
+    return request({
+      url: '/article/options',
+      method: 'GET',
+      params
+    })
   }
 }

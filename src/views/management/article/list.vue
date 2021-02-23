@@ -194,7 +194,7 @@
                 v-if="scope.row.status==2"
                 size="mini"
                 type="success"
-                @click.stop="publishArticle(scope.row.article_id, scope.row.status)"
+                @click.stop="setIndexed(scope.row.article_id)"
               >收录</el-button>
               <el-button
                 v-if="scope.row.status!==3"
@@ -223,8 +223,7 @@
         <div class="batch-edit">
           <el-button type="primary" icon="el-icon-finished" @click="toggleSelection(articleList)">全部选择</el-button>
           <el-button type="danger" icon="el-icon-circle-close" @click="toggleSelection()">取消</el-button>
-          <!-- <el-button type="success" icon="el-icon-upload2" @click="batchEdit(2)">上架</el-button>
-          <el-button type="warning" icon="el-icon-download" @click="batchEdit(3)">下架</el-button> -->
+          <el-button type="success" icon="el-icon-upload2" @click="batchSetIndexed()">全部收录</el-button>
         </div>
         <el-pagination
           :total="total"
@@ -305,6 +304,48 @@ export default {
     this.getFigureCategory()
   },
   methods: {
+    batchSetIndexed() {
+      if (Array.isArray(this.multipleSelection) && this.multipleSelection.length) {
+        const idList = this.multipleSelection.map(item => item.category_id).join(',')
+        this.setIndexed(idList)
+      } else {
+        this.$message({
+          type: 'info',
+          message: '请选择文章'
+        })
+      }
+    },
+    setIndexed(id) {
+      this.$confirm('是否收录该文章?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        confirmButtonClass: 'danger',
+        center: true
+      }).then(() => {
+        articleApi.setIndexed({
+          article_id: id
+        }).then(res => {
+          if (res.code === 0) {
+            this.$message({
+              type: 'success',
+              message: res.msg
+            })
+            this.fetchData()
+          } else {
+            this.$message({
+              type: 'error',
+              message: res.msg
+            })
+          }
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })
+      })
+    },
     publishArticle(id, status) {
       this.$confirm(`是否${status === 1 ? '撤销发布' : status === 3 ? '删除' : '发布'}该文章?`, '提示', {
         confirmButtonText: '确定',
@@ -358,7 +399,6 @@ export default {
         title: this.keywords,
         authorKeywords: this.authorKeywords
       }).then(res => {
-        console.log(res, 'res')
         this.loading = false
         this.articleList = res.data.data
         this.countsList = res.data.counts || []
@@ -426,52 +466,6 @@ export default {
         })
       } else {
         this.$refs.multipleTable.clearSelection()
-      }
-    },
-    // 批量修改
-    batchEdit(status) {
-      if (Array.isArray(this.multipleSelection)) {
-        const resultList = this.multipleSelection.filter(item => {
-          return item.status === status
-        })
-        const resultIdList = resultList.map(item => item.id)
-        if (!resultIdList.length) {
-          this.toggleSelection()
-          this.$message({
-            type: 'warning',
-            message: `没有选中任何${status === 2 ? '待上架' : '已上架'}商品`
-          })
-          return
-        }
-        const unSelectList = this.multipleSelection.filter(item => {
-          return item.status !== status
-        })
-        this.toggleSelection(unSelectList)
-        this.$confirm(`${`是否${status === 2 ? '上架' : '下架'}选中的商品`}!`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning',
-          confirmButtonClass: 'danger',
-          center: true
-        }).then(() => {
-          // changeStatus({
-          //   id: resultIdList,
-          //   status: status === 2 ? 3 : 2
-          // }).then(res => {
-          //   this.$message({
-          //     type: 'success',
-          //     message: `${this.$t('修改成功')}!`
-          //   })
-          //   this.fetchData()
-          // })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '修改失败!'
-          })
-        })
-      } else {
-        return
       }
     }
   }

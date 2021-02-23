@@ -1,7 +1,7 @@
 const path = require('path')
 module.exports = {
 
-  title: '云易绣管理后台',
+  title: '文章发布后台',
 
   /**
    * @type {boolean} true | false

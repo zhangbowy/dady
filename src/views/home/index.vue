@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard-editor-container">
-    <panel-group :panel-data="panelData" />
+    <panel-group :panel-data="countsList" />
 
     <el-row v-loading="loading" style="background:#fff;padding:16px 16px 0;margin-bottom:32px;border-radius: 20px;">
       <line-chart :chart-data="panelData" />
@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { indexApi } from '@/api/index'
+import { articleApi } from '@/api/management'
 import PanelGroup from './components/PanelGroup'
 import LineChart from './components/LineChart'
 // import RaddarChart from './components/RaddarChart'
@@ -46,7 +46,8 @@ export default {
   data() {
     return {
       loading: false,
-      panelData: {}
+      panelData: {},
+      countsList: []
     }
   },
   created() {
@@ -55,9 +56,18 @@ export default {
   methods: {
     getData() {
       this.loading = true
-      indexApi.getData().then(res => {
+      articleApi.articleList().then(res => {
         this.loading = false
-        this.panelData = res.data
+        console.log(res)
+        this.articleList = res.data.data
+        this.countsList = res.data.counts || []
+        this.total = res.data.count
+      }).catch(() => {
+        this.loading = false
+        this.$message({
+          type: 'info',
+          message: '获取失败!'
+        })
       })
     }
   }

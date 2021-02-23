@@ -15,7 +15,7 @@
           <div class="card-panel-text">
             总文章数
           </div>
-          <count-to :start-val="0" :end-val="panelData.user_count" :duration="2600" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="panelData[0] ? panelData[0].count : 0" :duration="2600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -28,7 +28,7 @@
           <div class="card-panel-text">
             草稿
           </div>
-          <count-to :start-val="0" :end-val="panelData.design_count" :duration="3000" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="panelData[1] ? panelData[1].count : 0" :duration="3000" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -41,7 +41,7 @@
           <div class="card-panel-text">
             已发布文章
           </div>
-          <count-to :start-val="0" :end-val="panelData.gooods_count" :duration="3600" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="panelData[2] ? panelData[2].count : 0" :duration="3600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -54,7 +54,7 @@
           <div class="card-panel-text">
             废纸篓文章
           </div>
-          <count-to :start-val="0" :end-val="panelData.total_order_amount" :decimals="2" :duration="3200" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="panelData[3] ? panelData[3].count : 0" :duration="3200" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -70,8 +70,8 @@ export default {
   },
   props: {
     panelData: {
-      type: Object,
-      default: () => {}
+      type: Array,
+      default: () => []
     }
   },
   methods: {

@@ -70,14 +70,6 @@ export const constantRoutes = [
           hidden: true,
           component: () => import('@/views/management/article/edit'),
           meta: { title: '文章编辑', activeMenu: '/management/article' }
-        }, {
-          pid: 10,
-          id: 10,
-          path: 'detail:id(\\d+)?',
-          name: 'GoodsDetail',
-          hidden: true,
-          component: () => import('@/views/management/article/detail'),
-          meta: { title: '文章详情', activeMenu: '/management/article' }
         }
       ]
     }, {
@@ -91,10 +83,10 @@ export const constantRoutes = [
     {
       pid: 10,
       id: 10,
-      path: 'import',
-      name: 'Import',
-      component: () => import('@/views/management/import/index'),
-      meta: { title: '文章导入', activeMenu: '/management/import' }
+      path: 'setting',
+      name: 'Setting',
+      component: () => import('@/views/management/setting/index'),
+      meta: { title: 'SEO设置' }
     }]
   },
   {

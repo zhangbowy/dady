@@ -41,7 +41,7 @@
               </div>
             </div>
             <div class="form-content-item">
-              <div class="block-title"><card-tag tag-name="开启SEO" /></div>
+              <div class="block-title"><card-tag tag-name="SEO" /></div>
               <div class="block-content">
                 <el-form-item label="标题">
                   <el-input v-model="form.seo_title" type="text" placeholder="请输入SEO标题" style="width: 15%; margin-top: 10px" />

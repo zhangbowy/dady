@@ -24,7 +24,7 @@ export default {
   },
   data() {
     return {
-      title: '管理后台',
+      title: '文章发布后台',
       logo: '@/assets/images/logo.png'
     }
   }

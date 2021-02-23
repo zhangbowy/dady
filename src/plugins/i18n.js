@@ -16,6 +16,7 @@ const i18n = new VueI18n({
     'zh': Object.assign(require('../lang/zh.json'), zhLang, zhLocale),
     'en': Object.assign(require('../lang/en.json'), enLang, enLocale)
   },
+  silentTranslationWarn: true,
   silentFallbackWarn: true
 })
 export default i18n

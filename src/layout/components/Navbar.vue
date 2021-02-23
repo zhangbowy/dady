@@ -5,7 +5,6 @@
     <breadcrumb class="breadcrumb-container" />
 
     <div class="right-menu">
-      <language-selector />
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <img v-if="adminInfo.logo" :src="adminInfo.logo" class="user-avatar">
@@ -39,13 +38,12 @@ import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import ChangePassword from './ChangePassword'
-import LanguageSelector from '@/components/LanguageSelector'
+
 export default {
   components: {
     Breadcrumb,
     Hamburger,
-    ChangePassword,
-    LanguageSelector
+    ChangePassword
   },
   data() {
     return {

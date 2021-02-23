@@ -38,8 +38,8 @@ Vue.mixin({
 })
 
 // 设置语言
-const lang = localStorage.getItem('lang') || 'zh'
-store.dispatch('settings/changeSetting', { key: 'lang', value: lang })
+// const lang = localStorage.getItem('lang') || 'zh'
+// store.dispatch('settings/changeSetting', { key: 'lang', value: lang })
 
 new Vue({
   el: '#app',
