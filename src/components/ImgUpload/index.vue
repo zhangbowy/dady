@@ -86,12 +86,14 @@ export default {
     imageChoose(ArrList) {
       console.log(ArrList, 'arrList')
       ArrList.forEach((item, index) => {
-        if (this.imgList.length < this.picMax) {
-          if (this.picMax === 1) {
-            this.imgList = item.oss_path
-          } else {
+        // this.picMax === 1
+        if (this.picMax !== 1) {
+          if (this.imgList.length < this.picMax) {
             this.imgList.push(item.oss_path)
+            this.imgList = item.oss_path
           }
+        } else {
+          this.imgList = item.oss_path
         }
       })
 
@@ -108,6 +110,7 @@ export default {
       } else {
         this.imgList.splice(index, 1)
       }
+      console.log(this.imgList, 'chooseImg')
       this.$emit('chooseImg', this.imgList)
     }
   }
