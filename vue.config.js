@@ -3,9 +3,18 @@ const path = require('path')
 const defaultSettings = require('./src/settings.js')
 const WebpackBar = require('webpackbar')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
-
+const IS_PROD = ['production', 'prod'].includes(process.env.NODE_ENV)
 function resolve(dir) {
   return path.join(__dirname, dir)
+}
+
+const plugins = []
+if (!IS_PROD) {
+  plugins.push(
+    new BundleAnalyzerPlugin({
+      analyzerPort: 9999
+    })
+  )
 }
 
 const name = defaultSettings.title || '云易绣管理后台' // page title
@@ -51,9 +60,7 @@ module.exports = {
     },
     plugins: [
       new WebpackBar(),
-      new BundleAnalyzerPlugin({
-        analyzerPort: 9999
-      })
+      ...plugins
     ]
   },
   chainWebpack(config) {
