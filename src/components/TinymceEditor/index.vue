@@ -143,13 +143,16 @@ export default {
     },
     imageChoose(imgArray) {
       this.images = []
-      if (imgArray.length > 0) {
+      if (Array.isArray(imgArray)) {
         const that = this
         imgArray.forEach(item => {
           // 这里的this指向前面对象的this
           that.images.push(item)
           tinymce.execCommand('mceInsertContent', false, `<img src=${item}>`)
         })
+      } else {
+        this.images.push(imgArray)
+        tinymce.execCommand('mceInsertContent', false, `<img src=${imgArray}>`)
       }
       // this.imageModalConfig.visible = false;
     }

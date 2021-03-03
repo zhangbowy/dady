@@ -43,9 +43,9 @@
             <div class="form-content-item">
               <div class="block-title"><card-tag tag-name="SEO" /></div>
               <div class="block-content">
-                <el-form-item label="标题">
+                <!-- <el-form-item label="标题">
                   <el-input v-model="form.seo_title" type="text" placeholder="请输入SEO标题" style="width: 15%; margin-top: 10px" />
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item label="描述">
                   <el-input v-model="form.seo_desc" type="textarea" :rows="2" placeholder="请输入SEO描述" style="width: 35%; margin-top: 10px" />
                 </el-form-item>
@@ -154,7 +154,7 @@ export default {
         cover_image: [], // 文章封面
         seo_title: '', // seo标题
         seo_desc: '', // seo描述
-        seo_keywords: '', // seo关键字
+        // seo_keywords: '', // seo关键字
         category_id: '', // 分类
         weight: 0, // 开启热榜时的权重
         hasWeigth: false

@@ -90,7 +90,7 @@
             </el-popover>
           </template>
         </el-table-column>
-        <el-table-column
+        <!-- <el-table-column
           label="seo标题"
           align="center"
         >
@@ -104,7 +104,7 @@
               <p slot="reference" class="text-wrapper">{{ scope.row.seo_title }}</p>
             </el-popover>
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column
           label="seo描述"
           align="center"
