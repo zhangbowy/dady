@@ -68,6 +68,16 @@ export default {
   },
   watch: {
     value(newValue) {
+      const editor = document.getElementById('tinymceEditor_ifr').contentDocument
+      console.dir(editor)
+      setTimeout(() => {
+        const imgList = editor.getElementsByTagName('img')
+        for (let i = 0; i < imgList.length; i++) {
+          const img = imgList[i]
+          img.style.width = '80%'
+          img.style.borderRadius = '4px'
+        }
+      }, 0)
       this.myValue = newValue
     },
     myValue(newValue) {

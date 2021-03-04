@@ -84,7 +84,6 @@ export default {
       this.imageModalConfig.visible = true
     },
     imageChoose(ArrList) {
-      console.log(ArrList, 'ArrList')
       ArrList.forEach((item, index) => {
         // this.picMax === 1
         if (this.picMax !== 1) {
@@ -110,7 +109,6 @@ export default {
       } else {
         this.imgList.splice(index, 1)
       }
-      console.log(this.imgList, 'chooseImg')
       this.$emit('chooseImg', this.imgList)
     }
   }

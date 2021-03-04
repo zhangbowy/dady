@@ -273,18 +273,6 @@ export default {
       _this.form.category_id = _this.category_id_list[_this.category_id_list.length - 1]
       _this.form.cover_image = _this.form.cover_image[0]
       _this.form.is_publish = !!isPublish
-      if (_this.form.content) {
-        _this.form.content = _this.form.content.replace(/<img[\D\d]*?src=/g, $1 => {
-          let value = $1
-          if ($1.indexOf('style') !== 0) {
-            // value = $1 ? $1.replace(/style="[\D\d]*?"/, 'style="display:block;width:80%;margin:10px auto; border-radius: 4px;"') : ''
-          } else {
-            value = $1 ? $1.replace('img', 'img style="display:block;width:80%;margin:10px auto; border-radius: 4px;"') : ''
-          }
-          console.log(value, 'value')
-          return value
-        })
-      }
       _this.$refs[formName].validate((valid) => {
         if (valid) {
           if (_this.form.article_id) {
