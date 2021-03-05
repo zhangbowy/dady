@@ -28,6 +28,7 @@
         <el-button size="small" icon="el-icon-refresh-right" @click="reset">重置</el-button>
       </div>
       <div class="operation">
+        <el-button class="batch-btn" size="small" type="success" icon="el-icon-upload2" @click="batchSetIndexed()">全部收录</el-button>
         <router-link :to="'/management/article/edit'">
           <div>
             <el-button size="small" icon="el-icon-plus" type="primary">新增</el-button>
@@ -57,10 +58,10 @@
         tooltip-effect="dark"
         @selection-change="handleSelectionChange"
       >
-        <el-table-column
+        <!-- <el-table-column
           type="selection"
           width="55"
-        />
+        /> -->
         <el-table-column
           prop="author"
           label="作者"
@@ -221,9 +222,9 @@
       <!-- 分页 -->
       <div class="pagination-box">
         <div class="batch-edit">
-          <el-button type="primary" icon="el-icon-finished" @click="toggleSelection(articleList)">全部选择</el-button>
+          <!-- <el-button type="primary" icon="el-icon-finished" @click="toggleSelection(articleList)">全部选择</el-button>
           <el-button type="danger" icon="el-icon-circle-close" @click="toggleSelection()">取消</el-button>
-          <el-button type="success" icon="el-icon-upload2" @click="batchSetIndexed()">全部收录</el-button>
+          <el-button type="success" icon="el-icon-upload2" @click="batchSetIndexed()">全部收录</el-button> -->
         </div>
         <el-pagination
           :total="total"
@@ -307,8 +308,8 @@ export default {
   methods: {
     batchSetIndexed() {
       if (Array.isArray(this.multipleSelection) && this.multipleSelection.length) {
-        const idList = this.multipleSelection.map(item => item.category_id).join(',')
-        this.setIndexed(idList)
+        // const idList = this.multipleSelection.map(item => item.article_id).join(',')
+        this.setIndexed('')
       } else {
         this.$message({
           type: 'info',
@@ -476,6 +477,14 @@ export default {
 
 <style lang="scss" scoped>
 .goods-list{
+  .operation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .batch-btn {
+      margin-right: 12px;
+    }
+  }
   .screen-box{
     .screen-item{
       text-align: left;

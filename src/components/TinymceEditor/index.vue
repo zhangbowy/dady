@@ -76,6 +76,7 @@ export default {
           const img = imgList[i]
           img.style.width = '80%'
           img.style.borderRadius = '4px'
+          img.style.margin = '10px 0'
         }
       }, 0)
       this.myValue = newValue
