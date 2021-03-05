@@ -167,7 +167,7 @@
         >
           <template slot-scope="scope">
             <div class="operate-btn">
-              <a v-if="scope.row.status === 2" :href="scope.row.full_path">
+              <a v-if="scope.row.status === 2" target="_blank" :href="scope.row.full_path">
                 <el-button
                   size="mini"
                 >查看</el-button>
