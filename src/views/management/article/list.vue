@@ -307,15 +307,15 @@ export default {
   },
   methods: {
     batchSetIndexed() {
-      if (Array.isArray(this.multipleSelection) && this.multipleSelection.length) {
-        // const idList = this.multipleSelection.map(item => item.article_id).join(',')
-        this.setIndexed('')
-      } else {
-        this.$message({
-          type: 'info',
-          message: '请选择文章'
-        })
-      }
+      this.setIndexed('')
+      // if (Array.isArray(this.multipleSelection) && this.multipleSelection.length) {
+      //   // const idList = this.multipleSelection.map(item => item.article_id).join(',')
+      // } else {
+      //   this.$message({
+      //     type: 'info',
+      //     message: '请选择文章'
+      //   })
+      // }
     },
     setIndexed(id) {
       this.$confirm('是否收录该文章?', '提示', {
